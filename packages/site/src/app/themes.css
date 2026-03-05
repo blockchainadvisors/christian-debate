@@ -1785,6 +1785,12 @@ html[data-theme="warm-parchment"] header button {
   color: #f4edd3 !important;
 }
 
+html[data-theme="warm-parchment"] header [data-variant="outline"] {
+  background: transparent !important;
+  border-color: #f4edd3 !important;
+  color: #f4edd3 !important;
+}
+
 html[data-theme="warm-parchment"] header a[href="/"] {
   font-family: 'Cormorant Garamond', serif;
   color: #b8860b !important;
@@ -1898,6 +1904,12 @@ html[data-theme="ink-and-paper"] header {
 
 html[data-theme="ink-and-paper"] header a,
 html[data-theme="ink-and-paper"] header button {
+  color: #ffffff !important;
+}
+
+html[data-theme="ink-and-paper"] header [data-variant="outline"] {
+  background: transparent !important;
+  border-color: #ffffff !important;
   color: #ffffff !important;
 }
 
@@ -2383,6 +2395,12 @@ html[data-theme="slate-academic"] header button {
   color: #fffff0 !important;
 }
 
+html[data-theme="slate-academic"] header [data-variant="outline"] {
+  background: transparent !important;
+  border-color: #fffff0 !important;
+  color: #fffff0 !important;
+}
+
 html[data-theme="slate-academic"] header a[href="/"] {
   font-family: 'Libre Baskerville', serif;
 }
@@ -2481,6 +2499,486 @@ html[data-theme="slate-academic"] .debates-page h1 {
   font-family: 'Libre Baskerville', serif;
   border-bottom: 1px solid #002147;
   padding-bottom: 0.5rem;
+}
+
+/* ================================================================
+   APP-LEVEL — DISTINCTIVE THEME EFFECTS & ATMOSPHERE
+   Animations, textures, glows, and visual signatures per theme
+   ================================================================ */
+
+/* ── KEYFRAME ANIMATIONS ──────────────────────────────────── */
+
+@keyframes cross-glow {
+  0%, 100% { text-shadow: 0 0 6px rgba(255, 215, 0, 0.3); }
+  50% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.2); }
+}
+
+@keyframes neon-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+@keyframes scan-line-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 4px; }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes shimmer-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(15px, -10px) scale(1.02); }
+  66% { transform: translate(-10px, 8px) scale(0.98); }
+}
+
+@keyframes tile-pulse {
+  0%, 100% { opacity: 0.04; }
+  50% { opacity: 0.08; }
+}
+
+/* ── CATHEDRAL DARK — Mosaic overlay + gold glows ─────────── */
+
+html[data-theme="cathedral-dark"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  background:
+    repeating-conic-gradient(rgba(255, 215, 0, 0.15) 0% 25%, transparent 0% 50%) 0 0 / 30px 30px;
+}
+
+html[data-theme="cathedral-dark"] .debate-header-card {
+  border: 1px solid rgba(201, 168, 76, 0.2) !important;
+  background: rgba(26, 35, 126, 0.08) !important;
+}
+
+html[data-theme="cathedral-dark"] [data-slot="card"] {
+  position: relative;
+}
+
+html[data-theme="cathedral-dark"] [data-slot="card"]::before,
+html[data-theme="cathedral-dark"] [data-slot="card"]::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: rgba(201, 168, 76, 0.25);
+  border-style: solid;
+  pointer-events: none;
+}
+
+html[data-theme="cathedral-dark"] [data-slot="card"]::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+html[data-theme="cathedral-dark"] [data-slot="card"]::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+html[data-theme="cathedral-dark"] h1 {
+  animation: cross-glow 4s ease-in-out infinite;
+}
+
+/* ── WARM PARCHMENT — Ornamental dividers + texture ───────── */
+
+html[data-theme="warm-parchment"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
+  background:
+    radial-gradient(circle at 20% 50%, #b8860b, transparent 40%),
+    radial-gradient(circle at 80% 20%, #8b2500, transparent 35%),
+    radial-gradient(circle at 50% 85%, #d4a017, transparent 30%);
+}
+
+html[data-theme="warm-parchment"] [data-slot="card"] {
+  border: 1px solid #d4c9a8 !important;
+  background: #f9f3e0 !important;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+html[data-theme="warm-parchment"] [data-slot="card"]:hover {
+  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.1);
+}
+
+html[data-theme="warm-parchment"] [data-slot="separator"] {
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent 5%, #d4c9a8 25%, #8b2500 50%, #d4c9a8 75%, transparent 95%) !important;
+}
+
+html[data-theme="warm-parchment"] .debate-header-card {
+  background: #f4edd3 !important;
+  border: 1px solid #d4c9a8 !important;
+}
+
+/* ── NORDIC CLEAN — Botanical blobs ───────────────────────── */
+
+html[data-theme="nordic-clean"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.04;
+  background:
+    radial-gradient(ellipse at 15% 85%, #b4c7a8, transparent 35%),
+    radial-gradient(ellipse at 85% 15%, #a8c4d4, transparent 30%),
+    radial-gradient(ellipse at 50% 50%, #c9b8d4, transparent 40%);
+  animation: blob-drift 25s ease-in-out infinite;
+}
+
+html[data-theme="nordic-clean"] [data-slot="card"] {
+  box-shadow: none !important;
+  border: 1px solid #e5e7eb !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-theme="nordic-clean"] [data-slot="card"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ── INK & PAPER — Brutalist heavy borders + flat ─────────── */
+
+html[data-theme="ink-and-paper"] * {
+  border-radius: 0 !important;
+}
+
+html[data-theme="ink-and-paper"] [data-slot="card"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-bottom: 2px solid #111111 !important;
+}
+
+html[data-theme="ink-and-paper"] [data-slot="button"][data-variant="default"] {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border: 2px solid #111111 !important;
+}
+
+html[data-theme="ink-and-paper"] [data-slot="button"][data-variant="outline"] {
+  border: 2px solid #111111 !important;
+}
+
+html[data-theme="ink-and-paper"] [role="tablist"] {
+  border-bottom: 2px solid #111111 !important;
+}
+
+html[data-theme="ink-and-paper"] [data-slot="badge"] {
+  border: 1px solid #111111 !important;
+}
+
+html[data-theme="ink-and-paper"] ::selection {
+  background: #e8ff00;
+  color: #000000;
+}
+
+/* ── NEON TERMINAL — Scan-lines + CRT glow ────────────────── */
+
+html[data-theme="neon-terminal"]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 229, 255, 0.015) 2px,
+    rgba(0, 229, 255, 0.015) 4px
+  );
+  animation: scan-line-scroll 0.15s linear infinite;
+}
+
+html[data-theme="neon-terminal"] body {
+  text-shadow: 0 0 1px rgba(0, 229, 255, 0.15);
+}
+
+html[data-theme="neon-terminal"] h1 {
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.4), 0 0 40px rgba(0, 229, 255, 0.15) !important;
+  animation: neon-flicker 4s ease-in-out infinite;
+}
+
+html[data-theme="neon-terminal"] [data-slot="card"] {
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 229, 255, 0.08) !important;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+html[data-theme="neon-terminal"] [data-slot="card"]:hover {
+  border-color: rgba(0, 229, 255, 0.25) !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.06);
+}
+
+html[data-theme="neon-terminal"] [data-slot="button"][data-variant="default"] {
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+  transition: box-shadow 0.3s;
+}
+
+html[data-theme="neon-terminal"] [data-slot="button"][data-variant="default"]:hover {
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+}
+
+html[data-theme="neon-terminal"] [role="tab"][data-state="active"]::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00e5ff, #ff0080);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+html[data-theme="neon-terminal"] .debate-header-card {
+  border: 1px solid rgba(0, 229, 255, 0.12) !important;
+  background: rgba(0, 229, 255, 0.02) !important;
+}
+
+/* Neon cursor blink for the hero/title area */
+html[data-theme="neon-terminal"] .debates-page h1::after {
+  content: "▌";
+  font-weight: 400;
+  animation: cursor-blink 1s step-end infinite;
+  color: #00e5ff;
+  margin-left: 4px;
+}
+
+/* ── FOREST DEEP — Organic atmosphere ─────────────────────── */
+
+html[data-theme="forest-deep"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.02;
+  background:
+    radial-gradient(circle at 15% 85%, #6b8f5e, transparent 30%),
+    radial-gradient(circle at 85% 15%, #d4a44c, transparent 30%);
+}
+
+html[data-theme="forest-deep"] [data-slot="card"] {
+  box-shadow: 0 4px 16px rgba(26, 36, 24, 0.4) !important;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+html[data-theme="forest-deep"] [data-slot="card"]:hover {
+  box-shadow: 0 8px 28px rgba(107, 143, 94, 0.15) !important;
+  transform: translateY(-2px);
+}
+
+html[data-theme="forest-deep"] .debate-header-card {
+  background: rgba(107, 143, 94, 0.06) !important;
+  border: 1px solid rgba(107, 143, 94, 0.15) !important;
+}
+
+/* ── BYZANTINE GOLD — Mosaic patterns + gold glows ────────── */
+
+html[data-theme="byzantine-gold"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    repeating-conic-gradient(rgba(255, 215, 0, 0.06) 0% 25%, transparent 0% 50%) 0 0 / 24px 24px;
+  animation: tile-pulse 6s ease-in-out infinite;
+}
+
+html[data-theme="byzantine-gold"] [data-slot="card"] {
+  border-top: 3px solid #ffd700 !important;
+  position: relative;
+}
+
+html[data-theme="byzantine-gold"] h1 {
+  text-shadow: 0 2px 12px rgba(255, 215, 0, 0.15);
+}
+
+html[data-theme="byzantine-gold"] .debate-header-card {
+  border: 1px solid rgba(255, 215, 0, 0.2) !important;
+  background: rgba(26, 35, 126, 0.06) !important;
+}
+
+html[data-theme="byzantine-gold"] [data-slot="button"][data-variant="default"] {
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
+}
+
+/* ── SOFT CLOUD — Pastel blobs + bouncy cards ─────────────── */
+
+html[data-theme="soft-cloud"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 80%, #c4b5fd, transparent),
+    radial-gradient(ellipse 500px 500px at 80% 20%, #fda4af, transparent),
+    radial-gradient(ellipse 400px 600px at 50% 50%, #93c5fd, transparent);
+  animation: blob-drift 20s ease-in-out infinite;
+}
+
+html[data-theme="soft-cloud"] [data-slot="card"] {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #e5e7f0 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-theme="soft-cloud"] [data-slot="card"]:hover {
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="soft-cloud"] [data-slot="button"] {
+  border-radius: 24px !important;
+}
+
+html[data-theme="soft-cloud"] [data-slot="badge"] {
+  border-radius: 12px !important;
+}
+
+html[data-theme="soft-cloud"] [role="tablist"] {
+  background: #f3f0ff !important;
+  border-radius: 12px !important;
+  padding: 4px;
+  border: none !important;
+}
+
+html[data-theme="soft-cloud"] [role="tab"][data-state="active"] {
+  background: #ffffff !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.12);
+}
+
+html[data-theme="soft-cloud"] .debate-header-card {
+  border-radius: 16px !important;
+  background: rgba(243, 240, 255, 0.5) !important;
+}
+
+/* ── ART DECO — Geometric patterns + shimmer ──────────────── */
+
+html[data-theme="art-deco"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
+  background:
+    repeating-conic-gradient(from 0deg, transparent 0deg, rgba(201, 168, 76, 0.3) 2deg, transparent 4deg) 50% 50% / 800px 800px no-repeat;
+}
+
+html[data-theme="art-deco"] [data-slot="card"] {
+  border: 1px solid rgba(201, 168, 76, 0.15) !important;
+  position: relative;
+}
+
+html[data-theme="art-deco"] [data-slot="card"]::before,
+html[data-theme="art-deco"] [data-slot="card"]::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(201, 168, 76, 0.3);
+  border-style: solid;
+  pointer-events: none;
+}
+
+html[data-theme="art-deco"] [data-slot="card"]::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+html[data-theme="art-deco"] [data-slot="card"]::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+html[data-theme="art-deco"] [data-slot="button"][data-variant="default"] {
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-theme="art-deco"] [data-slot="button"][data-variant="default"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: translateX(-100%);
+  transition: none;
+}
+
+html[data-theme="art-deco"] [data-slot="button"][data-variant="default"]:hover::after {
+  animation: shimmer-slide 0.8s ease;
+}
+
+html[data-theme="art-deco"] .debate-header-card {
+  border: 1px solid rgba(201, 168, 76, 0.2) !important;
+  text-align: center;
+}
+
+html[data-theme="art-deco"] h1 {
+  letter-spacing: 0.02em;
+}
+
+/* ── SLATE ACADEMIC — Scholarly restraint ─────────────────── */
+
+html[data-theme="slate-academic"] [data-slot="card"] {
+  border: 1px solid #c4b99a !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+  transition: border-color 0.3s;
+}
+
+html[data-theme="slate-academic"] [data-slot="card"]:hover {
+  border-color: #002147 !important;
+}
+
+html[data-theme="slate-academic"] [data-slot="separator"] {
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, #002147, transparent) !important;
+}
+
+html[data-theme="slate-academic"] .debate-header-card {
+  border: 1px solid #c4b99a !important;
+  background: #f5f0e8 !important;
+}
+
+html[data-theme="slate-academic"] [data-slot="badge"] {
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
 }
 
 /* ================================================================

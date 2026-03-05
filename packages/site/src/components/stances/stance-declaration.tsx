@@ -166,7 +166,7 @@ export function StanceDeclaration({
                   variant="outline"
                   disabled={isSubmitting}
                   className={cn(
-                    "flex-1 border-2 py-3 font-medium transition-all",
+                    "min-w-0 flex-1 border-2 py-3 font-medium transition-all whitespace-normal h-auto text-center",
                     option.colorClass,
                     isSelected && selectedStyles[option.value]
                   )}

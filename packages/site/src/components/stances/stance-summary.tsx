@@ -50,19 +50,17 @@ export function StanceSummary({
       </div>
 
       {/* Counts */}
-      <div className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
-        <span className="inline-flex items-center gap-1">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-blue-500" />
-          {sideALabel}: {summary.sideA}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+        <span className="inline-flex min-w-0 items-center gap-1">
+          <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-blue-500" />
+          <span className="truncate">{sideALabel}: {summary.sideA}</span>
         </span>
-        <span className="mx-1">|</span>
-        <span className="inline-flex items-center gap-1">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-500" />
-          {sideBLabel}: {summary.sideB}
+        <span className="inline-flex min-w-0 items-center gap-1">
+          <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" />
+          <span className="truncate">{sideBLabel}: {summary.sideB}</span>
         </span>
-        <span className="mx-1">|</span>
-        <span className="inline-flex items-center gap-1">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gray-400 dark:bg-gray-500" />
+        <span className="inline-flex min-w-0 items-center gap-1">
+          <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-gray-400 dark:bg-gray-500" />
           Neutral: {summary.neutral}
         </span>
       </div>

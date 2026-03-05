@@ -75,7 +75,7 @@ export function CommentCard({
   return (
     <div
       id={`comment-${comment.id}`}
-      className={cn("group", depth > 0 && "border-l-2 border-gray-200")}
+      className={cn("group min-w-0 overflow-hidden", depth > 0 && "border-l-2 border-gray-200")}
       style={{ marginLeft: `${visualDepth * 12}px` }}
     >
       <div className="py-3 px-4">
@@ -93,29 +93,34 @@ export function CommentCard({
         ) : (
           <>
             {/* Header: avatar, name, stance, time */}
-            <div className="flex flex-wrap items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1 min-w-0">
               {/* Avatar */}
               {comment.author.avatarUrl ? (
                 <img
                   src={comment.author.avatarUrl}
                   alt={comment.author.displayName}
-                  className="w-6 h-6 rounded-full"
+                  className="w-6 h-6 rounded-full shrink-0"
                 />
               ) : (
-                <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600">
+                <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600 shrink-0">
                   {comment.author.displayName.charAt(0).toUpperCase()}
                 </div>
               )}
 
-              <span className="font-medium text-sm">
+              <span className="font-medium text-sm shrink-0">
                 {comment.author.displayName}
               </span>
 
               <Badge
                 variant="outline"
                 className={cn(
-                  "text-xs px-1.5 py-0",
+                  "text-xs px-1.5 py-0 max-w-[200px] sm:max-w-[300px] inline-block truncate align-middle shrink min-w-0",
                   STANCE_COLORS[comment.stanceSide]
+                )}
+                title={getStanceLabel(
+                  comment.stanceSide,
+                  debate.sideALabel,
+                  debate.sideBLabel
                 )}
               >
                 {getStanceLabel(
@@ -125,12 +130,12 @@ export function CommentCard({
                 )}
               </Badge>
 
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 shrink-0">
                 {timeAgo(comment.createdAt)}
               </span>
 
               {comment.status === "edited" && (
-                <span className="text-xs text-gray-400 italic">
+                <span className="text-xs text-gray-400 italic shrink-0">
                   (edited{comment.editedAt ? ` ${timeAgo(comment.editedAt)}` : ""})
                 </span>
               )}
@@ -145,7 +150,7 @@ export function CommentCard({
               </p>
             ) : (
               <div
-                className="text-sm mt-1 prose prose-sm max-w-none"
+                className="text-sm mt-1 prose prose-sm max-w-none break-words overflow-hidden"
                 dangerouslySetInnerHTML={{ __html: comment.content }}
               />
             )}

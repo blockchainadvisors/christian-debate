@@ -15,9 +15,47 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Christian Debate",
+  title: {
+    default: "Christian Debate",
+    template: "%s | Christian Debate",
+  },
   description:
-    "Structured debate platform for meaningful discussions",
+    "Structured debate platform for meaningful theological discussions. Explore multiple perspectives, track stance shifts, and find the strongest arguments.",
+  metadataBase: new URL(process.env.AUTH_URL || "http://localhost:3000"),
+  icons: {
+    icon: [
+      { url: "/icons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/icons/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
+  openGraph: {
+    type: "website",
+    siteName: "Christian Debate",
+    title: "Christian Debate",
+    description:
+      "Structured debate platform for meaningful theological discussions. Explore multiple perspectives, track stance shifts, and find the strongest arguments.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Christian Debate — Structured discussions that illuminate truth",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Christian Debate",
+    description:
+      "Structured debate platform for meaningful theological discussions.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export const viewport: Viewport = {

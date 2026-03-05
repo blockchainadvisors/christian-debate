@@ -36,8 +36,16 @@ export function Header() {
         />
 
         {/* Logo */}
-        <Link href="/" className="mr-6 flex items-center font-bold tracking-tight">
-          Christian Debate
+        <Link href="/" className="mr-6 flex items-center gap-2 font-bold tracking-tight">
+          <img
+            src="/icons/logo-40.png"
+            alt=""
+            width={28}
+            height={28}
+            className="shrink-0"
+          />
+          <span className="hidden sm:inline">Christian Debate</span>
+          <span className="sm:hidden">CD</span>
         </Link>
 
         {/* Desktop nav links */}
