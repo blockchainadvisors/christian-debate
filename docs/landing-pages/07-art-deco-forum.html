@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christian Debate — The Grand Forum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #0a1628;
+      --navy-light: #132240;
+      --navy-mid: #1a2d52;
+      --cream: #f0e6d3;
+      --cream-dim: #d4c9b6;
+      --gold: #c9a84c;
+      --gold-light: #e0c872;
+      --gold-dark: #a08030;
+      --white: #faf8f4;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background-color: var(--navy);
+      color: var(--cream);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Poiret One', cursive;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-weight: 400;
+    }
+
+    /* ===== UTILITY ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .gold-text {
+      color: var(--gold);
+    }
+
+    /* ===== ART DECO SUNBURST DIVIDER ===== */
+    .deco-divider {
+      width: 100%;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deco-divider::before {
+      content: '';
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: repeating-conic-gradient(from 0deg, transparent 0deg, var(--gold) 2deg, transparent 4deg, transparent 10deg);
+      opacity: 0.4;
+      clip-path: polygon(50% 50%, 0% 0%, 100% 0%);
+      transform: scaleY(0.5);
+    }
+
+    .deco-divider .diamond {
+      width: 16px;
+      height: 16px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+
+    .deco-divider .line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      flex: 1;
+      max-width: 200px;
+    }
+
+    /* ===== GEOMETRIC BACKGROUND PATTERNS ===== */
+    .geo-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .geo-bg .fan {
+      position: absolute;
+      width: 300px;
+      height: 150px;
+      border-radius: 300px 300px 0 0;
+      border: 1px solid rgba(201, 168, 76, 0.12);
+    }
+
+    .geo-bg .fan::before {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 100px;
+      border-radius: 200px 200px 0 0;
+      border: 1px solid rgba(201, 168, 76, 0.08);
+      bottom: 0;
+      left: 50px;
+    }
+
+    .geo-bg .fan::after {
+      content: '';
+      position: absolute;
+      width: 100px;
+      height: 50px;
+      border-radius: 100px 100px 0 0;
+      border: 1px solid rgba(201, 168, 76, 0.06);
+      bottom: 0;
+      left: 100px;
+    }
+
+    .geo-bg .vertical-line {
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.08), transparent);
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.2rem 0;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(10, 22, 40, 0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--gold);
+    }
+
+    .nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: 'Poiret One', cursive;
+      font-size: 1.4rem;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 1px;
+      background: var(--gold);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero .geo-bg .fan:nth-child(1) {
+      bottom: 0;
+      left: -100px;
+      opacity: 0.5;
+    }
+
+    .hero .geo-bg .fan:nth-child(2) {
+      bottom: 0;
+      right: -100px;
+      opacity: 0.5;
+    }
+
+    .hero .geo-bg .vertical-line:nth-child(3) { left: 10%; }
+    .hero .geo-bg .vertical-line:nth-child(4) { left: 20%; }
+    .hero .geo-bg .vertical-line:nth-child(5) { right: 10%; }
+    .hero .geo-bg .vertical-line:nth-child(6) { right: 20%; }
+
+    .hero-stepped-bg {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 40%;
+      background:
+        linear-gradient(to top, rgba(201, 168, 76, 0.03) 0%, transparent 25%),
+        linear-gradient(to top, rgba(201, 168, 76, 0.02) 0%, transparent 50%);
+      clip-path: polygon(
+        0% 100%, 0% 80%, 10% 80%, 10% 60%, 20% 60%, 20% 40%, 30% 40%, 30% 20%,
+        40% 20%, 40% 0%, 60% 0%, 60% 20%, 70% 20%, 70% 40%, 80% 40%, 80% 60%,
+        90% 60%, 90% 80%, 100% 80%, 100% 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      animation: fadeInDown 1s ease 0.2s both;
+    }
+
+    .hero-ornament .line {
+      width: 80px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-ornament .diamond {
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+      animation: fadeInDown 1s ease 0.4s both;
+      line-height: 1.2;
+    }
+
+    .hero h1 .gold-text {
+      display: block;
+      font-size: 0.5em;
+      margin-top: 0.5rem;
+    }
+
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--cream-dim);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      margin-bottom: 3rem;
+      animation: fadeInDown 1s ease 0.6s both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 3rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Poiret One', cursive;
+      font-size: 1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.4s ease, background 0.4s ease;
+      animation: fadeInUp 1s ease 0.8s both;
+    }
+
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent 0%, transparent 30%,
+        rgba(201, 168, 76, 0.15) 45%,
+        rgba(201, 168, 76, 0.3) 50%,
+        rgba(201, 168, 76, 0.15) 55%,
+        transparent 70%, transparent 100%
+      );
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .hero-cta:hover {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .hero-cta:hover::before {
+      transform: translateX(100%);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: fadeInUp 1s ease 1s both;
+    }
+
+    .hero-scroll .arrow {
+      width: 1px;
+      height: 30px;
+      background: var(--gold);
+      position: relative;
+      animation: scrollBounce 2s ease infinite;
+    }
+
+    .hero-scroll .arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -4px;
+      width: 9px;
+      height: 9px;
+      border-right: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 6rem 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      color: var(--cream-dim);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .feature-card {
+      background: linear-gradient(180deg, var(--navy-light), var(--navy));
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s ease, border-color 0.4s ease;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent 0%, transparent 40%,
+        rgba(201, 168, 76, 0.05) 50%,
+        transparent 60%, transparent 100%
+      );
+      transform: translateX(-100%);
+      transition: transform 0.8s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-card:hover::after {
+      transform: translateX(100%);
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .feature-icon::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      transform: rotate(45deg);
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      letter-spacing: 0.2em;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--cream-dim);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .how-it-works {
+      padding: 6rem 0;
+      position: relative;
+      background: var(--navy-light);
+    }
+
+    .how-it-works .stepped-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent calc(50% - 1px),
+          rgba(201, 168, 76, 0.06) calc(50% - 1px),
+          rgba(201, 168, 76, 0.06) calc(50% + 1px),
+          transparent calc(50% + 1px)
+        );
+      pointer-events: none;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 2.5rem;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .step.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step-number {
+      width: 80px;
+      height: 80px;
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poiret One', cursive;
+      font-size: 2rem;
+      color: var(--gold);
+      position: relative;
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .step-number span {
+      transform: rotate(-45deg);
+    }
+
+    .step-number::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(201, 168, 76, 0.3);
+    }
+
+    .step-content h3 {
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.2em;
+    }
+
+    .step-content p {
+      color: var(--cream-dim);
+      font-weight: 300;
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .step-connector {
+      width: 1px;
+      height: 3rem;
+      background: linear-gradient(180deg, var(--gold), transparent);
+      margin-left: 40px;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials {
+      padding: 6rem 0;
+      position: relative;
+    }
+
+    .testimonials .geo-bg .fan {
+      top: -75px;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+      opacity: 0.4;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .testimonial-card {
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      padding: 2.5rem 2rem;
+      position: relative;
+      background: var(--navy-light);
+      transition: border-color 0.4s ease;
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+    }
+
+    .testimonial-card::before,
+    .testimonial-card::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+
+    .testimonial-card::before {
+      top: -1px;
+      left: -1px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .testimonial-card::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .testimonial-quote {
+      font-size: 2.5rem;
+      color: var(--gold);
+      font-family: 'Poiret One', cursive;
+      line-height: 1;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      color: var(--cream);
+      font-weight: 300;
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--gold);
+      transform: rotate(45deg);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--navy-mid);
+    }
+
+    .testimonial-avatar span {
+      transform: rotate(-45deg);
+      font-family: 'Poiret One', cursive;
+      color: var(--gold);
+      font-size: 1rem;
+    }
+
+    .testimonial-name {
+      font-family: 'Poiret One', cursive;
+      font-size: 0.95rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .testimonial-role {
+      font-size: 0.8rem;
+      color: var(--cream-dim);
+      font-weight: 300;
+      margin-top: 0.15rem;
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      padding: 8rem 0;
+      position: relative;
+      text-align: center;
+      background: var(--navy-light);
+      overflow: hidden;
+    }
+
+    .cta .sunburst {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: repeating-conic-gradient(from 0deg, transparent 0deg, rgba(201, 168, 76, 0.03) 2deg, transparent 4deg, transparent 10deg);
+      border-radius: 50%;
+      animation: slowRotate 60s linear infinite;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta p {
+      color: var(--cream-dim);
+      font-weight: 300;
+      max-width: 550px;
+      margin: 0 auto 3rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 3rem;
+      background: var(--gold);
+      color: var(--navy);
+      text-decoration: none;
+      font-family: 'Poiret One', cursive;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent 0%, transparent 30%,
+        rgba(255, 255, 255, 0.3) 45%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0.3) 55%,
+        transparent 70%, transparent 100%
+      );
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 3rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Poiret One', cursive;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(201, 168, 76, 0.1);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 3rem 0;
+      border-top: 1px solid rgba(201, 168, 76, 0.15);
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Poiret One', cursive;
+      font-size: 1.2rem;
+      color: var(--gold);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .footer p {
+      color: var(--cream-dim);
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--cream-dim);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    @keyframes slowRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 22, 40, 0.98);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .step {
+        grid-template-columns: 60px 1fr;
+        gap: 1.5rem;
+      }
+
+      .step-number {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+
+      .step-connector {
+        margin-left: 30px;
+      }
+
+      .hero-stepped-bg {
+        display: none;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        letter-spacing: 0.15em;
+      }
+
+      .section-header h2 {
+        letter-spacing: 0.15em;
+      }
+
+      .hero-cta, .btn-primary, .btn-secondary {
+        padding: 0.9rem 2rem;
+        font-size: 0.85rem;
+      }
+
+      .deco-divider .line {
+        max-width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">Christian Debate</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#cta">Join</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="geo-bg">
+      <div class="fan"></div>
+      <div class="fan"></div>
+      <div class="vertical-line"></div>
+      <div class="vertical-line"></div>
+      <div class="vertical-line"></div>
+      <div class="vertical-line"></div>
+    </div>
+    <div class="hero-stepped-bg"></div>
+
+    <div class="hero-content">
+      <div class="hero-ornament">
+        <div class="line"></div>
+        <div class="diamond"></div>
+        <div class="line"></div>
+      </div>
+      <h1>
+        Christian Debate
+        <span class="gold-text">The Grand Forum</span>
+      </h1>
+      <p class="hero-tagline">
+        Where conviction meets discourse. A structured platform for
+        theological debate, built on reason and mutual respect.
+      </p>
+      <a href="#cta" class="hero-cta">Enter the Forum</a>
+    </div>
+
+    <a href="#features" class="hero-scroll">
+      <span>Explore</span>
+      <div class="arrow"></div>
+    </a>
+  </section>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="deco-divider">
+    <div class="line"></div>
+    <div class="diamond"></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2>The Architecture of <span class="gold-text">Discourse</span></h2>
+        <p>Four distinct views designed to elevate theological debate beyond noise into structured, meaningful exchange.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Thread View -->
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 8h24v20H18l-6 4v-4H8V8z"/>
+              <line x1="14" y1="14" x2="26" y2="14"/>
+              <line x1="14" y1="18" x2="22" y2="18"/>
+              <line x1="14" y1="22" x2="24" y2="22"/>
+            </svg>
+          </div>
+          <h3>Thread View</h3>
+          <p>Follow conversations as they unfold naturally. Nested replies with full context, designed for deep theological exploration.</p>
+        </div>
+
+        <!-- Sides View -->
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="6" width="14" height="28" rx="1"/>
+              <rect x="22" y="6" width="14" height="28" rx="1"/>
+              <line x1="8" y1="12" x2="14" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+              <line x1="26" y1="12" x2="32" y2="12"/>
+              <line x1="26" y1="16" x2="32" y2="16"/>
+              <path d="M18 20h4" stroke-dasharray="2,2"/>
+            </svg>
+          </div>
+          <h3>Sides View</h3>
+          <p>Pro and Con arguments displayed in elegant symmetry. See both perspectives side by side, weigh each position with clarity.</p>
+        </div>
+
+        <!-- Best Exchanges -->
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="20,4 24,14 35,14 26,21 29,32 20,25 11,32 14,21 5,14 16,14"/>
+            </svg>
+          </div>
+          <h3>Best Exchanges</h3>
+          <p>The finest moments of debate, surfaced by community discernment. Where iron truly sharpens iron.</p>
+        </div>
+
+        <!-- Neutral Verdict -->
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="16" r="10"/>
+              <line x1="20" y1="6" x2="20" y2="16"/>
+              <line x1="20" y1="16" x2="27" y2="20"/>
+              <rect x="12" y="30" width="16" height="4" rx="1"/>
+              <line x1="16" y1="26" x2="12" y2="30"/>
+              <line x1="24" y1="26" x2="28" y2="30"/>
+            </svg>
+          </div>
+          <h3>Neutral Verdict</h3>
+          <p>Impartial analysis that synthesizes arguments from both sides into a balanced, community-driven assessment.</p>
+        </div>
+      </div>
+
+      <!-- Additional feature highlights -->
+      <div class="deco-divider" style="margin: 4rem 0 3rem;">
+        <div class="line"></div>
+        <div class="diamond"></div>
+        <div class="line"></div>
+      </div>
+
+      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4v32M12 12l8-8 8 8M12 28l8 8 8-8"/>
+            </svg>
+          </div>
+          <h3>Stance Tracking</h3>
+          <p>Declare your position and track how it shifts through the course of debate. Intellectual honesty, made visible.</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="6" width="28" height="28" rx="2"/>
+              <line x1="6" y1="14" x2="34" y2="14"/>
+              <line x1="6" y1="22" x2="34" y2="22"/>
+              <line x1="6" y1="30" x2="34" y2="30"/>
+              <circle cx="12" cy="18" r="2"/>
+              <circle cx="12" cy="26" r="2"/>
+            </svg>
+          </div>
+          <h3>Reasoned Voting</h3>
+          <p>Every vote requires a reason. Categorized feedback ensures substance rises above mere popularity.</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <polyline points="6,30 14,18 22,24 30,10 34,10"/>
+              <polyline points="30,10 34,10 34,14"/>
+              <line x1="6" y1="34" x2="34" y2="34"/>
+              <line x1="6" y1="6" x2="6" y2="34"/>
+            </svg>
+          </div>
+          <h3>Analytics Engine</h3>
+          <p>Deep insights into debate dynamics: engagement patterns, argument strength, and community consensus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="deco-divider">
+    <div class="line"></div>
+    <div class="diamond"></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="stepped-bg"></div>
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2>The <span class="gold-text">Grand Procedure</span></h2>
+        <p>From proposition to verdict, every debate follows a refined process that ensures fairness and depth.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step fade-in">
+          <div class="step-number"><span>I</span></div>
+          <div class="step-content">
+            <h3>Propose a Topic</h3>
+            <p>Present your theological question or proposition to the forum. Frame it with clarity and precision, setting the stage for structured discourse. Every great debate begins with a well-formed question.</p>
+          </div>
+        </div>
+
+        <div class="step-connector"></div>
+
+        <div class="step fade-in">
+          <div class="step-number"><span>II</span></div>
+          <div class="step-content">
+            <h3>Declare Your Stance</h3>
+            <p>Take a position and state it publicly. Whether you argue for, against, or remain undecided, your stance is recorded and tracked throughout the debate, honoring intellectual transparency.</p>
+          </div>
+        </div>
+
+        <div class="step-connector"></div>
+
+        <div class="step fade-in">
+          <div class="step-number"><span>III</span></div>
+          <div class="step-content">
+            <h3>Engage in Discourse</h3>
+            <p>Build arguments with Scripture, reason, and tradition. Respond to counterpoints with substance. The multi-view system lets you engage through threads, side-by-side comparison, or curated exchanges.</p>
+          </div>
+        </div>
+
+        <div class="step-connector"></div>
+
+        <div class="step fade-in">
+          <div class="step-number"><span>IV</span></div>
+          <div class="step-content">
+            <h3>Vote with Reason</h3>
+            <p>Cast reasoned votes across categories: logical rigor, scriptural support, rhetorical clarity, and charitable interpretation. Every vote demands a rationale, ensuring the best arguments rise to prominence.</p>
+          </div>
+        </div>
+
+        <div class="step-connector"></div>
+
+        <div class="step fade-in">
+          <div class="step-number"><span>V</span></div>
+          <div class="step-content">
+            <h3>Receive the Verdict</h3>
+            <p>A neutral, community-driven verdict synthesizes all arguments and votes into a balanced assessment. Analytics reveal shifts in stance, the strength of key exchanges, and the overall arc of discourse.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="deco-divider">
+    <div class="line"></div>
+    <div class="diamond"></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="testimonials" id="testimonials">
+    <div class="geo-bg">
+      <div class="fan"></div>
+    </div>
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2>Voices from the <span class="gold-text">Forum</span></h2>
+        <p>Scholars, pastors, and seekers share their experience with structured theological discourse.</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">The Sides View transformed how I approach theological disagreement. Seeing pro and con arguments in parallel forced me to engage honestly with positions I previously dismissed.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar"><span>JM</span></div>
+            <div>
+              <div class="testimonial-name">Dr. James Morrison</div>
+              <div class="testimonial-role">Professor of Systematic Theology</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">Reasoned voting changed everything. When you must articulate why you agree or disagree, the quality of discourse rises dramatically. This is what online discussion should be.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar"><span>SR</span></div>
+            <div>
+              <div class="testimonial-name">Sarah Richardson</div>
+              <div class="testimonial-role">Seminary Student</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">I watched my stance shift on three debates this year. The stance tracking feature kept me honest and helped me see my own growth. Iron truly sharpens iron here.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar"><span>PK</span></div>
+            <div>
+              <div class="testimonial-name">Pastor Kevin Liu</div>
+              <div class="testimonial-role">Community Church Leader</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="deco-divider">
+    <div class="line"></div>
+    <div class="diamond"></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta" id="cta">
+    <div class="sunburst"></div>
+    <div class="container">
+      <div class="cta-content">
+        <div class="hero-ornament fade-in">
+          <div class="line"></div>
+          <div class="diamond"></div>
+          <div class="line"></div>
+        </div>
+        <h2 class="fade-in">Enter the <span class="gold-text">Grand Forum</span></h2>
+        <p class="fade-in">Join a community where theological debate is elevated to an art form. Where every argument is heard, every vote is reasoned, and every exchange brings us closer to truth.</p>
+        <div class="cta-buttons fade-in">
+          <a href="#" class="btn-primary">Begin Debating</a>
+          <a href="#" class="btn-secondary">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">Christian Debate</div>
+      <p>"As iron sharpens iron, so one person sharpens another." — Proverbs 27:17</p>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">Guidelines</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // Navigation scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Mobile navigation toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Intersection Observer for fade-in animations
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          // Stagger animations for sibling elements
+          const siblings = entry.target.parentElement.querySelectorAll('.fade-in');
+          const siblingIndex = Array.from(siblings).indexOf(entry.target);
+          const delay = siblingIndex * 120;
+
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, delay);
+
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Also observe .step elements
+    const stepObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          stepObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.step').forEach(el => {
+      stepObserver.observe(el);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Debate - Admin Dashboard (Nordic Clean)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f7f5;
+    --white: #ffffff;
+    --border: #e5e7eb;
+    --text-body: #64748b;
+    --text-heading: #1e293b;
+    --accent: #3b82f6;
+    --accent-light: #eff6ff;
+    --green: #22c55e;
+    --green-light: #f0fdf4;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --amber: #f59e0b;
+    --amber-light: #fffbeb;
+    --purple: #8b5cf6;
+    --purple-light: #f5f3ff;
+    --radius: 8px;
+    --radius-sm: 6px;
+    --font-heading: 'DM Sans', sans-serif;
+    --font-body: 'Karla', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text-body);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-heading);
+    color: var(--text-heading);
+    line-height: 1.3;
+  }
+
+  /* Layout */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-logo span {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    color: var(--text-body);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .sidebar-nav a:hover {
+    background: var(--bg);
+    color: var(--text-heading);
+  }
+
+  .sidebar-nav a.active {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .sidebar-nav a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .sidebar-nav a svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .sidebar-nav a.active svg { opacity: 1; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--red-light);
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .sidebar-user {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-heading);
+  }
+
+  .sidebar-user-info {
+    flex: 1;
+  }
+
+  .sidebar-user-info strong {
+    display: block;
+    font-size: 13px;
+    color: var(--text-heading);
+    font-weight: 600;
+  }
+
+  .sidebar-user-info small {
+    font-size: 11px;
+    color: var(--text-body);
+  }
+
+  /* Main Content */
+  .main {
+    flex: 1;
+    margin-left: 260px;
+  }
+
+  /* Top Bar */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-search {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .topbar-search input {
+    width: 100%;
+    padding: 8px 12px 8px 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-heading);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .topbar-search input::placeholder { color: #94a3b8; }
+  .topbar-search input:focus { border-color: var(--accent); }
+
+  .topbar-search svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #94a3b8;
+  }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .topbar-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    color: var(--text-body);
+    transition: background 0.15s;
+  }
+
+  .topbar-btn:hover { background: var(--bg); }
+  .topbar-btn svg { width: 18px; height: 18px; }
+
+  .topbar-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quick-action-btn {
+    padding: 7px 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+
+  .quick-action-btn:hover { background: #2563eb; }
+
+  /* Content Area */
+  .content {
+    padding: 28px 32px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  /* Sections (pages) */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Stat Cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .stat-card-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-body);
+    margin-bottom: 6px;
+  }
+
+  .stat-card-value {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-heading);
+  }
+
+  .stat-card-change {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .stat-card-change.up { color: var(--green); }
+  .stat-card-change.down { color: var(--red); }
+
+  /* Charts */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .chart-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .chart-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  /* Bar Chart */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 160px;
+    padding-top: 8px;
+  }
+
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .bar {
+    width: 100%;
+    max-width: 40px;
+    background: var(--accent-light);
+    border-radius: 4px 4px 0 0;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .bar:hover { background: var(--accent); }
+
+  .bar-label {
+    font-size: 11px;
+    color: var(--text-body);
+  }
+
+  .bar-value {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  /* Trust Tier Distribution */
+  .tier-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .tier-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tier-row-label {
+    font-size: 13px;
+    width: 80px;
+    flex-shrink: 0;
+    font-weight: 500;
+    color: var(--text-heading);
+  }
+
+  .tier-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: var(--bg);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .tier-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .tier-bar-fill.newcomer { background: #94a3b8; }
+  .tier-bar-fill.regular { background: var(--accent); }
+  .tier-bar-fill.trusted { background: var(--green); }
+  .tier-bar-fill.elder { background: var(--purple); }
+
+  .tier-row-count {
+    font-size: 13px;
+    font-weight: 600;
+    width: 40px;
+    text-align: right;
+    color: var(--text-heading);
+  }
+
+  /* Activity Feed */
+  .activity-feed {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+
+  .activity-feed h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .activity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .activity-dot.blue { background: var(--accent); }
+  .activity-dot.green { background: var(--green); }
+  .activity-dot.red { background: var(--red); }
+  .activity-dot.amber { background: var(--amber); }
+  .activity-dot.purple { background: var(--purple); }
+
+  .activity-text {
+    flex: 1;
+    font-size: 13px;
+  }
+
+  .activity-text strong { color: var(--text-heading); font-weight: 600; }
+
+  .activity-time {
+    font-size: 12px;
+    color: #94a3b8;
+    white-space: nowrap;
+  }
+
+  /* Queue Cards */
+  .queue-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .queue-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .queue-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .queue-card-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .queue-card-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-body);
+    font-family: var(--font-heading);
+  }
+
+  .queue-card-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  .queue-card-meta {
+    font-size: 12px;
+    color: var(--text-body);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-amber { background: var(--amber-light); color: var(--amber); }
+  .badge-blue { background: var(--accent-light); color: var(--accent); }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-purple { background: var(--purple-light); color: var(--purple); }
+
+  .queue-card-content {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-body);
+    padding: 12px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 14px;
+  }
+
+  .queue-card-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--white);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    color: var(--text-body);
+  }
+
+  .btn:hover { background: var(--bg); color: var(--text-heading); }
+  .btn-approve { border-color: var(--green); color: var(--green); }
+  .btn-approve:hover { background: var(--green-light); }
+  .btn-reject { border-color: var(--red); color: var(--red); }
+  .btn-reject:hover { background: var(--red-light); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #2563eb; }
+
+  /* Tables */
+  .table-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .table-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-card-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafaf9; }
+
+  .user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-cell-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-heading);
+    flex-shrink: 0;
+  }
+
+  .user-cell-name {
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  .user-cell-email {
+    font-size: 12px;
+    color: var(--text-body);
+  }
+
+  .status-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+  }
+
+  .status-dot::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .status-dot.active::before { background: var(--green); }
+  .status-dot.closed::before { background: var(--text-body); }
+  .status-dot.flagged::before { background: var(--red); }
+
+  .actions-cell {
+    display: flex;
+    gap: 6px;
+  }
+
+  .action-link {
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .action-link:hover { color: #2563eb; text-decoration: underline; }
+  .action-link.danger { color: var(--red); }
+  .action-link.danger:hover { color: #dc2626; }
+
+  /* Report Cards */
+  .reports-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .report-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .report-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .report-card-type {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  .report-card-target {
+    font-size: 12px;
+    color: var(--text-body);
+    margin-top: 2px;
+  }
+
+  .report-card-body {
+    font-size: 13px;
+    color: var(--text-body);
+    padding: 12px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+  }
+
+  .report-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .report-card-reporter {
+    font-size: 12px;
+    color: var(--text-body);
+  }
+
+  .report-card-reporter strong { color: var(--text-heading); }
+
+  /* Analytics */
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .analytics-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .analytics-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .metric-row:last-child { border-bottom: none; }
+
+  .metric-row-value {
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  .mini-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 80px;
+    margin-top: 8px;
+  }
+
+  .mini-bar {
+    flex: 1;
+    background: var(--accent-light);
+    border-radius: 2px 2px 0 0;
+    transition: background 0.15s;
+  }
+
+  .mini-bar:hover { background: var(--accent); }
+
+  .top-list { list-style: none; }
+
+  .top-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .top-list li:last-child { border-bottom: none; }
+
+  .top-list-rank {
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-right: 8px;
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  .top-list-title {
+    flex: 1;
+    color: var(--text-heading);
+    font-weight: 500;
+  }
+
+  .top-list-count {
+    font-weight: 600;
+    color: var(--text-body);
+    font-size: 12px;
+  }
+
+  .donut-chart {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .donut-visual {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--accent) 0% 38%,
+      var(--green) 38% 62%,
+      var(--amber) 62% 80%,
+      var(--red) 80% 100%
+    );
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .donut-visual::after {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    background: var(--white);
+  }
+
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .donut-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .taxonomy-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .taxonomy-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .taxonomy-label {
+    font-size: 13px;
+    width: 120px;
+    flex-shrink: 0;
+    color: var(--text-heading);
+    font-weight: 500;
+  }
+
+  .taxonomy-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: var(--bg);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .taxonomy-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+
+  .taxonomy-count {
+    font-size: 12px;
+    font-weight: 600;
+    width: 30px;
+    text-align: right;
+    color: var(--text-heading);
+  }
+
+  /* Mobile toggle */
+  .mobile-toggle {
+    display: none;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-heading);
+  }
+
+  .mobile-toggle svg { width: 20px; height: 20px; }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    z-index: 90;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+    .analytics-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+
+    .sidebar.open { transform: translateX(0); }
+
+    .sidebar-overlay.open {
+      display: block;
+    }
+
+    .main { margin-left: 0; }
+
+    .mobile-toggle { display: flex; }
+
+    .content { padding: 20px 16px; }
+    .topbar { padding: 0 16px; }
+
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .charts-grid { grid-template-columns: 1fr; }
+
+    .table-card { overflow-x: auto; }
+    table { min-width: 600px; }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <h2>Christian Debate</h2>
+      <span>Admin</span>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebarNav">
+      <a href="#" data-section="dashboard" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="#" data-section="quarantine">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Quarantine Queue
+        <span class="nav-badge">12</span>
+      </a>
+      <a href="#" data-section="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Reports
+        <span class="nav-badge">5</span>
+      </a>
+      <a href="#" data-section="users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Users
+      </a>
+      <a href="#" data-section="debates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Debates
+      </a>
+      <a href="#" data-section="analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </a>
+      <a href="#" data-section="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">SM</div>
+      <div class="sidebar-user-info">
+        <strong>Sarah M.</strong>
+        <small>Administrator</small>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search users, debates, reports...">
+      </div>
+
+      <div class="topbar-actions">
+        <button class="topbar-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="topbar-badge">3</span>
+        </button>
+        <button class="quick-action-btn">+ New Debate</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- DASHBOARD SECTION -->
+      <section class="section active" id="section-dashboard">
+        <h1 class="page-title">Dashboard</h1>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-label">Total Users</div>
+            <div class="stat-card-value">2,847</div>
+            <div class="stat-card-change up">+12.3% this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Active Debates</div>
+            <div class="stat-card-value">184</div>
+            <div class="stat-card-change up">+8.1% this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Pending Moderation</div>
+            <div class="stat-card-value">12</div>
+            <div class="stat-card-change down">-23% from last week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Comments Today</div>
+            <div class="stat-card-value">342</div>
+            <div class="stat-card-change up">+5.6% vs yesterday</div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Moderation Activity (7 Days)</h3>
+            <div class="bar-chart">
+              <div class="bar-col">
+                <div class="bar-value">18</div>
+                <div class="bar" style="height: 60%"></div>
+                <div class="bar-label">Mon</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-value">24</div>
+                <div class="bar" style="height: 80%"></div>
+                <div class="bar-label">Tue</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-value">30</div>
+                <div class="bar" style="height: 100%"></div>
+                <div class="bar-label">Wed</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-value">15</div>
+                <div class="bar" style="height: 50%"></div>
+                <div class="bar-label">Thu</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-value">22</div>
+                <div class="bar" style="height: 73%"></div>
+                <div class="bar-label">Fri</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-value">9</div>
+                <div class="bar" style="height: 30%"></div>
+                <div class="bar-label">Sat</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-value">12</div>
+                <div class="bar" style="height: 40%"></div>
+                <div class="bar-label">Sun</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Trust Tier Distribution</h3>
+            <div class="tier-list">
+              <div class="tier-row">
+                <div class="tier-row-label">Newcomer</div>
+                <div class="tier-bar-bg"><div class="tier-bar-fill newcomer" style="width: 45%"></div></div>
+                <div class="tier-row-count">1,281</div>
+              </div>
+              <div class="tier-row">
+                <div class="tier-row-label">Regular</div>
+                <div class="tier-bar-bg"><div class="tier-bar-fill regular" style="width: 30%"></div></div>
+                <div class="tier-row-count">854</div>
+              </div>
+              <div class="tier-row">
+                <div class="tier-row-label">Trusted</div>
+                <div class="tier-bar-bg"><div class="tier-bar-fill trusted" style="width: 18%"></div></div>
+                <div class="tier-row-count">513</div>
+              </div>
+              <div class="tier-row">
+                <div class="tier-row-label">Elder</div>
+                <div class="tier-bar-bg"><div class="tier-bar-fill elder" style="width: 7%"></div></div>
+                <div class="tier-row-count">199</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-feed">
+          <h3>Recent Activity</h3>
+          <div class="activity-item">
+            <div class="activity-dot blue"></div>
+            <div class="activity-text"><strong>Mark T.</strong> created a new debate: "Sola Scriptura in the Modern Context"</div>
+            <div class="activity-time">5 min ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot red"></div>
+            <div class="activity-text"><strong>AutoMod</strong> quarantined a comment by JohnD99 for profanity filter match</div>
+            <div class="activity-time">12 min ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div class="activity-text"><strong>Sarah M.</strong> approved 3 comments from the quarantine queue</div>
+            <div class="activity-time">28 min ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot amber"></div>
+            <div class="activity-text"><strong>Rachel W.</strong> reported a comment in "Free Will vs. Predestination"</div>
+            <div class="activity-time">1 hr ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot purple"></div>
+            <div class="activity-text"><strong>System</strong> promoted user GraceBeliever to Trusted tier (rep reached 500)</div>
+            <div class="activity-time">2 hr ago</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUARANTINE QUEUE SECTION -->
+      <section class="section" id="section-quarantine">
+        <h1 class="page-title">Quarantine Queue</h1>
+
+        <div class="queue-grid">
+          <div class="queue-card">
+            <div class="queue-card-header">
+              <div class="queue-card-author">
+                <div class="queue-card-avatar">JD</div>
+                <div>
+                  <div class="queue-card-name">JohnD99</div>
+                  <div class="queue-card-meta">Newcomer &middot; Rep: 45 &middot; 2 min ago</div>
+                </div>
+              </div>
+              <span class="badge badge-red">Profanity</span>
+            </div>
+            <div class="queue-card-content">
+              This is absolutely [filtered] ridiculous. How can anyone who claims to understand scripture come to such a conclusion? The early church fathers would be rolling in their graves...
+            </div>
+            <div class="queue-card-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-reject">Reject</button>
+              <button class="btn">Edit &amp; Approve</button>
+              <button class="btn">View Context</button>
+            </div>
+          </div>
+
+          <div class="queue-card">
+            <div class="queue-card-header">
+              <div class="queue-card-author">
+                <div class="queue-card-avatar">AL</div>
+                <div>
+                  <div class="queue-card-name">AnnaLuther</div>
+                  <div class="queue-card-meta">Regular &middot; Rep: 210 &middot; 8 min ago</div>
+                </div>
+              </div>
+              <span class="badge badge-amber">Spam Detection</span>
+            </div>
+            <div class="queue-card-content">
+              Check out my blog for the REAL truth about end times prophecy! Visit www.example-blog.com for daily updates on revelation interpretation. Subscribe now for exclusive content and join thousands who...
+            </div>
+            <div class="queue-card-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-reject">Reject</button>
+              <button class="btn">Edit &amp; Approve</button>
+              <button class="btn">View Context</button>
+            </div>
+          </div>
+
+          <div class="queue-card">
+            <div class="queue-card-header">
+              <div class="queue-card-author">
+                <div class="queue-card-avatar">PK</div>
+                <div>
+                  <div class="queue-card-name">PeterK</div>
+                  <div class="queue-card-meta">Newcomer &middot; Rep: 12 &middot; 15 min ago</div>
+                </div>
+              </div>
+              <span class="badge badge-blue">New User Review</span>
+            </div>
+            <div class="queue-card-content">
+              I think the Calvinist interpretation of Romans 9 is the most consistent with the broader narrative of Paul's theology. Election is clearly individual, not corporate, when you examine the Greek participles in context.
+            </div>
+            <div class="queue-card-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-reject">Reject</button>
+              <button class="btn">Edit &amp; Approve</button>
+              <button class="btn">View Context</button>
+            </div>
+          </div>
+
+          <div class="queue-card">
+            <div class="queue-card-header">
+              <div class="queue-card-author">
+                <div class="queue-card-avatar">MR</div>
+                <div>
+                  <div class="queue-card-name">MikeR_Theology</div>
+                  <div class="queue-card-meta">Regular &middot; Rep: 180 &middot; 22 min ago</div>
+                </div>
+              </div>
+              <span class="badge badge-red">Ad Hominem</span>
+            </div>
+            <div class="queue-card-content">
+              Anyone who holds that position clearly hasn't read the Bible carefully. You sound like someone who just repeats what their pastor says without actually thinking critically about the text.
+            </div>
+            <div class="queue-card-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-reject">Reject</button>
+              <button class="btn">Edit &amp; Approve</button>
+              <button class="btn">View Context</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTS SECTION -->
+      <section class="section" id="section-reports">
+        <h1 class="page-title">Reports</h1>
+
+        <div class="reports-grid">
+          <div class="report-card">
+            <div class="report-card-header">
+              <div>
+                <div class="report-card-type">Personal Attack</div>
+                <div class="report-card-target">In debate: "Baptism: Infant vs. Believer's" &middot; Comment by ThomasA</div>
+              </div>
+              <span class="badge badge-red">High Priority</span>
+            </div>
+            <div class="report-card-body">
+              "You're not even a real Christian if you believe in infant baptism. This is just a pagan practice dressed up in Christian clothing and anyone who practices it is deceived."
+            </div>
+            <div class="report-card-footer">
+              <div class="report-card-reporter">Reported by <strong>ElizabethH</strong> &middot; 45 min ago</div>
+              <div class="queue-card-actions">
+                <button class="btn btn-primary">Review</button>
+                <button class="btn">Dismiss</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-header">
+              <div>
+                <div class="report-card-type">Off-Topic / Derailing</div>
+                <div class="report-card-target">In debate: "The Role of Women in Church Leadership" &middot; Comment by User4Christ</div>
+              </div>
+              <span class="badge badge-amber">Medium Priority</span>
+            </div>
+            <div class="report-card-body">
+              "This debate is pointless. What we should really be talking about is the end times. Everything else is a distraction from the real issues facing the church today. Let me tell you about..."
+            </div>
+            <div class="report-card-footer">
+              <div class="report-card-reporter">Reported by <strong>DavidP</strong> &middot; 2 hr ago</div>
+              <div class="queue-card-actions">
+                <button class="btn btn-primary">Review</button>
+                <button class="btn">Dismiss</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-header">
+              <div>
+                <div class="report-card-type">Misinformation</div>
+                <div class="report-card-target">In debate: "Young Earth vs. Old Earth Creationism" &middot; Comment by ScienceFaith</div>
+              </div>
+              <span class="badge badge-blue">Low Priority</span>
+            </div>
+            <div class="report-card-body">
+              "Carbon dating has been scientifically proven to be completely unreliable. Every single study has shown that it gives wildly inaccurate results and no credible scientist uses it anymore."
+            </div>
+            <div class="report-card-footer">
+              <div class="report-card-reporter">Reported by <strong>ProfJamesW</strong> &middot; 4 hr ago</div>
+              <div class="queue-card-actions">
+                <button class="btn btn-primary">Review</button>
+                <button class="btn">Dismiss</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- USERS SECTION -->
+      <section class="section" id="section-users">
+        <h1 class="page-title">Users</h1>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>All Users</h3>
+            <button class="btn btn-primary">Export CSV</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Trust Tier</th>
+                <th>Reputation</th>
+                <th>Comments</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-cell-avatar">MT</div>
+                    <div>
+                      <div class="user-cell-name">Mark T.</div>
+                      <div class="user-cell-email">mark.t@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-purple">Elder</span></td>
+                <td>1,240</td>
+                <td>892</td>
+                <td>Jan 2024</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Suspend</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-cell-avatar">EH</div>
+                    <div>
+                      <div class="user-cell-name">Elizabeth H.</div>
+                      <div class="user-cell-email">elizabeth.h@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-green">Trusted</span></td>
+                <td>680</td>
+                <td>445</td>
+                <td>Mar 2024</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Suspend</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-cell-avatar">DP</div>
+                    <div>
+                      <div class="user-cell-name">David P.</div>
+                      <div class="user-cell-email">david.p@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-green">Trusted</span></td>
+                <td>510</td>
+                <td>312</td>
+                <td>May 2024</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Suspend</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-cell-avatar">AL</div>
+                    <div>
+                      <div class="user-cell-name">Anna Luther</div>
+                      <div class="user-cell-email">anna.l@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-blue">Regular</span></td>
+                <td>210</td>
+                <td>134</td>
+                <td>Aug 2024</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Suspend</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-cell-avatar">JD</div>
+                    <div>
+                      <div class="user-cell-name">John D.</div>
+                      <div class="user-cell-email">john.d99@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge" style="background:#f1f5f9;color:#64748b;">Newcomer</span></td>
+                <td>45</td>
+                <td>23</td>
+                <td>Feb 2026</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Suspend</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-cell-avatar">RW</div>
+                    <div>
+                      <div class="user-cell-name">Rachel W.</div>
+                      <div class="user-cell-email">rachel.w@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge" style="background:#f1f5f9;color:#64748b;">Newcomer</span></td>
+                <td>28</td>
+                <td>11</td>
+                <td>Feb 2026</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Suspend</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- DEBATES SECTION -->
+      <section class="section" id="section-debates">
+        <h1 class="page-title">Debates</h1>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>All Debates</h3>
+            <button class="btn btn-primary">+ Create Debate</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Creator</th>
+                <th>Sides</th>
+                <th>Comments</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:600;color:var(--text-heading);">Sola Scriptura in the Modern Context</td>
+                <td><span class="status-dot active">Active</span></td>
+                <td>Mark T.</td>
+                <td>3</td>
+                <td>127</td>
+                <td>Mar 1, 2026</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Close</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;color:var(--text-heading);">Free Will vs. Predestination</td>
+                <td><span class="status-dot active">Active</span></td>
+                <td>Elizabeth H.</td>
+                <td>4</td>
+                <td>342</td>
+                <td>Feb 18, 2026</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Close</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;color:var(--text-heading);">Baptism: Infant vs. Believer's</td>
+                <td><span class="status-dot flagged">Flagged</span></td>
+                <td>David P.</td>
+                <td>2</td>
+                <td>89</td>
+                <td>Feb 10, 2026</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Close</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;color:var(--text-heading);">The Role of Women in Church Leadership</td>
+                <td><span class="status-dot active">Active</span></td>
+                <td>Anna Luther</td>
+                <td>3</td>
+                <td>215</td>
+                <td>Jan 28, 2026</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link danger" href="#">Close</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;color:var(--text-heading);">Young Earth vs. Old Earth Creationism</td>
+                <td><span class="status-dot closed">Closed</span></td>
+                <td>Mark T.</td>
+                <td>2</td>
+                <td>478</td>
+                <td>Dec 5, 2025</td>
+                <td class="actions-cell">
+                  <a class="action-link" href="#">View</a>
+                  <a class="action-link" href="#">Edit</a>
+                  <a class="action-link" href="#">Reopen</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ANALYTICS SECTION -->
+      <section class="section" id="section-analytics">
+        <h1 class="page-title">Analytics</h1>
+
+        <div class="stats-grid" style="margin-bottom:20px;">
+          <div class="stat-card">
+            <div class="stat-card-label">Avg. Response Time</div>
+            <div class="stat-card-value">4.2h</div>
+            <div class="stat-card-change down">-18% improvement</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Engagement Rate</div>
+            <div class="stat-card-value">68%</div>
+            <div class="stat-card-change up">+3.2% this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Civility Score</div>
+            <div class="stat-card-value">8.4</div>
+            <div class="stat-card-change up">+0.3 from last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Return Users (7d)</div>
+            <div class="stat-card-value">72%</div>
+            <div class="stat-card-change up">+5.1% this week</div>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <h3>Engagement (14 Days)</h3>
+            <div class="mini-chart">
+              <div class="mini-bar" style="height:45%"></div>
+              <div class="mini-bar" style="height:60%"></div>
+              <div class="mini-bar" style="height:55%"></div>
+              <div class="mini-bar" style="height:80%"></div>
+              <div class="mini-bar" style="height:70%"></div>
+              <div class="mini-bar" style="height:65%"></div>
+              <div class="mini-bar" style="height:30%"></div>
+              <div class="mini-bar" style="height:50%"></div>
+              <div class="mini-bar" style="height:75%"></div>
+              <div class="mini-bar" style="height:90%"></div>
+              <div class="mini-bar" style="height:85%"></div>
+              <div class="mini-bar" style="height:100%"></div>
+              <div class="mini-bar" style="height:40%"></div>
+              <div class="mini-bar" style="height:60%"></div>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Top Debates by Engagement</h3>
+            <ul class="top-list">
+              <li>
+                <span class="top-list-rank">1.</span>
+                <span class="top-list-title">Free Will vs. Predestination</span>
+                <span class="top-list-count">342 comments</span>
+              </li>
+              <li>
+                <span class="top-list-rank">2.</span>
+                <span class="top-list-title">Young Earth vs. Old Earth</span>
+                <span class="top-list-count">478 comments</span>
+              </li>
+              <li>
+                <span class="top-list-rank">3.</span>
+                <span class="top-list-title">Women in Church Leadership</span>
+                <span class="top-list-count">215 comments</span>
+              </li>
+              <li>
+                <span class="top-list-rank">4.</span>
+                <span class="top-list-title">Sola Scriptura</span>
+                <span class="top-list-count">127 comments</span>
+              </li>
+              <li>
+                <span class="top-list-rank">5.</span>
+                <span class="top-list-title">Baptism: Infant vs. Believer's</span>
+                <span class="top-list-count">89 comments</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Vote Distribution</h3>
+            <div class="donut-chart">
+              <div class="donut-visual"></div>
+              <div class="donut-legend">
+                <div class="donut-legend-item">
+                  <div class="donut-legend-dot" style="background:var(--accent)"></div>
+                  Compelling (38%)
+                </div>
+                <div class="donut-legend-item">
+                  <div class="donut-legend-dot" style="background:var(--green)"></div>
+                  Well-Sourced (24%)
+                </div>
+                <div class="donut-legend-item">
+                  <div class="donut-legend-dot" style="background:var(--amber)"></div>
+                  Thought-Provoking (18%)
+                </div>
+                <div class="donut-legend-item">
+                  <div class="donut-legend-dot" style="background:var(--red)"></div>
+                  Needs Revision (20%)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Taxonomy Stats</h3>
+            <div class="taxonomy-list">
+              <div class="taxonomy-row">
+                <div class="taxonomy-label">Soteriology</div>
+                <div class="taxonomy-bar-bg"><div class="taxonomy-bar-fill" style="width:85%"></div></div>
+                <div class="taxonomy-count">42</div>
+              </div>
+              <div class="taxonomy-row">
+                <div class="taxonomy-label">Ecclesiology</div>
+                <div class="taxonomy-bar-bg"><div class="taxonomy-bar-fill" style="width:65%"></div></div>
+                <div class="taxonomy-count">31</div>
+              </div>
+              <div class="taxonomy-row">
+                <div class="taxonomy-label">Eschatology</div>
+                <div class="taxonomy-bar-bg"><div class="taxonomy-bar-fill" style="width:55%"></div></div>
+                <div class="taxonomy-count">27</div>
+              </div>
+              <div class="taxonomy-row">
+                <div class="taxonomy-label">Hermeneutics</div>
+                <div class="taxonomy-bar-bg"><div class="taxonomy-bar-fill" style="width:45%"></div></div>
+                <div class="taxonomy-count">22</div>
+              </div>
+              <div class="taxonomy-row">
+                <div class="taxonomy-label">Apologetics</div>
+                <div class="taxonomy-bar-bg"><div class="taxonomy-bar-fill" style="width:35%"></div></div>
+                <div class="taxonomy-count">18</div>
+              </div>
+              <div class="taxonomy-row">
+                <div class="taxonomy-label">Ethics</div>
+                <div class="taxonomy-bar-bg"><div class="taxonomy-bar-fill" style="width:30%"></div></div>
+                <div class="taxonomy-count">15</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS SECTION -->
+      <section class="section" id="section-settings">
+        <h1 class="page-title">Settings</h1>
+
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <h3>Moderation Settings</h3>
+            <div class="metric-row">
+              <span>Auto-quarantine new users</span>
+              <span class="metric-row-value">Enabled</span>
+            </div>
+            <div class="metric-row">
+              <span>Profanity filter</span>
+              <span class="metric-row-value">Strict</span>
+            </div>
+            <div class="metric-row">
+              <span>Spam detection threshold</span>
+              <span class="metric-row-value">Medium</span>
+            </div>
+            <div class="metric-row">
+              <span>Ad hominem detection</span>
+              <span class="metric-row-value">Enabled</span>
+            </div>
+            <div class="metric-row">
+              <span>Max reports before auto-hide</span>
+              <span class="metric-row-value">3</span>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Trust Tier Thresholds</h3>
+            <div class="metric-row">
+              <span>Newcomer &rarr; Regular</span>
+              <span class="metric-row-value">100 rep</span>
+            </div>
+            <div class="metric-row">
+              <span>Regular &rarr; Trusted</span>
+              <span class="metric-row-value">500 rep</span>
+            </div>
+            <div class="metric-row">
+              <span>Trusted &rarr; Elder</span>
+              <span class="metric-row-value">1,000 rep</span>
+            </div>
+            <div class="metric-row">
+              <span>Elder privileges</span>
+              <span class="metric-row-value">Full mod tools</span>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Notification Preferences</h3>
+            <div class="metric-row">
+              <span>Email on new report</span>
+              <span class="metric-row-value">On</span>
+            </div>
+            <div class="metric-row">
+              <span>Email on quarantine overflow (>20)</span>
+              <span class="metric-row-value">On</span>
+            </div>
+            <div class="metric-row">
+              <span>Daily digest</span>
+              <span class="metric-row-value">8:00 AM</span>
+            </div>
+            <div class="metric-row">
+              <span>Weekly analytics summary</span>
+              <span class="metric-row-value">Monday</span>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Site Configuration</h3>
+            <div class="metric-row">
+              <span>Site name</span>
+              <span class="metric-row-value">Christian Debate</span>
+            </div>
+            <div class="metric-row">
+              <span>Max debate sides</span>
+              <span class="metric-row-value">6</span>
+            </div>
+            <div class="metric-row">
+              <span>Comment max length</span>
+              <span class="metric-row-value">5,000 chars</span>
+            </div>
+            <div class="metric-row">
+              <span>Federation mode</span>
+              <span class="metric-row-value">Hub</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Navigation
+  const navLinks = document.querySelectorAll('#sidebarNav a');
+  const sections = document.querySelectorAll('.section');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const mobileToggle = document.getElementById('mobileToggle');
+
+  function switchSection(sectionId) {
+    sections.forEach(s => s.classList.remove('active'));
+    navLinks.forEach(a => a.classList.remove('active'));
+
+    const target = document.getElementById('section-' + sectionId);
+    if (target) target.classList.add('active');
+
+    const activeLink = document.querySelector('[data-section="' + sectionId + '"]');
+    if (activeLink) activeLink.classList.add('active');
+
+    // Close mobile sidebar
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const sectionId = link.getAttribute('data-section');
+      if (sectionId) switchSection(sectionId);
+    });
+  });
+
+  // Mobile toggle
+  mobileToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+  });
+
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  });
+</script>
+</body>
+</html>

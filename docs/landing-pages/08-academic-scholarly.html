@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christian Debate &mdash; A Scholarly Platform for Structured Theological Discourse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Foundations ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --oxford: #002147;
+      --ivory: #fffff0;
+      --crimson: #a51c30;
+      --dark-green: #1e4d2b;
+      --parchment: #f5f0e8;
+      --ink: #1a1a1a;
+      --muted: #5c5c5c;
+      --rule: #c4b99a;
+      --shadow: rgba(0, 33, 71, 0.12);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'Lora', 'Georgia', serif;
+      color: var(--ink);
+      background-color: var(--ivory);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Libre Baskerville', 'Times New Roman', serif;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    /* ===== Typography Utilities ===== */
+    .section-number {
+      display: block;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      color: var(--oxford);
+      margin-bottom: 0.25rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-style: italic;
+      max-width: 640px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-header .section-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Decorative rules */
+    .hr-thin {
+      border: none;
+      height: 1px;
+      background: var(--rule);
+      margin: 2rem auto;
+      max-width: 120px;
+    }
+
+    .hr-double {
+      border: none;
+      height: 4px;
+      margin: 0 auto;
+      max-width: 200px;
+      background: repeating-linear-gradient(
+        to bottom, var(--rule) 0px, var(--rule) 1px,
+        transparent 1px, transparent 3px, var(--rule) 3px, var(--rule) 4px
+      );
+    }
+
+    .engraving {
+      height: 6px;
+      opacity: 0.25;
+      margin: 0 auto;
+      max-width: 300px;
+      background: repeating-linear-gradient(
+        to bottom, var(--oxford) 0px, var(--oxford) 1px,
+        transparent 1px, transparent 2px
+      );
+    }
+
+    .footnote {
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--rule);
+      padding-top: 0.75rem;
+      margin-top: 1.5rem;
+      font-style: italic;
+    }
+
+    .footnote sup {
+      color: var(--crimson);
+      font-weight: 700;
+      margin-right: 0.25em;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 5rem 0; }
+
+    /* ===== Animations ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .animate { opacity: 0; }
+    .animate.in-view { animation-fill-mode: both; }
+    .animate.fade-up.in-view { animation: fadeInUp 0.7s ease-out; }
+    .animate.fade-in.in-view { animation: fadeIn 0.8s ease-out; }
+    .animate.slide-left.in-view { animation: slideInLeft 0.7s ease-out; }
+    .animate.slide-right.in-view { animation: slideInRight 0.7s ease-out; }
+    .delay-1 { animation-delay: 0.15s !important; }
+    .delay-2 { animation-delay: 0.3s !important; }
+    .delay-3 { animation-delay: 0.45s !important; }
+    .delay-4 { animation-delay: 0.6s !important; }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--oxford);
+      border-bottom: 2px solid var(--crimson);
+      transition: box-shadow 0.3s ease;
+    }
+
+    nav.scrolled { box-shadow: 0 4px 20px var(--shadow); }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--ivory);
+    }
+
+    /* Shield / heraldic motif */
+    .shield { width: 32px; height: 38px; position: relative; flex-shrink: 0; }
+
+    .shield::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 6px;
+      background: var(--crimson);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .shield::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 16px;
+      background: var(--crimson);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+
+    .shield-cross {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 2px; height: 20px;
+      background: var(--ivory);
+      z-index: 1;
+    }
+
+    .shield-cross::after {
+      content: '';
+      position: absolute;
+      top: 5px; left: 50%;
+      transform: translateX(-50%);
+      width: 12px; height: 2px;
+      background: var(--ivory);
+    }
+
+    .nav-brand-text {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links { display: flex; list-style: none; gap: 2rem; }
+
+    .nav-links a {
+      color: rgba(255, 255, 240, 0.75);
+      text-decoration: none;
+      font-family: 'Lora', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--crimson);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--ivory); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      display: inline-block;
+      padding: 0.4rem 1.25rem;
+      background: var(--crimson);
+      color: var(--ivory) !important;
+      border-radius: 3px;
+      font-size: 0.85rem !important;
+      transition: background 0.3s ease !important;
+    }
+
+    .nav-cta:hover { background: #8a1728 !important; }
+    .nav-cta::after { display: none !important; }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--ivory);
+      margin: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: var(--oxford);
+      color: var(--ivory);
+      position: relative;
+      overflow: hidden;
+      padding-top: 64px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 39px,
+          rgba(255,255,240,0.03) 39px, rgba(255,255,240,0.03) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px,
+          rgba(255,255,240,0.03) 39px, rgba(255,255,240,0.03) 40px);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -60px; top: 50%;
+      transform: translateY(-50%);
+      width: 400px; height: 480px;
+      opacity: 0.04;
+      background: var(--ivory);
+      clip-path: polygon(0 0, 100% 0, 100% 65%, 50% 100%, 0 65%);
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+    .hero-eyebrow {
+      font-family: 'Lora', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,240,0.6);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--crimson);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .hero h1 em { color: var(--crimson); font-style: italic; }
+
+    .hero-description {
+      font-size: 1.1rem;
+      line-height: 1.85;
+      color: rgba(255,255,240,0.8);
+      margin-bottom: 2.5rem;
+      max-width: 580px;
+    }
+
+    .hero-actions { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 3rem; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: var(--crimson);
+      color: var(--ivory);
+      text-decoration: none;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+      border: 1px solid var(--crimson);
+    }
+
+    .btn-primary:hover {
+      background: #8a1728;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(165,28,48,0.35);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--ivory);
+      text-decoration: none;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,240,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--ivory);
+      background: rgba(255,255,240,0.08);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,240,0.12);
+    }
+
+    .hero-stat-value {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--ivory);
+    }
+
+    .hero-stat-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,240,0.5);
+      margin-top: 0.25rem;
+    }
+
+    /* ===== Features ===== */
+    .features { background: var(--parchment); position: relative; }
+
+    .features::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      opacity: 0.15;
+      background: repeating-linear-gradient(
+        to bottom, var(--oxford) 0px, var(--oxford) 1px,
+        transparent 1px, transparent 2px
+      );
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+
+    .feature-card {
+      background: var(--ivory);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 2.25rem;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px var(--shadow);
+    }
+
+    .feature-card::before {
+      content: attr(data-number);
+      position: absolute;
+      top: -1px; right: -1px;
+      width: 42px; height: 42px;
+      background: var(--oxford);
+      color: var(--ivory);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 0 4px 0 8px;
+    }
+
+    .feature-icon { width: 48px; height: 48px; margin-bottom: 1.25rem; position: relative; }
+
+    /* CSS icons for features */
+    .icon-thread .line {
+      position: absolute; left: 0; height: 3px;
+      background: var(--oxford); border-radius: 2px;
+    }
+    .icon-thread .line:nth-child(1) { top: 6px; width: 40px; }
+    .icon-thread .line:nth-child(2) { top: 16px; width: 32px; left: 8px; }
+    .icon-thread .line:nth-child(3) { top: 26px; width: 36px; left: 4px; }
+    .icon-thread .line:nth-child(4) { top: 36px; width: 28px; left: 12px; }
+
+    .icon-sides .col {
+      position: absolute; top: 4px; width: 18px; height: 40px;
+      border: 2px solid var(--oxford); border-radius: 3px;
+    }
+    .icon-sides .col:nth-child(1) { left: 2px; background: rgba(165,28,48,0.1); }
+    .icon-sides .col:nth-child(2) { right: 2px; background: rgba(30,77,43,0.1); }
+    .icon-sides .col-divider {
+      position: absolute; left: 50%; top: 8px;
+      width: 2px; height: 32px; background: var(--rule);
+    }
+
+    .icon-verdict .beam {
+      position: absolute; top: 12px; left: 4px;
+      width: 40px; height: 3px; background: var(--oxford); border-radius: 2px;
+    }
+    .icon-verdict .post {
+      position: absolute; top: 8px; left: 22px;
+      width: 4px; height: 32px; background: var(--oxford); border-radius: 2px;
+    }
+    .icon-verdict .pan {
+      position: absolute; bottom: 6px; width: 16px; height: 4px;
+      background: var(--crimson); border-radius: 0 0 8px 8px;
+    }
+    .icon-verdict .pan:nth-child(3) { left: 0; }
+    .icon-verdict .pan:nth-child(4) { right: 0; }
+
+    .icon-analytics .bar {
+      position: absolute; bottom: 4px; width: 8px;
+      background: var(--oxford); border-radius: 2px 2px 0 0;
+    }
+    .icon-analytics .bar:nth-child(1) { left: 4px; height: 18px; }
+    .icon-analytics .bar:nth-child(2) { left: 16px; height: 30px; background: var(--crimson); }
+    .icon-analytics .bar:nth-child(3) { left: 28px; height: 24px; }
+    .icon-analytics .bar:nth-child(4) { left: 40px; height: 36px; }
+
+    .feature-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.2rem;
+      color: var(--oxford);
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-text {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* Sidebar info panel */
+    .sidebar-panel {
+      grid-column: 1 / -1;
+      background: var(--oxford);
+      color: var(--ivory);
+      border-radius: 4px;
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .sidebar-panel-text h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--ivory);
+    }
+
+    .sidebar-panel-text p {
+      color: rgba(255,255,240,0.75);
+      line-height: 1.75;
+      font-size: 0.95rem;
+    }
+
+    /* CSS-only bar chart */
+    .chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      height: 160px;
+      padding: 0 1rem;
+    }
+
+    .chart-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-bar {
+      width: 100%;
+      border-radius: 3px 3px 0 0;
+      min-height: 0;
+      transition: height 1s ease;
+    }
+
+    .chart-bar.bar-crimson { background: var(--crimson); }
+    .chart-bar.bar-green { background: var(--dark-green); }
+    .chart-bar.bar-ivory { background: rgba(255,255,240,0.6); }
+    .chart-bar.bar-muted { background: rgba(255,255,240,0.3); }
+
+    .chart-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,240,0.5);
+      white-space: nowrap;
+    }
+
+    .chart-value {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* ===== Best Exchanges Highlight ===== */
+    .exchanges {
+      background: var(--ivory);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .exchanges-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .exchange-demo {
+      background: var(--parchment);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .exchange-demo::before {
+      content: 'Best Exchange';
+      position: absolute;
+      top: -12px; left: 1.5rem;
+      background: var(--crimson);
+      color: var(--ivory);
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      border-radius: 3px;
+    }
+
+    .exchange-post {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .exchange-post:last-child { border-bottom: none; }
+
+    .exchange-stance {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      margin-bottom: 0.5rem;
+    }
+
+    .stance-pro {
+      background: rgba(30, 77, 43, 0.12);
+      color: var(--dark-green);
+    }
+
+    .stance-con {
+      background: rgba(165, 28, 48, 0.12);
+      color: var(--crimson);
+    }
+
+    .exchange-excerpt {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+      font-style: italic;
+    }
+
+    .exchange-meta {
+      font-size: 0.75rem;
+      color: var(--rule);
+      margin-top: 0.35rem;
+    }
+
+    .exchanges-text h3 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.5rem;
+      color: var(--oxford);
+      margin-bottom: 1rem;
+    }
+
+    .exchanges-text p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    /* ===== How It Works ===== */
+    .how-it-works { background: var(--ivory); }
+
+    .steps {
+      position: relative;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      left: 28px; top: 0; bottom: 0;
+      width: 2px;
+      background: repeating-linear-gradient(
+        to bottom, var(--rule) 0px, var(--rule) 6px,
+        transparent 6px, transparent 12px
+      );
+    }
+
+    .step {
+      display: flex;
+      gap: 2rem;
+      padding: 2rem 0;
+      position: relative;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background: var(--oxford);
+      color: var(--ivory);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+      border: 3px solid var(--ivory);
+      box-shadow: 0 0 0 2px var(--oxford);
+    }
+
+    .step-content { padding-top: 0.5rem; }
+
+    .step-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.15rem;
+      color: var(--oxford);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-text {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 520px;
+    }
+
+    .step-annotation {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--crimson);
+      font-style: italic;
+      padding-left: 1rem;
+      border-left: 2px solid var(--crimson);
+    }
+
+    /* ===== Testimonials ===== */
+    .testimonials { background: var(--parchment); position: relative; }
+
+    .testimonials::before,
+    .testimonials::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 6px;
+      opacity: 0.15;
+      background: repeating-linear-gradient(
+        to bottom, var(--oxford) 0px, var(--oxford) 1px,
+        transparent 1px, transparent 2px
+      );
+    }
+
+    .testimonials::before { top: 0; }
+    .testimonials::after { bottom: 0; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: var(--ivory);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '\201C';
+      position: absolute;
+      top: 12px; left: 18px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 4rem;
+      color: var(--crimson);
+      opacity: 0.15;
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+
+    .testimonial-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--oxford);
+      color: var(--ivory);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .testimonial-name {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--oxford);
+    }
+
+    .testimonial-role { font-size: 0.8rem; color: var(--muted); }
+    .testimonial-institution { font-size: 0.75rem; color: var(--crimson); letter-spacing: 0.05em; }
+
+    /* ===== CTA ===== */
+    .cta {
+      background: var(--oxford);
+      color: var(--ivory);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 59px,
+        rgba(255,255,240,0.02) 59px, rgba(255,255,240,0.02) 60px
+      );
+    }
+
+    .cta-shield {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px; height: 384px;
+      opacity: 0.04;
+      background: var(--ivory);
+      clip-path: polygon(0 0, 100% 0, 100% 65%, 50% 100%, 0 65%);
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 1.25rem; }
+
+    .cta p {
+      font-size: 1.05rem;
+      color: rgba(255,255,240,0.75);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta .btn-primary { font-size: 1.05rem; padding: 1rem 2.5rem; }
+    .cta .btn-secondary { font-size: 1.05rem; padding: 1rem 2.5rem; }
+    .cta-footnote { font-size: 0.82rem; color: rgba(255,255,240,0.4); font-style: italic; }
+
+    /* ===== Footer ===== */
+    footer {
+      background: #001530;
+      color: rgba(255,255,240,0.5);
+      padding: 3rem 0 2rem;
+      font-size: 0.85rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-brand { display: flex; align-items: center; gap: 0.75rem; }
+    .footer-brand .shield { width: 22px; height: 26px; }
+    .footer-brand span {
+      font-family: 'Libre Baskerville', serif;
+      color: rgba(255,255,240,0.7);
+      font-size: 0.9rem;
+    }
+
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { color: rgba(255,255,240,0.5); text-decoration: none; transition: color 0.3s ease; }
+    .footer-links a:hover { color: var(--ivory); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 900px) {
+      .features-grid,
+      .sidebar-panel,
+      .exchanges-layout { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 2rem; }
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 3.5rem 0; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: var(--oxford);
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 1rem;
+        border-top: 1px solid rgba(255,255,240,0.1);
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: block; }
+
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) { opacity: 0; }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      .hero-stats { flex-direction: column; gap: 1.25rem; }
+      .hero-actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { text-align: center; justify-content: center; }
+      .steps::before { left: 18px; }
+      .step-number { width: 40px; height: 40px; font-size: 0.95rem; }
+      .step { gap: 1.25rem; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.75rem; }
+      .chart { height: 120px; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <div class="shield"><div class="shield-cross"></div></div>
+        <span class="nav-brand-text">Christian Debate</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">Method</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#cta" class="nav-cta">Join the Discourse</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Section I: Hero -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow animate fade-up">A Platform for Theological Discourse</div>
+        <h1 class="animate fade-up delay-1">
+          Where Rigorous Inquiry Meets <em>Faithful Conviction</em>
+        </h1>
+        <p class="hero-description animate fade-up delay-2">
+          Christian Debate provides a structured environment for substantive theological
+          exchange&mdash;moving beyond social media noise toward the kind of careful,
+          evidenced argumentation that the life of the mind demands.
+        </p>
+        <div class="hero-actions animate fade-up delay-3">
+          <a href="#cta" class="btn-primary">Begin Your Inquiry</a>
+          <a href="#features" class="btn-secondary">Examine the Framework</a>
+        </div>
+        <div class="hero-stats animate fade-up delay-4">
+          <div>
+            <div class="hero-stat-value">12,400+</div>
+            <div class="hero-stat-label">Scholars &amp; Theologians</div>
+          </div>
+          <div>
+            <div class="hero-stat-value">3,200+</div>
+            <div class="hero-stat-label">Structured Debates</div>
+          </div>
+          <div>
+            <div class="hero-stat-value">94%</div>
+            <div class="hero-stat-label">Report Deeper Understanding</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section II: Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header animate fade-up">
+        <span class="section-number">Section II</span>
+        <h2 class="section-title">The Apparatus of Discourse</h2>
+        <hr class="hr-thin">
+        <p class="section-subtitle">
+          Four integrated views provide a comprehensive framework for examining
+          every dimension of theological argumentation.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature i: Thread View -->
+        <div class="feature-card animate fade-up" data-number="i">
+          <div class="feature-icon icon-thread">
+            <div class="line"></div><div class="line"></div>
+            <div class="line"></div><div class="line"></div>
+          </div>
+          <h3 class="feature-title">Thread View</h3>
+          <p class="feature-text">
+            Follow the full lineage of argumentation in its natural order.
+            Nested replies preserve the dialectical structure, allowing readers
+            to trace each line of reasoning from thesis to final rebuttal.
+          </p>
+          <p class="footnote"><sup>1</sup> Threaded discourse mirrors the scholastic disputatio tradition.</p>
+        </div>
+
+        <!-- Feature ii: Sides View -->
+        <div class="feature-card animate fade-up delay-1" data-number="ii">
+          <div class="feature-icon icon-sides">
+            <div class="col"></div><div class="col"></div>
+            <div class="col-divider"></div>
+          </div>
+          <h3 class="feature-title">Sides View</h3>
+          <p class="feature-text">
+            Arguments are systematically organized into pro and con columns,
+            presenting the strongest case for each position. This bifurcated
+            layout enables clear comparative analysis of competing claims.
+          </p>
+          <p class="footnote"><sup>2</sup> Inspired by the Sic et Non method of Peter Abelard.</p>
+        </div>
+
+        <!-- Feature iii: Neutral Verdict -->
+        <div class="feature-card animate fade-up delay-2" data-number="iii">
+          <div class="feature-icon icon-verdict">
+            <div class="beam"></div><div class="post"></div>
+            <div class="pan"></div><div class="pan"></div>
+          </div>
+          <h3 class="feature-title">Neutral Verdict</h3>
+          <p class="feature-text">
+            Community-generated assessments synthesize the strongest arguments
+            from both sides into an impartial summary. Reasoned voting with
+            categorical evaluation ensures intellectual honesty.
+          </p>
+          <p class="footnote"><sup>3</sup> Verdicts require a minimum quorum of qualified voters.</p>
+        </div>
+
+        <!-- Feature iv: Analytics Engine -->
+        <div class="feature-card animate fade-up delay-3" data-number="iv">
+          <div class="feature-icon icon-analytics">
+            <div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div>
+          </div>
+          <h3 class="feature-title">Analytics Engine</h3>
+          <p class="feature-text">
+            Track stance shifts, voting patterns, and argument effectiveness
+            with quantitative precision. The analytics engine reveals how
+            positions evolve through the weight of evidence and reason.
+          </p>
+          <p class="footnote"><sup>4</sup> All metrics are anonymized and aggregated for privacy.</p>
+        </div>
+
+        <!-- Data sidebar panel with chart -->
+        <div class="sidebar-panel animate fade-up">
+          <div class="sidebar-panel-text">
+            <h3>Empirical Evidence of Impact</h3>
+            <p>
+              Our platform data demonstrates measurable improvements in
+              argumentative quality. Participants who engage with the Sides View
+              produce 47% more evidenced claims, while stance-shift tracking
+              has increased intellectual honesty by 62%.
+            </p>
+            <p class="footnote" style="border-color: rgba(255,255,240,0.2); color: rgba(255,255,240,0.5);">
+              <sup style="color: rgba(255,255,240,0.7);">5</sup>
+              Based on analysis of 3,200+ debates conducted between 2024&ndash;2026.
+            </p>
+          </div>
+          <div>
+            <div class="chart" id="chart">
+              <div class="chart-col">
+                <span class="chart-value">47%</span>
+                <div class="chart-bar bar-crimson" data-height="75"></div>
+                <span class="chart-label">Evidence</span>
+              </div>
+              <div class="chart-col">
+                <span class="chart-value">62%</span>
+                <div class="chart-bar bar-green" data-height="100"></div>
+                <span class="chart-label">Honesty</span>
+              </div>
+              <div class="chart-col">
+                <span class="chart-value">38%</span>
+                <div class="chart-bar bar-ivory" data-height="60"></div>
+                <span class="chart-label">Clarity</span>
+              </div>
+              <div class="chart-col">
+                <span class="chart-value">55%</span>
+                <div class="chart-bar bar-muted" data-height="88"></div>
+                <span class="chart-label">Charity</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Exchanges Highlight -->
+  <section class="exchanges">
+    <div class="container">
+      <div class="exchanges-layout">
+        <div class="exchanges-text animate slide-left">
+          <span class="section-number">Featured Capability</span>
+          <h3>Best Exchanges Surface the Substance</h3>
+          <p>
+            Not every reply advances understanding equally. The Best Exchanges
+            view algorithmically identifies the most substantive point-counterpoint
+            pairs&mdash;those interactions where both participants demonstrate
+            evidential reasoning, charitable interpretation, and genuine
+            intellectual engagement.
+          </p>
+          <p>
+            These curated exchanges serve as exemplars of theological discourse
+            done well, offering newcomers a model of the kind of argument
+            the platform cultivates.
+          </p>
+          <p class="footnote">
+            <sup>6</sup> Exchange quality is assessed by a composite score
+            of evidence density, logical structure, and peer recognition.
+          </p>
+        </div>
+        <div class="exchange-demo animate slide-right delay-1">
+          <div class="exchange-post">
+            <span class="exchange-stance stance-pro">Pro</span>
+            <p class="exchange-excerpt">
+              "The Pauline corpus consistently employs koinonia in ecclesial
+              contexts that presuppose visible, institutional unity&mdash;not
+              merely spiritual affinity..."
+            </p>
+            <span class="exchange-meta">Dr. J. Whitfield &middot; 14 citations &middot; 89% quality</span>
+          </div>
+          <div class="exchange-post">
+            <span class="exchange-stance stance-con">Con</span>
+            <p class="exchange-excerpt">
+              "Yet the Johannine tradition equally deploys koinonia to describe
+              the believer's participation in the divine nature (2 Pet 1:4),
+              suggesting the term resists institutional reduction..."
+            </p>
+            <span class="exchange-meta">Rev. M. Adeyemi &middot; 11 citations &middot; 92% quality</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section III: How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-header animate fade-up">
+        <span class="section-number">Section III</span>
+        <h2 class="section-title">The Method of Inquiry</h2>
+        <hr class="hr-thin">
+        <p class="section-subtitle">
+          A structured methodology that transforms informal disagreement
+          into productive theological scholarship.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step animate slide-left">
+          <div class="step-number">I</div>
+          <div class="step-content">
+            <h3 class="step-title">Propose a Thesis</h3>
+            <p class="step-text">
+              Frame your theological question or proposition with precision.
+              A well-formed thesis includes scriptural grounding, historical
+              context, and a clear position that invites reasoned dissent.
+            </p>
+            <span class="step-annotation">Cf. the quaestio disputata of the medieval university</span>
+          </div>
+        </div>
+
+        <div class="step animate slide-left delay-1">
+          <div class="step-number">II</div>
+          <div class="step-content">
+            <h3 class="step-title">Declare Your Stance</h3>
+            <p class="step-text">
+              Participants declare their initial position before engaging.
+              This transparency enables the platform to track genuine shifts
+              in conviction&mdash;a rare and valuable metric in theological discourse.
+            </p>
+            <span class="step-annotation">Stance declarations are timestamped and immutable</span>
+          </div>
+        </div>
+
+        <div class="step animate slide-left delay-2">
+          <div class="step-number">III</div>
+          <div class="step-content">
+            <h3 class="step-title">Engage with Rigor</h3>
+            <p class="step-text">
+              Present arguments across Thread and Sides views. The rich text
+              editor supports scriptural citations, footnotes, and structured
+              rebuttals. Best Exchanges surface the most substantive interactions.
+            </p>
+            <span class="step-annotation">Arguments are evaluated by logical coherence, not mere popularity</span>
+          </div>
+        </div>
+
+        <div class="step animate slide-left delay-3">
+          <div class="step-number">IV</div>
+          <div class="step-content">
+            <h3 class="step-title">Arrive at Verdict</h3>
+            <p class="step-text">
+              Reasoned voting with categorical evaluation produces a Neutral
+              Verdict. Voters must justify their assessment, and the analytics
+              engine synthesizes patterns across the entire discourse.
+            </p>
+            <span class="step-annotation">Verdicts represent communal discernment, not mere majority rule</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="engraving" style="margin-top: 3rem;"></div>
+    </div>
+  </section>
+
+  <!-- Section IV: Testimonials -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-header animate fade-up">
+        <span class="section-number">Section IV</span>
+        <h2 class="section-title">Commendations from the Academy</h2>
+        <hr class="hr-thin">
+        <p class="section-subtitle">
+          Scholars and pastors reflect on how structured debate has
+          deepened their theological understanding.
+        </p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card animate fade-up">
+          <p class="testimonial-text">
+            "The Sides View alone has transformed how I prepare lectures on
+            contested doctrines. Seeing the strongest arguments arrayed in
+            parallel reveals nuances I had overlooked for twenty years of
+            teaching systematic theology."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">ME</div>
+            <div>
+              <div class="testimonial-name">Dr. Margaret Ellis</div>
+              <div class="testimonial-role">Professor of Systematic Theology</div>
+              <div class="testimonial-institution">Regent Divinity School</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card animate fade-up delay-1">
+          <p class="testimonial-text">
+            "What distinguishes this platform is the stance-shift tracking.
+            It creates an environment where changing one's mind in light of
+            evidence is honored rather than penalized&mdash;a rare quality
+            in modern theological discourse."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">HO</div>
+            <div>
+              <div class="testimonial-name">Rev. Henry Okonkwo</div>
+              <div class="testimonial-role">Senior Pastor &amp; Author</div>
+              <div class="testimonial-institution">Grace Reformed Church</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card animate fade-up delay-2">
+          <p class="testimonial-text">
+            "I assign Christian Debate discussions as coursework. The analytical
+            rigor required by the reasoned voting system teaches my students
+            more about charitable interpretation than any textbook exercise
+            I have devised."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SL</div>
+            <div>
+              <div class="testimonial-name">Dr. Sarah Lin</div>
+              <div class="testimonial-role">Chair, Department of Philosophy</div>
+              <div class="testimonial-institution">Covenant University</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section V: Call to Action -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <div class="cta-shield"></div>
+      <div class="cta-content animate fade-up">
+        <span class="section-number" style="color: rgba(255,255,240,0.5);">Section V</span>
+        <h2>Join the Scholarly Community</h2>
+        <hr class="hr-double" style="margin: 1.5rem auto;">
+        <p>
+          Whether you are a seminary professor, a parish minister, or a layperson
+          committed to the examined faith&mdash;your voice strengthens the discourse.
+          Enter the lecture hall.
+        </p>
+        <div class="cta-actions">
+          <a href="#" class="btn-primary">Create Your Account</a>
+          <a href="#" class="btn-secondary">Read the Prospectus</a>
+        </div>
+        <p class="cta-footnote">
+          No institutional affiliation required. Free for individual scholars.
+          Community guidelines uphold the standards of academic charity.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="shield"><div class="shield-cross"></div></div>
+          <span>Christian Debate</span>
+        </div>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Guidelines</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <div style="color: rgba(255,255,240,0.35);">
+          &copy; 2026 Christian Debate. Soli Deo Gloria.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Mobile navigation toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('active');
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Navbar scroll shadow
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Intersection Observer for scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+    // Animated chart bars on scroll
+    const chartObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const bars = entry.target.querySelectorAll('.chart-bar');
+          bars.forEach(bar => {
+            bar.style.height = bar.getAttribute('data-height') + '%';
+          });
+          chartObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const chart = document.getElementById('chart');
+    if (chart) {
+      chart.querySelectorAll('.chart-bar').forEach(bar => {
+        bar.style.height = '0%';
+      });
+      chartObserver.observe(chart);
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offset = navbar.offsetHeight;
+          const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christian Debate — Structured Discourse, Illuminated Truth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --deep-blue: #1a237e;
+      --gold: #ffd700;
+      --gold-dark: #c5a600;
+      --crimson: #b71c1c;
+      --teal: #00695c;
+      --warm-white: #fdf5e6;
+      --navy: #0d1442;
+      --blue-mid: #283593;
+      --gold-light: #fff3b0;
+      --crimson-dark: #7f0000;
+      --teal-light: #00897b;
+      --shadow-gold: rgba(255, 215, 0, 0.25);
+      --shadow-dark: rgba(13, 20, 66, 0.4);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Vollkorn', Georgia, serif;
+      color: var(--warm-white);
+      background: var(--navy);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== MOSAIC TILE PATTERNS ===== */
+    .mosaic-bg {
+      background-image:
+        repeating-conic-gradient(
+          var(--deep-blue) 0% 25%,
+          var(--navy) 25% 50%
+        );
+      background-size: 30px 30px;
+    }
+
+    .mosaic-bg-gold {
+      background-image:
+        repeating-conic-gradient(
+          rgba(255, 215, 0, 0.06) 0% 25%,
+          transparent 25% 50%
+        );
+      background-size: 20px 20px;
+    }
+
+    .mosaic-bg-teal {
+      background-image:
+        repeating-conic-gradient(
+          rgba(0, 105, 92, 0.08) 0% 25%,
+          transparent 25% 50%
+        );
+      background-size: 24px 24px;
+    }
+
+    /* ===== TILE DIVIDER ===== */
+    .tile-divider {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      padding: 32px 0;
+    }
+
+    .tile-divider span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+      animation: tilePulse 3s ease-in-out infinite;
+    }
+
+    .tile-divider span:nth-child(odd) {
+      background: var(--gold);
+    }
+
+    .tile-divider span:nth-child(even) {
+      background: var(--crimson);
+    }
+
+    .tile-divider span:nth-child(3n) {
+      background: var(--teal);
+    }
+
+    .tile-divider span:nth-child(1) { animation-delay: 0s; }
+    .tile-divider span:nth-child(2) { animation-delay: 0.15s; }
+    .tile-divider span:nth-child(3) { animation-delay: 0.3s; }
+    .tile-divider span:nth-child(4) { animation-delay: 0.45s; }
+    .tile-divider span:nth-child(5) { animation-delay: 0.6s; }
+    .tile-divider span:nth-child(6) { animation-delay: 0.75s; }
+    .tile-divider span:nth-child(7) { animation-delay: 0.9s; }
+    .tile-divider span:nth-child(8) { animation-delay: 1.05s; }
+    .tile-divider span:nth-child(9) { animation-delay: 1.2s; }
+
+    @keyframes tilePulse {
+      0%, 100% { opacity: 0.5; transform: rotate(45deg) scale(1); }
+      50% { opacity: 1; transform: rotate(45deg) scale(1.3); }
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3 {
+      font-family: 'Uncial Antiqua', 'Vollkorn', serif;
+      font-weight: 400;
+    }
+
+    .section-heading {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      text-align: center;
+      color: var(--gold);
+      margin-bottom: 0.5em;
+      text-shadow: 0 2px 12px var(--shadow-gold);
+    }
+
+    .section-subheading {
+      text-align: center;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--warm-white);
+      opacity: 0.85;
+      max-width: 640px;
+      margin: 0 auto 3rem;
+      font-style: italic;
+    }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: linear-gradient(180deg, var(--navy) 0%, rgba(13, 20, 66, 0.92) 100%);
+      border-bottom: 2px solid var(--gold);
+      backdrop-filter: blur(12px);
+      transition: box-shadow 0.3s ease;
+    }
+
+    nav.scrolled {
+      box-shadow: 0 4px 24px var(--shadow-gold);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: 'Uncial Antiqua', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-logo .cross {
+      font-size: 1.6rem;
+      animation: crossGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes crossGlow {
+      0%, 100% { text-shadow: 0 0 6px var(--shadow-gold); }
+      50% { text-shadow: 0 0 20px var(--gold), 0 0 40px var(--shadow-gold); }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--warm-white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--gold);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      background:
+        radial-gradient(ellipse at 50% 30%, rgba(26, 35, 126, 0.9) 0%, var(--navy) 70%),
+        repeating-conic-gradient(
+          rgba(255, 215, 0, 0.04) 0% 25%,
+          transparent 25% 50%
+        );
+      background-size: 100% 100%, 28px 28px;
+      overflow: hidden;
+    }
+
+    /* Dome arch overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 120px;
+      background: var(--navy);
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+
+    /* Floating mosaic tiles in hero */
+    .hero-tiles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-tile {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      transform: rotate(45deg);
+      opacity: 0.15;
+      animation: floatTile 12s ease-in-out infinite;
+    }
+
+    @keyframes floatTile {
+      0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.1; }
+      50% { transform: rotate(45deg) translateY(-30px); opacity: 0.25; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: crossGlow 4s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      color: var(--gold);
+      margin-bottom: 0.6em;
+      text-shadow: 0 4px 24px var(--shadow-gold);
+      line-height: 1.2;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero p {
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      color: var(--warm-white);
+      opacity: 0.9;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2.2rem;
+      font-family: 'Vollkorn', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px;
+      border: 2px solid var(--gold);
+      transition: all 0.35s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(255, 215, 0, 0.15) 100%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .btn:hover::before {
+      opacity: 1;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--navy);
+      border-color: var(--gold);
+      box-shadow: 0 4px 20px var(--shadow-gold);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--shadow-gold);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--gold);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 215, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features {
+      padding: 5rem 1.5rem;
+      background:
+        linear-gradient(180deg, var(--navy) 0%, var(--deep-blue) 50%, var(--navy) 100%);
+      position: relative;
+    }
+
+    .features-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      position: relative;
+      background: linear-gradient(145deg, rgba(26, 35, 126, 0.6), rgba(13, 20, 66, 0.8));
+      border: 2px solid rgba(255, 215, 0, 0.25);
+      border-radius: 16px;
+      padding: 2.2rem 1.8rem;
+      text-align: center;
+      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background:
+        repeating-conic-gradient(
+          rgba(255, 215, 0, 0.03) 0% 25%,
+          transparent 25% 50%
+        );
+      background-size: 16px 16px;
+      pointer-events: none;
+    }
+
+    /* Arch top on feature cards */
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 10%;
+      right: 10%;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 0 0 50% 50% / 0 0 100% 100%;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 12px 40px var(--shadow-gold);
+    }
+
+    .feature-card:hover::after {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-icon.blue-icon {
+      background: linear-gradient(135deg, var(--deep-blue), var(--blue-mid));
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 16px var(--shadow-gold);
+    }
+
+    .feature-icon.crimson-icon {
+      background: linear-gradient(135deg, var(--crimson-dark), var(--crimson));
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 16px rgba(183, 28, 28, 0.3);
+    }
+
+    .feature-icon.teal-icon {
+      background: linear-gradient(135deg, var(--teal), var(--teal-light));
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 16px rgba(0, 105, 92, 0.3);
+    }
+
+    .feature-icon.gold-icon {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border: 2px solid var(--warm-white);
+      box-shadow: 0 0 16px var(--shadow-gold);
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      line-height: 1.65;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .how-it-works {
+      padding: 5rem 1.5rem;
+      background:
+        linear-gradient(180deg, var(--navy) 0%, #0f1a4a 50%, var(--navy) 100%);
+      position: relative;
+    }
+
+    .steps-container {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* Vertical gold line */
+    .steps-container::before {
+      content: '';
+      position: absolute;
+      left: 32px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--gold) 10%,
+        var(--gold) 90%,
+        transparent 100%
+      );
+    }
+
+    .step {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Uncial Antiqua', serif;
+      font-size: 1.5rem;
+      color: var(--navy);
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border: 3px solid var(--warm-white);
+      box-shadow: 0 0 20px var(--shadow-gold);
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-content {
+      background: linear-gradient(145deg, rgba(26, 35, 126, 0.5), rgba(13, 20, 66, 0.7));
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 12px;
+      padding: 1.8rem 2rem;
+      flex: 1;
+      position: relative;
+    }
+
+    /* Arch shape at top of step content */
+    .step-content::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 20px;
+      right: 20px;
+      height: 4px;
+      border-radius: 0 0 50% 50% / 0 0 100% 100%;
+      transition: background 0.4s ease;
+    }
+
+    .step:nth-child(1) .step-content::before { background: var(--gold); }
+    .step:nth-child(2) .step-content::before { background: var(--crimson); }
+    .step:nth-child(3) .step-content::before { background: var(--teal); }
+    .step:nth-child(4) .step-content::before { background: var(--gold); }
+
+    .step-content h3 {
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      line-height: 1.65;
+    }
+
+    .step-tag {
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      margin-top: 0.8rem;
+    }
+
+    .step-tag.blue { background: rgba(26, 35, 126, 0.6); border: 1px solid var(--blue-mid); color: var(--gold-light); }
+    .step-tag.crimson { background: rgba(183, 28, 28, 0.4); border: 1px solid var(--crimson); color: #ffcdd2; }
+    .step-tag.teal { background: rgba(0, 105, 92, 0.4); border: 1px solid var(--teal); color: #b2dfdb; }
+    .step-tag.gold { background: rgba(255, 215, 0, 0.15); border: 1px solid var(--gold-dark); color: var(--gold-light); }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials {
+      padding: 5rem 1.5rem;
+      background:
+        linear-gradient(180deg, var(--navy) 0%, var(--deep-blue) 50%, var(--navy) 100%);
+      position: relative;
+    }
+
+    .testimonials-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: linear-gradient(145deg, rgba(26, 35, 126, 0.5), rgba(13, 20, 66, 0.75));
+      border: 2px solid rgba(255, 215, 0, 0.15);
+      border-radius: 16px;
+      padding: 2rem 1.8rem;
+      position: relative;
+      transition: transform 0.4s ease, border-color 0.4s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 215, 0, 0.5);
+    }
+
+    /* Gold quotation ornament */
+    .testimonial-card::before {
+      content: '\201C';
+      position: absolute;
+      top: 12px;
+      left: 20px;
+      font-size: 4rem;
+      font-family: 'Uncial Antiqua', serif;
+      color: var(--gold);
+      opacity: 0.2;
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-size: 1rem;
+      font-style: italic;
+      line-height: 1.75;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Icon-style circular portrait frame */
+    .author-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 12px var(--shadow-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .author-avatar.av-blue {
+      background: linear-gradient(135deg, var(--deep-blue), var(--blue-mid));
+    }
+
+    .author-avatar.av-crimson {
+      background: linear-gradient(135deg, var(--crimson-dark), var(--crimson));
+    }
+
+    .author-avatar.av-teal {
+      background: linear-gradient(135deg, var(--teal), var(--teal-light));
+    }
+
+    /* Inner ring for icon-frame effect */
+    .author-avatar::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      pointer-events: none;
+    }
+
+    .author-info strong {
+      display: block;
+      color: var(--gold);
+      font-size: 0.95rem;
+    }
+
+    .author-info span {
+      font-size: 0.82rem;
+      opacity: 0.65;
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta {
+      padding: 6rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(26, 35, 126, 0.85) 0%, var(--navy) 70%);
+    }
+
+    /* Dome arch at top of CTA */
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 80px;
+      background: var(--navy);
+      border-radius: 0 0 50% 50% / 0 0 100% 100%;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      animation: crossGlow 4s ease-in-out infinite;
+    }
+
+    .cta h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--gold);
+      margin-bottom: 0.6em;
+      text-shadow: 0 2px 16px var(--shadow-gold);
+    }
+
+    .cta p {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      opacity: 0.85;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Ornate border around CTA */
+    .cta-border {
+      position: relative;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3.5rem 2.5rem;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 20px;
+    }
+
+    .cta-border::before,
+    .cta-border::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gold);
+      transform: rotate(45deg);
+    }
+
+    .cta-border::before {
+      top: -12px;
+      left: 50%;
+      margin-left: -10px;
+      background: var(--navy);
+    }
+
+    .cta-border::after {
+      bottom: -12px;
+      left: 50%;
+      margin-left: -10px;
+      background: var(--navy);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      border-top: 2px solid rgba(255, 215, 0, 0.2);
+      background: var(--navy);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      opacity: 0.5;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--navy);
+        border-bottom: 2px solid var(--gold);
+        padding: 1rem 1.5rem;
+        gap: 1rem;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-toggle.open span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .nav-toggle.open span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .nav-toggle.open span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      .steps-container::before {
+        left: 20px;
+      }
+
+      .step-number {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+      }
+
+      .step {
+        gap: 1rem;
+      }
+
+      .step-content {
+        padding: 1.3rem 1.2rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+      }
+
+      .cta-border {
+        padding: 2.5rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 5rem 1rem 3rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+    }
+
+    /* ===== ORNAMENTAL EXTRAS ===== */
+    .gold-line {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 1rem;
+      border-radius: 2px;
+    }
+
+    /* Geometric corner ornaments for cards */
+    .corner-ornament {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+    }
+
+    .corner-ornament::before,
+    .corner-ornament::after {
+      content: '';
+      position: absolute;
+      background: var(--gold);
+    }
+
+    .corner-ornament.top-left {
+      top: -1px;
+      left: -1px;
+    }
+
+    .corner-ornament.top-left::before {
+      top: 0; left: 0; width: 24px; height: 2px;
+    }
+
+    .corner-ornament.top-left::after {
+      top: 0; left: 0; width: 2px; height: 24px;
+    }
+
+    .corner-ornament.bottom-right {
+      bottom: -1px;
+      right: -1px;
+    }
+
+    .corner-ornament.bottom-right::before {
+      bottom: 0; right: 0; width: 24px; height: 2px;
+    }
+
+    .corner-ornament.bottom-right::after {
+      bottom: 0; right: 0; width: 2px; height: 24px;
+    }
+
+    /* Subtle shimmer animation for gold elements */
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .shimmer-text {
+      background: linear-gradient(
+        90deg,
+        var(--gold) 0%,
+        var(--warm-white) 25%,
+        var(--gold) 50%,
+        var(--warm-white) 75%,
+        var(--gold) 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 6s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="cross">&#10013;</span>
+        Christian Debate
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#cta">Join Now</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-tiles" aria-hidden="true">
+      <div class="hero-tile" style="top:10%;left:8%;background:var(--gold);animation-delay:0s;"></div>
+      <div class="hero-tile" style="top:20%;left:85%;background:var(--crimson);animation-delay:1.5s;"></div>
+      <div class="hero-tile" style="top:55%;left:12%;background:var(--teal);animation-delay:3s;"></div>
+      <div class="hero-tile" style="top:70%;left:78%;background:var(--gold);animation-delay:4.5s;"></div>
+      <div class="hero-tile" style="top:35%;left:92%;background:var(--crimson);animation-delay:2s;"></div>
+      <div class="hero-tile" style="top:80%;left:25%;background:var(--teal);animation-delay:5s;"></div>
+      <div class="hero-tile" style="top:15%;left:45%;background:var(--gold);animation-delay:3.5s;"></div>
+      <div class="hero-tile" style="top:60%;left:60%;background:var(--crimson);animation-delay:1s;"></div>
+      <div class="hero-tile" style="top:45%;left:5%;background:var(--gold);animation-delay:6s;"></div>
+      <div class="hero-tile" style="top:85%;left:55%;background:var(--teal);animation-delay:2.5s;"></div>
+      <div class="hero-tile" style="top:5%;left:65%;background:var(--crimson);animation-delay:4s;"></div>
+      <div class="hero-tile" style="top:40%;left:35%;background:var(--gold);animation-delay:5.5s;"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-icon">&#9768;</div>
+      <h1>Where Faith Meets<br><span class="shimmer-text">Reasoned Discourse</span></h1>
+      <p>
+        A structured debate platform built for the Christian community.
+        Multiple perspectives, transparent reasoning, and verdicts
+        grounded in charity and truth.
+      </p>
+      <div class="hero-buttons">
+        <a href="#cta" class="btn btn-primary">Begin the Dialogue</a>
+        <a href="#features" class="btn btn-secondary">Explore Features</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TILE DIVIDER ===== -->
+  <div class="tile-divider" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features" id="features">
+    <div class="reveal">
+      <div class="gold-line"></div>
+      <h2 class="section-heading">Pillars of the Platform</h2>
+      <p class="section-subheading">
+        Four foundational views that transform debate from noise into illumination.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon blue-icon">&#128483;</div>
+        <h3>Thread View</h3>
+        <p>Follow the full conversation as it unfolds, with nested replies, inline citations, and real-time stance indicators beside each contribution.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon crimson-icon">&#9878;</div>
+        <h3>Sides View</h3>
+        <p>See Pro and Con arguments laid out side by side. Quickly grasp the strongest case for each position without scrolling through tangents.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon teal-icon">&#9733;</div>
+        <h3>Best Exchanges</h3>
+        <p>Community-surfaced moments where two debaters genuinely engaged each other's points, ranked by quality of reasoning and charitable interpretation.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon gold-icon">&#9879;</div>
+        <h3>Neutral Verdict</h3>
+        <p>Impartial summaries that weigh evidence from both sides, highlighting where consensus was reached and where honest disagreement remains.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon crimson-icon">&#9998;</div>
+        <h3>Reasoned Voting</h3>
+        <p>Every vote requires a category: "Strong Evidence," "Sound Logic," "Charitable Tone," or "Novel Insight." No drive-by upvotes allowed.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon teal-icon">&#8634;</div>
+        <h3>Stance Tracking</h3>
+        <p>Declare your position before engaging, then update it as the debate progresses. The platform tracks genuine shifts in understanding over time.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon blue-icon">&#128202;</div>
+        <h3>Analytics Engine</h3>
+        <p>Debate health scores, participation balance, argument quality metrics, and trend analysis reveal patterns invisible to the naked eye.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="corner-ornament top-left"></div>
+        <div class="corner-ornament bottom-right"></div>
+        <div class="feature-icon gold-icon">&#127760;</div>
+        <h3>Federation</h3>
+        <p>Hub-and-spoke architecture lets churches and communities run their own sites while connecting into a broader network of Christian discourse.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TILE DIVIDER ===== -->
+  <div class="tile-divider" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="reveal">
+      <div class="gold-line"></div>
+      <h2 class="section-heading">The Way of Dialogue</h2>
+      <p class="section-subheading">
+        From proposition to verdict, every debate follows a path designed for clarity and grace.
+      </p>
+    </div>
+
+    <div class="steps-container">
+      <div class="step reveal">
+        <div class="step-number">I</div>
+        <div class="step-content">
+          <h3>A Question is Posed</h3>
+          <p>A member frames a proposition clearly and charitably. They set the scope, provide context from Scripture or tradition, and invite both sides to respond.</p>
+          <span class="step-tag blue">Proposition Phase</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">II</div>
+        <div class="step-content">
+          <h3>Stances are Declared</h3>
+          <p>Participants declare their initial position before engaging. This honest starting point becomes part of the record, creating accountability and transparency.</p>
+          <span class="step-tag crimson">Declaration Phase</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">III</div>
+        <div class="step-content">
+          <h3>Structured Exchange</h3>
+          <p>Arguments flow through Thread View while the platform organizes them into Sides View automatically. Reasoned votes surface the strongest contributions in real time.</p>
+          <span class="step-tag teal">Dialogue Phase</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">IV</div>
+        <div class="step-content">
+          <h3>Verdict and Reflection</h3>
+          <p>When debate matures, a neutral verdict crystallizes the outcome. Analytics reveal who shifted their stance, which arguments resonated, and what wisdom emerged.</p>
+          <span class="step-tag gold">Resolution Phase</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TILE DIVIDER ===== -->
+  <div class="tile-divider" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="testimonials" id="testimonials">
+    <div class="reveal">
+      <div class="gold-line"></div>
+      <h2 class="section-heading">Voices from the Nave</h2>
+      <p class="section-subheading">
+        What our earliest community members say about debating with structure, charity, and purpose.
+      </p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">
+          "The Sides View changed everything for me. I used to scroll past arguments I disagreed with. Now I read them first, because the structure forces me to engage honestly."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar av-blue">&#9775;</div>
+          <div class="author-info">
+            <strong>Fr. Michael T.</strong>
+            <span>Orthodox Pastor, Chicago</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">
+          "Reasoned voting is genius. When I have to categorize my upvote, I think more carefully about why an argument actually convinced me. It has made me a better thinker."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar av-crimson">&#9768;</div>
+          <div class="author-info">
+            <strong>Sarah K.</strong>
+            <span>Theology Student, Durham</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">
+          "Our small group uses Christian Debate for weekly discussions. Stance tracking showed me I shifted on three topics this year, and I am grateful for each one."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar av-teal">&#10013;</div>
+          <div class="author-info">
+            <strong>David R.</strong>
+            <span>Small Group Leader, Atlanta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TILE DIVIDER ===== -->
+  <div class="tile-divider" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta" id="cta">
+    <div class="cta-border reveal">
+      <div class="cta-inner">
+        <div class="cta-icon">&#9768;</div>
+        <h2>Enter the Dialogue</h2>
+        <p>
+          Join a growing community of Christians who believe that iron sharpens iron,
+          and that structured debate can deepen faith rather than divide it.
+          Your voice matters. Your reasoning matters even more.
+        </p>
+        <div class="cta-buttons">
+          <a href="#" class="btn btn-primary">Create Your Account</a>
+          <a href="#" class="btn btn-secondary">Read the Narthex Guide</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>&copy; 2026 <a href="#">Christian Debate</a>. Structured discourse for the Body of Christ.</p>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      navToggle.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('open');
+      });
+    });
+
+    // Navbar scroll shadow
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal with IntersectionObserver
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Stagger reveal for grid children
+    document.querySelectorAll('.features-grid .feature-card, .testimonials-grid .testimonial-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+    });
+
+    // Smooth scroll for anchor links (fallback for older browsers)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

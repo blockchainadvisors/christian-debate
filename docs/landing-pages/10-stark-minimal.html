@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christian Debate — Structured Discourse Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset ─── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ─── Root Variables ─── */
+    :root {
+      --accent: #3730a3;
+      --white: #ffffff;
+      --black: #111111;
+      --gray-200: #e5e5e5;
+      --gray-400: #a3a3a3;
+      --gray-600: #525252;
+      --font-heading: 'DM Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --margin-x: 120px;
+      --line-weight: 1px;
+    }
+
+    /* ─── Base ─── */
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background-color: var(--white);
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px var(--margin-x);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: var(--line-weight) solid transparent;
+      transition: border-color 0.4s ease;
+    }
+
+    nav.scrolled {
+      border-bottom-color: var(--gray-200);
+    }
+
+    .nav-wordmark {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--black);
+    }
+
+    .nav-wordmark span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--black);
+    }
+
+    .nav-cta {
+      font-family: var(--font-body) !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: var(--white) !important;
+      background: var(--accent);
+      padding: 10px 24px;
+      border-radius: 0;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      background: #2e2990;
+      transform: translateY(-1px);
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-mobile-toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--black);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 160px var(--margin-x) 120px;
+      position: relative;
+    }
+
+    .hero-label {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: 96px;
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: var(--black);
+      max-width: 900px;
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+    }
+
+    .hero-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 80px;
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-line {
+      width: 64px;
+      height: var(--line-weight);
+      background: var(--accent);
+      margin-top: 12px;
+      flex-shrink: 0;
+    }
+
+    .hero-text {
+      max-width: 420px;
+    }
+
+    .hero-text p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--gray-600);
+      margin-bottom: 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--accent);
+      padding: 16px 40px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: #2e2990;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--gray-600);
+      padding: 16px 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      color: var(--accent);
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 120px;
+      right: var(--margin-x);
+      display: flex;
+      gap: 56px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+
+    .hero-stat {
+      text-align: right;
+    }
+
+    .hero-stat-value {
+      font-family: var(--font-heading);
+      font-size: 48px;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-top: 8px;
+    }
+
+    /* ─── Section Common ─── */
+    section {
+      padding: 120px var(--margin-x);
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-bottom: 96px;
+      align-items: end;
+    }
+
+    .section-number {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--black);
+    }
+
+    .section-desc {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--gray-600);
+      max-width: 400px;
+      align-self: end;
+    }
+
+    .divider {
+      width: 100%;
+      height: var(--line-weight);
+      background: var(--gray-200);
+    }
+
+    /* ─── Features Grid ─── */
+    .features {
+      background: var(--white);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: var(--line-weight) solid var(--gray-200);
+      border-left: var(--line-weight) solid var(--gray-200);
+    }
+
+    .feature-cell {
+      padding: 48px 32px;
+      border-right: var(--line-weight) solid var(--gray-200);
+      border-bottom: var(--line-weight) solid var(--gray-200);
+      transition: background 0.4s ease;
+      position: relative;
+    }
+
+    .feature-cell:hover {
+      background: #fafafa;
+    }
+
+    .feature-cell::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    .feature-cell:hover::after {
+      width: 100%;
+    }
+
+    .feature-index {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--gray-400);
+      margin-bottom: 32px;
+    }
+
+    .feature-name {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 16px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--gray-600);
+    }
+
+    .features-secondary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-left: var(--line-weight) solid var(--gray-200);
+    }
+
+    .feature-cell-sm {
+      padding: 32px;
+      border-right: var(--line-weight) solid var(--gray-200);
+      border-bottom: var(--line-weight) solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: background 0.4s ease;
+    }
+
+    .feature-cell-sm:hover {
+      background: #fafafa;
+    }
+
+    .feature-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 0;
+      flex-shrink: 0;
+    }
+
+    .feature-cell-sm span {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--black);
+    }
+
+    /* ─── How It Works ─── */
+    .how-it-works {
+      background: var(--white);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      counter-reset: step;
+    }
+
+    .step {
+      padding: 64px 48px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .step.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: var(--line-weight);
+      height: 100%;
+      background: var(--gray-200);
+    }
+
+    .step-number {
+      font-family: var(--font-heading);
+      font-size: 72px;
+      font-weight: 300;
+      color: var(--gray-200);
+      line-height: 1;
+      margin-bottom: 40px;
+      letter-spacing: -0.04em;
+    }
+
+    .step-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      margin-bottom: 20px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--gray-600);
+      max-width: 280px;
+    }
+
+    .step-detail {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: var(--line-weight) solid var(--gray-200);
+    }
+
+    .step-detail-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .step-detail-text {
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* ─── Testimonials ─── */
+    .testimonials {
+      background: var(--white);
+      position: relative;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: var(--line-weight) solid var(--gray-200);
+    }
+
+    .testimonial {
+      padding: 64px 56px;
+      border-bottom: var(--line-weight) solid var(--gray-200);
+      position: relative;
+      transition: background 0.4s ease;
+    }
+
+    .testimonial:nth-child(odd) {
+      border-right: var(--line-weight) solid var(--gray-200);
+    }
+
+    .testimonial:hover {
+      background: #fafafa;
+    }
+
+    .testimonial-quote {
+      font-family: var(--font-heading);
+      font-size: 96px;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 0.5;
+      margin-bottom: 24px;
+      opacity: 0.4;
+    }
+
+    .testimonial-text {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.8;
+      color: var(--black);
+      margin-bottom: 32px;
+      max-width: 440px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .testimonial-name {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .testimonial-role {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      text-align: center;
+      padding: 160px var(--margin-x);
+      position: relative;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: var(--margin-x);
+      right: var(--margin-x);
+      height: var(--line-weight);
+      background: var(--gray-200);
+    }
+
+    .cta-accent-block {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      margin: 0 auto 48px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .cta-accent-block.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .cta-title {
+      font-family: var(--font-heading);
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      max-width: 700px;
+      margin: 0 auto 24px;
+    }
+
+    .cta-subtitle {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--gray-600);
+      max-width: 440px;
+      margin: 0 auto 48px;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .cta-note {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 24px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      padding: 48px var(--margin-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: var(--line-weight) solid var(--gray-200);
+    }
+
+    .footer-left {
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--gray-400);
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* ─── Animations ─── */
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1200px) {
+      :root {
+        --margin-x: 64px;
+      }
+
+      .hero h1 {
+        font-size: 72px;
+      }
+
+      .section-title {
+        font-size: 44px;
+      }
+
+      .cta-title {
+        font-size: 48px;
+      }
+    }
+
+    @media (max-width: 968px) {
+      :root {
+        --margin-x: 40px;
+      }
+
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--white);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 32px;
+        z-index: 99;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 18px;
+      }
+
+      .nav-cta {
+        font-size: 16px !important;
+        padding: 14px 32px;
+      }
+
+      .nav-mobile-toggle {
+        display: flex;
+        z-index: 101;
+      }
+
+      .hero h1 {
+        font-size: 56px;
+      }
+
+      .hero-body {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .hero-line {
+        width: 40px;
+      }
+
+      .hero-stats {
+        position: static;
+        margin-top: 64px;
+        opacity: 0;
+        animation: fadeUp 0.8s ease 0.8s forwards;
+      }
+
+      .section-header {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-bottom: 64px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-secondary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .step:not(:last-child)::after {
+        top: auto;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: var(--line-weight);
+      }
+
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonial:nth-child(odd) {
+        border-right: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      :root {
+        --margin-x: 24px;
+      }
+
+      nav {
+        padding: 20px var(--margin-x);
+      }
+
+      .hero {
+        padding-top: 120px;
+        padding-bottom: 80px;
+      }
+
+      .hero h1 {
+        font-size: 40px;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .hero-stat {
+        text-align: left;
+      }
+
+      .hero-stat-value {
+        font-size: 36px;
+      }
+
+      section {
+        padding-top: 80px;
+        padding-bottom: 80px;
+      }
+
+      .section-title {
+        font-size: 36px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .features-secondary {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        padding: 40px 0;
+      }
+
+      .step-number {
+        font-size: 48px;
+      }
+
+      .testimonial {
+        padding: 40px 24px;
+      }
+
+      .cta-section {
+        padding: 100px var(--margin-x);
+      }
+
+      .cta-title {
+        font-size: 36px;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navigation ─── -->
+  <nav id="nav">
+    <a href="#" class="nav-wordmark">Christian<span>Debate</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">Process</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#cta" class="nav-cta">Get Early Access</a>
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ─── Hero ─── -->
+  <section class="hero">
+    <div class="hero-label">Structured Discourse for the Modern Church</div>
+    <h1>Debate with<br><em>substance</em></h1>
+    <div class="hero-body">
+      <div class="hero-line"></div>
+      <div class="hero-text">
+        <p>
+          A platform built for the nuances of Christian theology. Multi-view debates,
+          reasoned voting, stance tracking, and neutral verdicts bring clarity
+          to the conversations that matter most.
+        </p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">Join the Waitlist</a>
+          <a href="#how-it-works" class="btn-secondary">See how it works</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">4</div>
+        <div class="hero-stat-label">View Modes</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">12</div>
+        <div class="hero-stat-label">Vote Categories</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">360</div>
+        <div class="hero-stat-label">Degree Analysis</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="margin: 0 var(--margin-x);"></div>
+
+  <!-- ─── Features ─── -->
+  <section class="features" id="features">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-number">01 / Features</div>
+        <h2 class="section-title">Every angle,<br>examined</h2>
+      </div>
+      <p class="section-desc">
+        Four distinct views transform how communities engage with complex theological
+        questions. No more shouting past each other in comment threads.
+      </p>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature-cell">
+        <div class="feature-index">F.01</div>
+        <div class="feature-name">Thread View</div>
+        <div class="feature-desc">
+          Traditional threaded discussion enhanced with inline citations,
+          argument mapping, and real-time stance indicators for every participant.
+        </div>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-index">F.02</div>
+        <div class="feature-name">Sides View</div>
+        <div class="feature-desc">
+          Pro and con arguments organized side by side. See the strongest
+          cases for each position, ranked by community consensus.
+        </div>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-index">F.03</div>
+        <div class="feature-name">Best Exchanges</div>
+        <div class="feature-desc">
+          The most substantive back-and-forth dialogues surfaced automatically.
+          Where steel-manning meets iron-sharpening-iron.
+        </div>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-index">F.04</div>
+        <div class="feature-name">Neutral Verdict</div>
+        <div class="feature-desc">
+          Community-generated summary of the strongest arguments on all sides,
+          with transparent methodology and sourced conclusions.
+        </div>
+      </div>
+    </div>
+
+    <div class="features-secondary reveal">
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Reasoned Voting</span>
+      </div>
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Stance Declaration</span>
+      </div>
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Shift Tracking</span>
+      </div>
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Analytics Engine</span>
+      </div>
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Citation System</span>
+      </div>
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Argument Mapping</span>
+      </div>
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Source Verification</span>
+      </div>
+      <div class="feature-cell-sm">
+        <div class="feature-dot"></div>
+        <span>Community Moderation</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="margin: 0 var(--margin-x);"></div>
+
+  <!-- ─── How It Works ─── -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-number">02 / Process</div>
+        <h2 class="section-title">From question<br>to clarity</h2>
+      </div>
+      <p class="section-desc">
+        Three steps transform a divisive topic into a structured,
+        productive conversation with measurable outcomes.
+      </p>
+    </div>
+
+    <div class="steps">
+      <div class="step" data-step="1">
+        <div class="step-number">01</div>
+        <div class="step-title">Declare Your Stance</div>
+        <div class="step-desc">
+          Select a topic and publicly declare your starting position. This
+          anchors the conversation and enables shift tracking as the debate unfolds.
+        </div>
+        <div class="step-detail">
+          <div class="step-detail-label">Key Feature</div>
+          <div class="step-detail-text">Pre-debate stance survey with nuanced position options beyond binary agree/disagree</div>
+        </div>
+      </div>
+      <div class="step" data-step="2">
+        <div class="step-number">02</div>
+        <div class="step-title">Engage With Reason</div>
+        <div class="step-desc">
+          Present arguments with sources, vote on contributions using twelve
+          distinct quality categories, and engage with opposing views directly.
+        </div>
+        <div class="step-detail">
+          <div class="step-detail-label">Key Feature</div>
+          <div class="step-detail-text">Reasoned voting requires selecting a category, eliminating drive-by upvotes</div>
+        </div>
+      </div>
+      <div class="step" data-step="3">
+        <div class="step-number">03</div>
+        <div class="step-title">Review the Verdict</div>
+        <div class="step-desc">
+          The analytics engine compiles stance shifts, vote distributions, and
+          argument quality into a transparent, community-driven neutral verdict.
+        </div>
+        <div class="step-detail">
+          <div class="step-detail-label">Key Feature</div>
+          <div class="step-detail-text">Full analytics dashboard showing how minds changed and why</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="margin: 0 var(--margin-x);"></div>
+
+  <!-- ─── Testimonials ─── -->
+  <section class="testimonials" id="testimonials">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-number">03 / Testimonials</div>
+        <h2 class="section-title">Words from<br>early users</h2>
+      </div>
+      <p class="section-desc">
+        Theologians, pastors, and community leaders who have experienced
+        a better way to disagree.
+      </p>
+    </div>
+
+    <div class="testimonial-grid reveal">
+      <div class="testimonial">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">
+          The Sides View alone changed how our seminary class approaches
+          contentious passages. Students now see the strongest version of
+          positions they disagree with before responding.
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">DK</div>
+          <div>
+            <div class="testimonial-name">Dr. David Kim</div>
+            <div class="testimonial-role">Professor of Systematic Theology</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">
+          Finally, a platform that treats theological disagreement as an
+          opportunity for growth rather than a problem to solve. The stance
+          tracking feature is genuinely revelatory.
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SR</div>
+          <div>
+            <div class="testimonial-name">Sarah Rodriguez</div>
+            <div class="testimonial-role">Lead Pastor, Grace Community</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">
+          Reasoned voting eliminates the noise. When every vote requires a
+          category selection, the quality of discourse rises dramatically.
+          We saw engagement double in two weeks.
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MT</div>
+          <div>
+            <div class="testimonial-name">Michael Torres</div>
+            <div class="testimonial-role">Director, Apologetics Institute</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">
+          The Neutral Verdict feature brought genuine resolution to a debate
+          our congregation had been circling for years. Transparent methodology
+          built trust on all sides.
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JW</div>
+          <div>
+            <div class="testimonial-name">Rev. James Walker</div>
+            <div class="testimonial-role">Church Elder, First Reformed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="margin: 0 var(--margin-x);"></div>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta-section" id="cta">
+    <div class="cta-accent-block" id="ctaBlock"></div>
+    <h2 class="cta-title reveal">Elevate your<br>conversations</h2>
+    <p class="cta-subtitle reveal">
+      Join a growing community of churches, seminaries, and study groups
+      bringing structure and substance to theological discourse.
+    </p>
+    <div class="cta-actions reveal">
+      <a href="#" class="btn-primary">Request Early Access</a>
+      <a href="#" class="btn-secondary">Read the whitepaper</a>
+    </div>
+    <p class="cta-note reveal">Free during beta. No credit card required.</p>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer>
+    <div class="footer-left">
+      &copy; 2026 Christian Debate. All rights reserved.
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+      <a href="#">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- ─── Scripts ─── -->
+  <script>
+    /* ── Nav scroll state ── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    /* ── Mobile nav toggle ── */
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      const spans = navToggle.querySelectorAll('span');
+      if (navLinks.classList.contains('open')) {
+        spans[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(4px, -4px)';
+      } else {
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+      }
+    });
+
+    /* Close mobile nav on link click */
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        const spans = navToggle.querySelectorAll('span');
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+      });
+    });
+
+    /* ── Intersection Observer for reveal animations ── */
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -60px 0px'
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .step, .cta-accent-block').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    /* ── Staggered step reveals ── */
+    const stepObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const step = entry.target;
+          const index = parseInt(step.dataset.step) - 1;
+          setTimeout(() => {
+            step.classList.add('visible');
+          }, index * 200);
+          stepObserver.unobserve(step);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.step').forEach(el => {
+      stepObserver.observe(el);
+    });
+
+    /* ── Smooth scroll for anchor links ── */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

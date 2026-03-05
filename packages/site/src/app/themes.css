@@ -1,0 +1,2627 @@
+/* ================================================================
+   CHRISTIAN DEBATE PLATFORM — 10 SELECTABLE THEMES
+   Each theme sets CSS custom properties consumed by Tailwind/shadcn
+   via the @theme inline block in globals.css
+   ================================================================ */
+
+/* ── Theme Selector Component Styles ─────────────────────────── */
+.theme-selector-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.theme-selector-trigger:hover {
+  border-color: var(--ring);
+}
+.theme-selector-swatch {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+}
+.theme-selector-chevron {
+  color: var(--muted-foreground);
+  transition: transform 0.2s;
+}
+.theme-selector-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 280px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+  z-index: 100;
+  animation: theme-dropdown-in 0.15s ease-out;
+}
+@keyframes theme-dropdown-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.theme-selector-header {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted-foreground);
+  padding: 0 4px 8px;
+}
+.theme-selector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+.theme-selector-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+.theme-selector-option:hover {
+  background: var(--accent);
+}
+.theme-selector-option.active {
+  border-color: var(--ring);
+  background: var(--accent);
+}
+.theme-selector-option-swatch {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 2px solid;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+  position: relative;
+}
+.theme-selector-option-accent {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px 6px 0 0;
+}
+.theme-selector-option-name {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* ================================================================
+   THEME 1: CATHEDRAL DARK
+   Reverent, dramatic, immersive
+   ================================================================ */
+html[data-theme="cathedral-dark"] {
+  --radius: 0.5rem;
+
+  /* Semantic colors */
+  --background: #0f0f0f;
+  --foreground: #e8e4d9;
+  --card: #1a1a1a;
+  --card-foreground: #e8e4d9;
+  --popover: #1a1a1a;
+  --popover-foreground: #e8e4d9;
+  --primary: #c9a84c;
+  --primary-foreground: #0f0f0f;
+  --secondary: #252525;
+  --secondary-foreground: #e8e4d9;
+  --muted: #252525;
+  --muted-foreground: #9a9588;
+  --accent: #1f1f1f;
+  --accent-foreground: #c9a84c;
+  --destructive: #9b2335;
+  --border: #333333;
+  --input: #333333;
+  --ring: #c9a84c;
+
+  /* Chart colors */
+  --chart-1: #c9a84c;
+  --chart-2: #1e3a6e;
+  --chart-3: #9b2335;
+  --chart-4: #1a5e3a;
+  --chart-5: #b8860b;
+
+  /* Sidebar */
+  --sidebar: #111111;
+  --sidebar-foreground: #e8e4d9;
+  --sidebar-primary: #c9a84c;
+  --sidebar-primary-foreground: #0f0f0f;
+  --sidebar-accent: #1f1f1f;
+  --sidebar-accent-foreground: #e8e4d9;
+  --sidebar-border: #2a2a2a;
+  --sidebar-ring: #c9a84c;
+
+  /* Theme-specific */
+  --theme-side-a: #1e3a6e;
+  --theme-side-b: #9b2335;
+  --theme-neutral: #6b6b6b;
+  --theme-highlight: #c9a84c;
+  --theme-font-heading: 'Cinzel', serif;
+  --theme-font-body: 'Crimson Pro', serif;
+}
+
+/* ================================================================
+   THEME 2: WARM PARCHMENT
+   Warm, scholarly, inviting
+   ================================================================ */
+html[data-theme="warm-parchment"] {
+  --radius: 0.5rem;
+
+  --background: #f4edd3;
+  --foreground: #5c4033;
+  --card: #f9f3e0;
+  --card-foreground: #5c4033;
+  --popover: #f9f3e0;
+  --popover-foreground: #5c4033;
+  --primary: #8b2500;
+  --primary-foreground: #f4edd3;
+  --secondary: #ebe3c8;
+  --secondary-foreground: #5c4033;
+  --muted: #ebe3c8;
+  --muted-foreground: #8a7b6b;
+  --accent: #ebe3c8;
+  --accent-foreground: #8b2500;
+  --destructive: #a52a2a;
+  --border: #d4c9a8;
+  --input: #d4c9a8;
+  --ring: #b8860b;
+
+  --chart-1: #8b2500;
+  --chart-2: #b8860b;
+  --chart-3: #5c4033;
+  --chart-4: #6b8e23;
+  --chart-5: #8b6914;
+
+  --sidebar: #3d2b1f;
+  --sidebar-foreground: #f4edd3;
+  --sidebar-primary: #b8860b;
+  --sidebar-primary-foreground: #3d2b1f;
+  --sidebar-accent: #4d3b2f;
+  --sidebar-accent-foreground: #f4edd3;
+  --sidebar-border: #5c4033;
+  --sidebar-ring: #b8860b;
+
+  --theme-side-a: #3b5998;
+  --theme-side-b: #8b2500;
+  --theme-neutral: #8a7b6b;
+  --theme-highlight: #b8860b;
+  --theme-font-heading: 'Cormorant Garamond', serif;
+  --theme-font-body: 'EB Garamond', serif;
+}
+
+/* ================================================================
+   THEME 3: NORDIC CLEAN
+   Calm, functional, trustworthy
+   ================================================================ */
+html[data-theme="nordic-clean"] {
+  --radius: 0.5rem;
+
+  --background: #f7f7f5;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #1e293b;
+  --destructive: #ef4444;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #3b82f6;
+
+  --chart-1: #3b82f6;
+  --chart-2: #10b981;
+  --chart-3: #8b5cf6;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1e293b;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #1e293b;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #3b82f6;
+
+  --theme-side-a: #dbeafe;
+  --theme-side-b: #ffe4e6;
+  --theme-neutral: #f1f5f9;
+  --theme-highlight: #3b82f6;
+  --theme-font-heading: 'DM Sans', sans-serif;
+  --theme-font-body: 'Karla', sans-serif;
+}
+
+/* ================================================================
+   THEME 4: INK & PAPER
+   Premium, content-first editorial
+   ================================================================ */
+html[data-theme="ink-and-paper"] {
+  --radius: 0.25rem;
+
+  --background: #ffffff;
+  --foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --primary: #b91c1c;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #111111;
+  --muted: #f5f5f5;
+  --muted-foreground: #555555;
+  --accent: #fafafa;
+  --accent-foreground: #111111;
+  --destructive: #b91c1c;
+  --border: #dddddd;
+  --input: #dddddd;
+  --ring: #b91c1c;
+
+  --chart-1: #b91c1c;
+  --chart-2: #1e3a5f;
+  --chart-3: #555555;
+  --chart-4: #8b6914;
+  --chart-5: #2d572c;
+
+  --sidebar: #111111;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #b91c1c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #222222;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #333333;
+  --sidebar-ring: #b91c1c;
+
+  --theme-side-a: #1e3a5f;
+  --theme-side-b: #b91c1c;
+  --theme-neutral: #777777;
+  --theme-highlight: #b91c1c;
+  --theme-font-heading: 'Playfair Display', serif;
+  --theme-font-body: 'Source Serif 4', serif;
+}
+
+/* ================================================================
+   THEME 5: FOREST DEEP
+   Contemplative, grounded, natural
+   ================================================================ */
+html[data-theme="forest-deep"] {
+  --radius: 0.625rem;
+
+  --background: #1a2418;
+  --foreground: #e8e4d9;
+  --card: #242e22;
+  --card-foreground: #e8e4d9;
+  --popover: #242e22;
+  --popover-foreground: #e8e4d9;
+  --primary: #6b8f5e;
+  --primary-foreground: #1a2418;
+  --secondary: #2a3628;
+  --secondary-foreground: #e8e4d9;
+  --muted: #2a3628;
+  --muted-foreground: #9aaa8f;
+  --accent: #2a3628;
+  --accent-foreground: #d4a44c;
+  --destructive: #a85c3b;
+  --border: #3a4a38;
+  --input: #3a4a38;
+  --ring: #6b8f5e;
+
+  --chart-1: #6b8f5e;
+  --chart-2: #4a7c8a;
+  --chart-3: #d4a44c;
+  --chart-4: #a85c3b;
+  --chart-5: #8b6f4e;
+
+  --sidebar: #151d14;
+  --sidebar-foreground: #e8e4d9;
+  --sidebar-primary: #6b8f5e;
+  --sidebar-primary-foreground: #151d14;
+  --sidebar-accent: #1f2a1d;
+  --sidebar-accent-foreground: #e8e4d9;
+  --sidebar-border: #2a3628;
+  --sidebar-ring: #6b8f5e;
+
+  --theme-side-a: #4a7c8a;
+  --theme-side-b: #a85c3b;
+  --theme-neutral: #8b8b7a;
+  --theme-highlight: #d4a44c;
+  --theme-font-heading: 'Bitter', serif;
+  --theme-font-body: 'Nunito Sans', sans-serif;
+}
+
+/* ================================================================
+   THEME 6: NEON TERMINAL
+   Hacker forum meets theology
+   ================================================================ */
+html[data-theme="neon-terminal"] {
+  --radius: 0.375rem;
+
+  --background: #0a0a0a;
+  --foreground: #cccccc;
+  --card: #111111;
+  --card-foreground: #cccccc;
+  --popover: #111111;
+  --popover-foreground: #cccccc;
+  --primary: #00e5ff;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #cccccc;
+  --muted: #1a1a1a;
+  --muted-foreground: #666666;
+  --accent: #1a1a1a;
+  --accent-foreground: #00e5ff;
+  --destructive: #ff0080;
+  --border: #222222;
+  --input: #222222;
+  --ring: #00e5ff;
+
+  --chart-1: #00e5ff;
+  --chart-2: #ff0080;
+  --chart-3: #00ff88;
+  --chart-4: #ff6600;
+  --chart-5: #aa55ff;
+
+  --sidebar: #080808;
+  --sidebar-foreground: #cccccc;
+  --sidebar-primary: #00e5ff;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #151515;
+  --sidebar-accent-foreground: #cccccc;
+  --sidebar-border: #1a1a1a;
+  --sidebar-ring: #00e5ff;
+
+  --theme-side-a: #00e5ff;
+  --theme-side-b: #ff0080;
+  --theme-neutral: #666666;
+  --theme-highlight: #00ff88;
+  --theme-font-heading: 'Orbitron', sans-serif;
+  --theme-font-body: 'JetBrains Mono', monospace;
+}
+
+/* ================================================================
+   THEME 7: BYZANTINE GOLD
+   Imperial debate chamber
+   ================================================================ */
+html[data-theme="byzantine-gold"] {
+  --radius: 0.5rem;
+
+  --background: #0d1442;
+  --foreground: #fdf5e6;
+  --card: #111a4a;
+  --card-foreground: #fdf5e6;
+  --popover: #111a4a;
+  --popover-foreground: #fdf5e6;
+  --primary: #ffd700;
+  --primary-foreground: #0d1442;
+  --secondary: #151e52;
+  --secondary-foreground: #fdf5e6;
+  --muted: #151e52;
+  --muted-foreground: #a0a0b0;
+  --accent: #1a2460;
+  --accent-foreground: #ffd700;
+  --destructive: #b71c1c;
+  --border: #2a3470;
+  --input: #2a3470;
+  --ring: #ffd700;
+
+  --chart-1: #ffd700;
+  --chart-2: #1a237e;
+  --chart-3: #b71c1c;
+  --chart-4: #00695c;
+  --chart-5: #e65100;
+
+  --sidebar: #0a0f30;
+  --sidebar-foreground: #fdf5e6;
+  --sidebar-primary: #ffd700;
+  --sidebar-primary-foreground: #0a0f30;
+  --sidebar-accent: #111a4a;
+  --sidebar-accent-foreground: #fdf5e6;
+  --sidebar-border: #1a2460;
+  --sidebar-ring: #ffd700;
+
+  --theme-side-a: #1a237e;
+  --theme-side-b: #b71c1c;
+  --theme-neutral: #00695c;
+  --theme-highlight: #ffd700;
+  --theme-font-heading: 'Vollkorn', serif;
+  --theme-font-body: 'Merriweather', serif;
+}
+
+/* ================================================================
+   THEME 8: SOFT CLOUD
+   Calm, approachable, cozy
+   ================================================================ */
+html[data-theme="soft-cloud"] {
+  --radius: 1rem;
+
+  --background: #f8f7ff;
+  --foreground: #374151;
+  --card: #ffffff;
+  --card-foreground: #374151;
+  --popover: #ffffff;
+  --popover-foreground: #374151;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f0ff;
+  --secondary-foreground: #374151;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --accent: #f3f0ff;
+  --accent-foreground: #374151;
+  --destructive: #f87171;
+  --border: #e5e7f0;
+  --input: #e5e7f0;
+  --ring: #c4b5fd;
+
+  --chart-1: #c4b5fd;
+  --chart-2: #93c5fd;
+  --chart-3: #fda4af;
+  --chart-4: #86efac;
+  --chart-5: #fed7aa;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #374151;
+  --sidebar-primary: #8b5cf6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f3f0ff;
+  --sidebar-accent-foreground: #374151;
+  --sidebar-border: #e5e7f0;
+  --sidebar-ring: #c4b5fd;
+
+  --theme-side-a: #dbeafe;
+  --theme-side-b: #ffe4e6;
+  --theme-neutral: #f3f4f6;
+  --theme-highlight: #c4b5fd;
+  --theme-font-heading: 'Nunito', sans-serif;
+  --theme-font-body: 'Quicksand', sans-serif;
+}
+
+/* ================================================================
+   THEME 9: ART DECO DEBATE
+   1920s Grand Hotel salon
+   ================================================================ */
+html[data-theme="art-deco"] {
+  --radius: 0.25rem;
+
+  --background: #0a1628;
+  --foreground: #f0e6d3;
+  --card: #0f1d35;
+  --card-foreground: #f0e6d3;
+  --popover: #0f1d35;
+  --popover-foreground: #f0e6d3;
+  --primary: #c9a84c;
+  --primary-foreground: #0a1628;
+  --secondary: #142240;
+  --secondary-foreground: #f0e6d3;
+  --muted: #142240;
+  --muted-foreground: #8a8070;
+  --accent: #142240;
+  --accent-foreground: #c9a84c;
+  --destructive: #8b2500;
+  --border: #2a3a5a;
+  --input: #2a3a5a;
+  --ring: #c9a84c;
+
+  --chart-1: #c9a84c;
+  --chart-2: #1e3a6e;
+  --chart-3: #8b2500;
+  --chart-4: #2d572c;
+  --chart-5: #6b2d3e;
+
+  --sidebar: #070f1e;
+  --sidebar-foreground: #f0e6d3;
+  --sidebar-primary: #c9a84c;
+  --sidebar-primary-foreground: #070f1e;
+  --sidebar-accent: #0f1d35;
+  --sidebar-accent-foreground: #f0e6d3;
+  --sidebar-border: #1a2a4a;
+  --sidebar-ring: #c9a84c;
+
+  --theme-side-a: #1e3a6e;
+  --theme-side-b: #6b2d3e;
+  --theme-neutral: #8a8070;
+  --theme-highlight: #c9a84c;
+  --theme-font-heading: 'Poiret One', sans-serif;
+  --theme-font-body: 'Raleway', sans-serif;
+}
+
+/* ================================================================
+   THEME 10: SLATE ACADEMIC
+   Oxford lecture hall gravitas
+   ================================================================ */
+html[data-theme="slate-academic"] {
+  --radius: 0.375rem;
+
+  --background: #fffff0;
+  --foreground: #002147;
+  --card: #fffff0;
+  --card-foreground: #002147;
+  --popover: #fffff0;
+  --popover-foreground: #002147;
+  --primary: #a51c30;
+  --primary-foreground: #fffff0;
+  --secondary: #f5f5e8;
+  --secondary-foreground: #002147;
+  --muted: #f0f0e0;
+  --muted-foreground: #4a5568;
+  --accent: #f0f0e0;
+  --accent-foreground: #002147;
+  --destructive: #a51c30;
+  --border: #d0d0c0;
+  --input: #d0d0c0;
+  --ring: #a51c30;
+
+  --chart-1: #a51c30;
+  --chart-2: #002147;
+  --chart-3: #1e4d2b;
+  --chart-4: #8b6914;
+  --chart-5: #4a2545;
+
+  --sidebar: #002147;
+  --sidebar-foreground: #fffff0;
+  --sidebar-primary: #a51c30;
+  --sidebar-primary-foreground: #fffff0;
+  --sidebar-accent: #003366;
+  --sidebar-accent-foreground: #fffff0;
+  --sidebar-border: #1a3a5f;
+  --sidebar-ring: #a51c30;
+
+  --theme-side-a: #002147;
+  --theme-side-b: #a51c30;
+  --theme-neutral: #1e4d2b;
+  --theme-highlight: #a51c30;
+  --theme-font-heading: 'Libre Baskerville', serif;
+  --theme-font-body: 'Lora', serif;
+}
+
+/* ================================================================
+   THEME-SPECIFIC TYPOGRAPHY
+   Applied via data-theme attribute on html element
+   ================================================================ */
+
+/* Cathedral Dark */
+html[data-theme="cathedral-dark"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="cathedral-dark"] h1,
+html[data-theme="cathedral-dark"] h2,
+html[data-theme="cathedral-dark"] h3,
+html[data-theme="cathedral-dark"] h4 {
+  font-family: var(--theme-font-heading);
+  letter-spacing: 0.02em;
+}
+
+/* Warm Parchment */
+html[data-theme="warm-parchment"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="warm-parchment"] h1,
+html[data-theme="warm-parchment"] h2,
+html[data-theme="warm-parchment"] h3,
+html[data-theme="warm-parchment"] h4 {
+  font-family: var(--theme-font-heading);
+}
+
+/* Nordic Clean */
+html[data-theme="nordic-clean"] body {
+  font-family: var(--theme-font-body);
+  line-height: 1.7;
+}
+html[data-theme="nordic-clean"] h1,
+html[data-theme="nordic-clean"] h2,
+html[data-theme="nordic-clean"] h3,
+html[data-theme="nordic-clean"] h4 {
+  font-family: var(--theme-font-heading);
+  font-weight: 600;
+}
+
+/* Ink & Paper */
+html[data-theme="ink-and-paper"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="ink-and-paper"] h1,
+html[data-theme="ink-and-paper"] h2,
+html[data-theme="ink-and-paper"] h3,
+html[data-theme="ink-and-paper"] h4 {
+  font-family: var(--theme-font-heading);
+  font-weight: 700;
+}
+
+/* Forest Deep */
+html[data-theme="forest-deep"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="forest-deep"] h1,
+html[data-theme="forest-deep"] h2,
+html[data-theme="forest-deep"] h3,
+html[data-theme="forest-deep"] h4 {
+  font-family: var(--theme-font-heading);
+}
+
+/* Neon Terminal — monospace everything */
+html[data-theme="neon-terminal"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="neon-terminal"] h1,
+html[data-theme="neon-terminal"] h2,
+html[data-theme="neon-terminal"] h3,
+html[data-theme="neon-terminal"] h4 {
+  font-family: var(--theme-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Byzantine Gold */
+html[data-theme="byzantine-gold"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="byzantine-gold"] h1,
+html[data-theme="byzantine-gold"] h2,
+html[data-theme="byzantine-gold"] h3,
+html[data-theme="byzantine-gold"] h4 {
+  font-family: var(--theme-font-heading);
+}
+
+/* Soft Cloud */
+html[data-theme="soft-cloud"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="soft-cloud"] h1,
+html[data-theme="soft-cloud"] h2,
+html[data-theme="soft-cloud"] h3,
+html[data-theme="soft-cloud"] h4 {
+  font-family: var(--theme-font-heading);
+  font-weight: 700;
+}
+
+/* Art Deco */
+html[data-theme="art-deco"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="art-deco"] h1,
+html[data-theme="art-deco"] h2,
+html[data-theme="art-deco"] h3,
+html[data-theme="art-deco"] h4 {
+  font-family: var(--theme-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* Slate Academic */
+html[data-theme="slate-academic"] body {
+  font-family: var(--theme-font-body);
+}
+html[data-theme="slate-academic"] h1,
+html[data-theme="slate-academic"] h2,
+html[data-theme="slate-academic"] h3,
+html[data-theme="slate-academic"] h4 {
+  font-family: var(--theme-font-heading);
+}
+
+/* ================================================================
+   THEME-SPECIFIC MOTIFS & EFFECTS
+   ================================================================ */
+
+/* Cathedral Dark — gold glow on primary buttons, tracery border on cards */
+html[data-theme="cathedral-dark"] [data-slot="card"] {
+  border-top: 2px solid #c9a84c33;
+}
+html[data-theme="cathedral-dark"] [data-slot="card"]:hover {
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.08);
+}
+html[data-theme="cathedral-dark"] button[data-slot="button"]:not([data-variant]) {
+  text-shadow: 0 0 12px rgba(201, 168, 76, 0.3);
+}
+
+/* Warm Parchment — warm radial background, ornamental feel */
+html[data-theme="warm-parchment"] body {
+  background: radial-gradient(ellipse at 30% 20%, #f9f3e0 0%, #f4edd3 50%, #ebe3c8 100%);
+}
+html[data-theme="warm-parchment"] [data-slot="card"] {
+  border: 1px solid #d4c9a8;
+}
+
+/* Nordic Clean — ultra-clean, thin borders only */
+html[data-theme="nordic-clean"] [data-slot="card"] {
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+}
+
+/* Ink & Paper — horizontal rules instead of card borders, editorial feel */
+html[data-theme="ink-and-paper"] [data-slot="card"] {
+  box-shadow: none;
+  border: none;
+  border-bottom: 1px solid #dddddd;
+  border-radius: 0;
+}
+
+/* Forest Deep — green-tinted shadows, soft organic feel */
+html[data-theme="forest-deep"] [data-slot="card"] {
+  box-shadow: 0 4px 16px rgba(26, 36, 24, 0.5);
+}
+html[data-theme="forest-deep"] [data-slot="card"]:hover {
+  box-shadow: 0 6px 24px rgba(107, 143, 94, 0.15);
+}
+
+/* Neon Terminal — glassmorphism cards, scan-line overlay, neon glow */
+html[data-theme="neon-terminal"] [data-slot="card"] {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+html[data-theme="neon-terminal"] h1,
+html[data-theme="neon-terminal"] h2 {
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.3), 0 0 30px rgba(0, 229, 255, 0.1);
+}
+html[data-theme="neon-terminal"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 229, 255, 0.015) 2px,
+    rgba(0, 229, 255, 0.015) 4px
+  );
+}
+
+/* Byzantine Gold — gold top borders on cards, mosaic background */
+html[data-theme="byzantine-gold"] [data-slot="card"] {
+  border-top: 3px solid #ffd700;
+}
+html[data-theme="byzantine-gold"] body {
+  background-image: repeating-conic-gradient(
+    rgba(255, 215, 0, 0.02) 0% 25%,
+    transparent 25% 50%
+  );
+  background-size: 40px 40px;
+}
+
+/* Soft Cloud — diffused shadows, bouncy hover */
+html[data-theme="soft-cloud"] [data-slot="card"] {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+html[data-theme="soft-cloud"] [data-slot="card"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Art Deco — gold border cards with corner ornaments, geometric feel */
+html[data-theme="art-deco"] [data-slot="card"] {
+  border: 1px solid #c9a84c33;
+  position: relative;
+}
+html[data-theme="art-deco"] [data-slot="card"]::before,
+html[data-theme="art-deco"] [data-slot="card"]::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: #c9a84c55;
+  border-style: solid;
+}
+html[data-theme="art-deco"] [data-slot="card"]::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+html[data-theme="art-deco"] [data-slot="card"]::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+html[data-theme="art-deco"] h1,
+html[data-theme="art-deco"] h2 {
+  text-align: center;
+}
+
+/* Slate Academic — navy top borders on cards, thin horizontal rules */
+html[data-theme="slate-academic"] [data-slot="card"] {
+  border-top: 2px solid #002147;
+  box-shadow: none;
+}
+
+/* ================================================================
+   LANDING PAGE — BASE STYLES
+   ================================================================ */
+
+@keyframes landingFadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes landingPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+@keyframes landingFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.landing-page {
+  overflow-x: hidden;
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+.landing-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 6rem 1.5rem 4rem;
+  overflow: hidden;
+}
+
+.landing-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.landing-hero-ornament {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.landing-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  animation: landingFadeInUp 0.8s ease-out;
+}
+
+.landing-overline {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.landing-title {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: var(--foreground);
+}
+
+.landing-subtitle {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+  max-width: 540px;
+  margin: 0 auto 2.5rem;
+}
+
+.landing-cta-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.landing-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.landing-cta-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.landing-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.landing-cta-secondary:hover {
+  background: var(--accent);
+}
+
+.landing-hero-scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--muted-foreground);
+  opacity: 0.5;
+  animation: landingFloat 2.5s ease-in-out infinite;
+}
+
+/* ── Section Structure ───────────────────────────────────── */
+.landing-section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.landing-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.landing-section-title {
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+}
+
+.landing-section-desc {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  max-width: 560px;
+  margin-bottom: 3rem;
+}
+
+/* ── Features ────────────────────────────────────────────── */
+.landing-features {
+  padding: 6rem 0;
+}
+
+.landing-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+@media (max-width: 768px) {
+  .landing-features-grid { grid-template-columns: 1fr; }
+}
+
+.landing-feature-card {
+  padding: 2rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.25s ease;
+  animation: landingFadeInUp 0.6s ease-out both;
+}
+.landing-feature-card:hover {
+  border-color: var(--ring);
+  transform: translateY(-2px);
+}
+
+.landing-feature-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.landing-feature-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.landing-feature-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* ── How It Works ────────────────────────────────────────── */
+.landing-how-it-works {
+  padding: 6rem 0;
+}
+
+.landing-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+@media (max-width: 768px) {
+  .landing-steps { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .landing-steps { grid-template-columns: 1fr; }
+}
+
+.landing-step {
+  text-align: center;
+  position: relative;
+  animation: landingFadeInUp 0.6s ease-out both;
+}
+
+.landing-step-num {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.landing-step-connector {
+  display: none;
+}
+
+.landing-step-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.landing-step-desc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* ── Stats ───────────────────────────────────────────────── */
+.landing-stats {
+  padding: 4rem 0;
+}
+
+.landing-stats-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.landing-stat {
+  text-align: center;
+}
+
+.landing-stat-num {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.landing-stat-label {
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.landing-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+@media (max-width: 480px) {
+  .landing-stat-divider { display: none; }
+}
+
+/* ── Divider ─────────────────────────────────────────────── */
+.landing-divider {
+  max-width: 1100px;
+  margin: 0 auto;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Trending ────────────────────────────────────────────── */
+.landing-trending {
+  padding: 6rem 0;
+}
+
+.landing-trending-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.landing-view-all {
+  font-size: 0.85rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+.landing-view-all:hover {
+  text-decoration: underline;
+}
+
+.landing-debates-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 768px) {
+  .landing-debates-grid { grid-template-columns: 1fr; }
+}
+
+/* ── CTA Section ─────────────────────────────────────────── */
+.landing-cta-section {
+  padding: 6rem 0;
+}
+
+.landing-cta-card {
+  text-align: center;
+  padding: 4rem 2rem;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.landing-cta-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.landing-cta-desc {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.landing-footer {
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  border-top: 1px solid var(--border);
+}
+
+/* ================================================================
+   LANDING PAGE — THEME-SPECIFIC OVERRIDES
+   ================================================================ */
+
+/* ── Cathedral Dark: rose window, gold shimmer, gothic arches ── */
+html[data-theme="cathedral-dark"] .landing-hero-bg {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(201, 168, 76, 0.04) 0%, transparent 70%);
+}
+html[data-theme="cathedral-dark"] .landing-hero-ornament {
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(201, 168, 76, 0.03) 40px, rgba(201, 168, 76, 0.03) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201, 168, 76, 0.03) 40px, rgba(201, 168, 76, 0.03) 41px);
+}
+html[data-theme="cathedral-dark"] .landing-title {
+  background: linear-gradient(90deg, #e8e4d9 30%, #c9a84c 50%, #e8e4d9 70%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+html[data-theme="cathedral-dark"] .landing-overline {
+  color: #c9a84c;
+}
+html[data-theme="cathedral-dark"] .landing-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a84c33, transparent);
+}
+html[data-theme="cathedral-dark"] .landing-feature-card {
+  border-top: 2px solid #c9a84c22;
+}
+html[data-theme="cathedral-dark"] .landing-feature-card:hover {
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.08);
+}
+html[data-theme="cathedral-dark"] .landing-cta-card {
+  border: 1px solid #c9a84c22;
+}
+
+/* ── Warm Parchment: radial warmth, illuminated capitals ── */
+html[data-theme="warm-parchment"] .landing-hero-bg {
+  background: radial-gradient(ellipse at 30% 30%, #f9f3e0 0%, #f4edd3 50%, #ebe3c8 100%);
+}
+html[data-theme="warm-parchment"] .landing-title::first-letter {
+  color: #8b2500;
+  font-size: 1.15em;
+}
+html[data-theme="warm-parchment"] .landing-overline {
+  color: #b8860b;
+}
+html[data-theme="warm-parchment"] .landing-divider {
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #d4c9a8 0px, #d4c9a8 8px, transparent 8px, transparent 16px);
+}
+html[data-theme="warm-parchment"] .landing-step-num {
+  color: #8b2500;
+  text-shadow: 1px 1px 0 #b8860b33;
+}
+
+/* ── Nordic Clean: pure functional minimalism ── */
+html[data-theme="nordic-clean"] .landing-hero-bg {
+  background: transparent;
+}
+html[data-theme="nordic-clean"] .landing-feature-card {
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+}
+html[data-theme="nordic-clean"] .landing-feature-card:hover {
+  background: #f8fafc;
+  transform: none;
+}
+html[data-theme="nordic-clean"] .landing-cta-card {
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+}
+
+/* ── Ink & Paper: editorial rules, drop caps, no backgrounds ── */
+html[data-theme="ink-and-paper"] .landing-hero {
+  border-bottom: 2px solid #111111;
+}
+html[data-theme="ink-and-paper"] .landing-overline {
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+html[data-theme="ink-and-paper"] .landing-feature-card {
+  border: none;
+  border-bottom: 1px solid #dddddd;
+  border-radius: 0;
+  padding: 1.5rem 0;
+}
+html[data-theme="ink-and-paper"] .landing-feature-card:hover {
+  transform: none;
+  border-color: #b91c1c;
+}
+html[data-theme="ink-and-paper"] .landing-divider {
+  background: #111111;
+}
+html[data-theme="ink-and-paper"] .landing-cta-card {
+  border: 2px double #111111;
+  border-radius: 0;
+}
+html[data-theme="ink-and-paper"] .landing-stat-num {
+  font-variant-numeric: oldstyle-nums;
+}
+
+/* ── Forest Deep: nature gradients, organic shapes ── */
+html[data-theme="forest-deep"] .landing-hero-bg {
+  background: radial-gradient(ellipse at 50% 80%, rgba(107, 143, 94, 0.08) 0%, transparent 60%);
+}
+html[data-theme="forest-deep"] .landing-hero-ornament {
+  opacity: 0.15;
+  background-image: radial-gradient(circle at 20% 70%, #6b8f5e33, transparent 40%),
+    radial-gradient(circle at 80% 30%, #d4a44c22, transparent 40%);
+}
+html[data-theme="forest-deep"] .landing-feature-card {
+  box-shadow: 0 4px 16px rgba(26, 36, 24, 0.4);
+}
+html[data-theme="forest-deep"] .landing-feature-card:hover {
+  box-shadow: 0 8px 24px rgba(107, 143, 94, 0.12);
+}
+html[data-theme="forest-deep"] .landing-divider {
+  background: linear-gradient(90deg, transparent, #6b8f5e44, transparent);
+}
+
+/* ── Neon Terminal: grid bg, glassmorphism, neon glow ── */
+html[data-theme="neon-terminal"] .landing-hero-bg {
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+html[data-theme="neon-terminal"] .landing-hero-ornament {
+  background: radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.06) 0%, transparent 50%);
+}
+html[data-theme="neon-terminal"] .landing-title {
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.4), 0 0 60px rgba(0, 229, 255, 0.15);
+}
+html[data-theme="neon-terminal"] .landing-overline {
+  color: #ff0080;
+  text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+}
+html[data-theme="neon-terminal"] .landing-feature-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 255, 0.12);
+}
+html[data-theme="neon-terminal"] .landing-feature-card:hover {
+  border-color: rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+}
+html[data-theme="neon-terminal"] .landing-cta-primary {
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+}
+html[data-theme="neon-terminal"] .landing-divider {
+  background: linear-gradient(90deg, transparent, #00e5ff44, #ff008044, transparent);
+}
+html[data-theme="neon-terminal"] .landing-stat-num {
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+html[data-theme="neon-terminal"] .landing-cta-card {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+}
+
+/* ── Byzantine Gold: mosaic bg, gold shimmer, arch shapes ── */
+html[data-theme="byzantine-gold"] .landing-hero-bg {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 60%),
+    repeating-conic-gradient(rgba(255, 215, 0, 0.015) 0% 25%, transparent 25% 50%);
+  background-size: 100% 100%, 40px 40px;
+}
+html[data-theme="byzantine-gold"] .landing-title {
+  color: #ffd700;
+}
+html[data-theme="byzantine-gold"] .landing-overline {
+  color: #ffd700;
+}
+html[data-theme="byzantine-gold"] .landing-feature-card {
+  border-top: 3px solid #ffd70044;
+}
+html[data-theme="byzantine-gold"] .landing-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent 20%, #ffd70033, transparent 80%);
+}
+html[data-theme="byzantine-gold"] .landing-cta-card {
+  border-top: 3px solid #ffd700;
+}
+html[data-theme="byzantine-gold"] .landing-step-num {
+  color: #ffd700;
+}
+
+/* ── Soft Cloud: blobs, pastels, bouncy ── */
+html[data-theme="soft-cloud"] .landing-hero-bg {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(196, 181, 253, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(253, 164, 175, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(147, 197, 253, 0.1) 0%, transparent 40%);
+}
+html[data-theme="soft-cloud"] .landing-feature-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7f0;
+}
+html[data-theme="soft-cloud"] .landing-feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+html[data-theme="soft-cloud"] .landing-cta-primary {
+  border-radius: 24px;
+}
+html[data-theme="soft-cloud"] .landing-cta-secondary {
+  border-radius: 24px;
+}
+html[data-theme="soft-cloud"] .landing-cta-card {
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+html[data-theme="soft-cloud"] .landing-step-num {
+  font-size: 2.5rem;
+  color: #c4b5fd;
+}
+html[data-theme="soft-cloud"] .landing-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c4b5fd44, #fda4af44, transparent);
+}
+
+/* ── Art Deco: sunburst, gold geometry, centered layouts ── */
+html[data-theme="art-deco"] .landing-hero-bg {
+  background:
+    conic-gradient(from 0deg at 50% 100%, rgba(201, 168, 76, 0.04) 0deg, transparent 30deg, rgba(201, 168, 76, 0.04) 60deg, transparent 90deg, rgba(201, 168, 76, 0.04) 120deg, transparent 150deg, rgba(201, 168, 76, 0.04) 180deg, transparent 210deg, rgba(201, 168, 76, 0.04) 240deg, transparent 270deg, rgba(201, 168, 76, 0.04) 300deg, transparent 330deg, rgba(201, 168, 76, 0.04) 360deg);
+}
+html[data-theme="art-deco"] .landing-overline {
+  letter-spacing: 0.4em;
+}
+html[data-theme="art-deco"] .landing-title {
+  color: #c9a84c;
+  letter-spacing: 0.12em;
+}
+html[data-theme="art-deco"] .landing-section-title {
+  text-align: center;
+}
+html[data-theme="art-deco"] .landing-section-label {
+  text-align: center;
+}
+html[data-theme="art-deco"] .landing-section-desc {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+html[data-theme="art-deco"] .landing-feature-card {
+  text-align: center;
+  position: relative;
+  border: 1px solid #c9a84c22;
+}
+html[data-theme="art-deco"] .landing-feature-card::before,
+html[data-theme="art-deco"] .landing-feature-card::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #c9a84c44;
+  border-style: solid;
+}
+html[data-theme="art-deco"] .landing-feature-card::before {
+  top: -1px; left: -1px;
+  border-width: 2px 0 0 2px;
+}
+html[data-theme="art-deco"] .landing-feature-card::after {
+  bottom: -1px; right: -1px;
+  border-width: 0 2px 2px 0;
+}
+html[data-theme="art-deco"] .landing-feature-icon {
+  margin-left: auto;
+  margin-right: auto;
+}
+html[data-theme="art-deco"] .landing-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent 10%, #c9a84c33 30%, #c9a84c 50%, #c9a84c33 70%, transparent 90%);
+}
+html[data-theme="art-deco"] .landing-cta-card {
+  border: 1px solid #c9a84c33;
+  position: relative;
+}
+html[data-theme="art-deco"] .landing-step {
+  text-align: center;
+}
+
+/* ── Slate Academic: thin rules, scholarly restraint ── */
+html[data-theme="slate-academic"] .landing-hero {
+  border-bottom: 2px solid #002147;
+}
+html[data-theme="slate-academic"] .landing-overline {
+  font-variant: small-caps;
+  letter-spacing: 0.25em;
+  color: #a51c30;
+}
+html[data-theme="slate-academic"] .landing-feature-card {
+  border-top: 2px solid #002147;
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-theme="slate-academic"] .landing-feature-card:hover {
+  transform: none;
+  background: #f5f5e8;
+}
+html[data-theme="slate-academic"] .landing-divider {
+  background: #002147;
+  height: 1px;
+}
+html[data-theme="slate-academic"] .landing-cta-card {
+  border-top: 2px solid #002147;
+  border-bottom: 2px solid #002147;
+  border-radius: 0;
+  box-shadow: none;
+}
+html[data-theme="slate-academic"] .landing-stat-num {
+  font-variant-numeric: oldstyle-nums;
+}
+
+/* ================================================================
+   APP-LEVEL STYLES — BASE
+   Debate pages, listing, header, tabs, comments, badges, votes
+   ================================================================ */
+
+/* ── Header ─────────────────────────────────────────────── */
+.app-header {
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* ── Debate Detail Page ─────────────────────────────────── */
+.debate-sides-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.debate-side-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.debate-side-dot--a {
+  background: var(--theme-side-a);
+}
+
+.debate-side-dot--b {
+  background: var(--theme-side-b);
+}
+
+/* ── Stance Badges — Themed ─────────────────────────────── */
+.stance-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px solid;
+  transition: all 0.2s;
+}
+
+.stance-badge--side-a {
+  color: var(--theme-side-a);
+  border-color: var(--theme-side-a);
+  background: transparent;
+}
+
+.stance-badge--side-b {
+  color: var(--theme-side-b);
+  border-color: var(--theme-side-b);
+  background: transparent;
+}
+
+.stance-badge--neutral {
+  color: var(--theme-neutral);
+  border-color: var(--theme-neutral);
+  background: transparent;
+}
+
+/* ── Comment Depth Lines ────────────────────────────────── */
+.comment-depth-line {
+  border-left: 2px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.comment-depth-line:hover {
+  border-color: var(--primary);
+}
+
+/* ── Vote Buttons ───────────────────────────────────────── */
+.vote-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.vote-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.vote-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+/* ── Side Columns (Sides View) ──────────────────────────── */
+.side-column--a {
+  border-top: 3px solid var(--theme-side-a);
+}
+
+.side-column--b {
+  border-top: 3px solid var(--theme-side-b);
+}
+
+.side-column-header--a {
+  color: var(--theme-side-a);
+}
+
+.side-column-header--b {
+  color: var(--theme-side-b);
+}
+
+/* ── Exchange Pair Cards ────────────────────────────────── */
+.exchange-card--a {
+  border-left: 3px solid var(--theme-side-a);
+}
+
+.exchange-card--b {
+  border-left: 3px solid var(--theme-side-b);
+}
+
+/* ── Verdict Tally Bar ──────────────────────────────────── */
+.verdict-bar--a {
+  background: var(--theme-side-a);
+}
+
+.verdict-bar--b {
+  background: var(--theme-side-b);
+}
+
+/* ================================================================
+   APP-LEVEL — THEME-SPECIFIC OVERRIDES
+   ================================================================ */
+
+/* ── CATHEDRAL DARK ─────────────────────────────────────── */
+
+/* Header: dark gradient with gold accents */
+html[data-theme="cathedral-dark"] header {
+  background: linear-gradient(180deg, #161616 0%, #111111 100%) !important;
+  border-color: #2a2a2a !important;
+}
+
+html[data-theme="cathedral-dark"] header a[href="/"] {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+  color: #c9a84c;
+}
+
+/* Tabs: gold underline with glow */
+html[data-theme="cathedral-dark"] [role="tablist"] {
+  border-bottom: 1px solid #2a2a2a;
+}
+
+html[data-theme="cathedral-dark"] [role="tab"] {
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+}
+
+html[data-theme="cathedral-dark"] [role="tab"][data-state="active"] {
+  color: #c9a84c;
+  box-shadow: 0 2px 0 0 #c9a84c, 0 4px 12px rgba(201, 168, 76, 0.15);
+}
+
+/* Comment depth: progressively lighter gold lines */
+html[data-theme="cathedral-dark"] .border-l-2 {
+  border-color: rgba(201, 168, 76, 0.15) !important;
+}
+
+html[data-theme="cathedral-dark"] .border-l-2:hover {
+  border-color: rgba(201, 168, 76, 0.35) !important;
+}
+
+/* Debate description drop cap */
+html[data-theme="cathedral-dark"] .debate-description::first-letter {
+  float: left;
+  font-size: 3rem;
+  line-height: 1;
+  font-family: 'Cinzel', serif;
+  color: #c9a84c;
+  margin-right: 0.15em;
+  margin-top: 0.05em;
+}
+
+/* Stance badges: jewel-tone borders */
+html[data-theme="cathedral-dark"] .bg-blue-100 {
+  background: transparent !important;
+  color: #2d56a0 !important;
+  border-color: #2d56a0 !important;
+}
+
+html[data-theme="cathedral-dark"] .bg-red-100 {
+  background: transparent !important;
+  color: #c4344a !important;
+  border-color: #c4344a !important;
+}
+
+/* Side dots: theme colors */
+html[data-theme="cathedral-dark"] .bg-blue-500 {
+  background-color: #1e3a6e !important;
+}
+
+html[data-theme="cathedral-dark"] .bg-amber-500 {
+  background-color: #9b2335 !important;
+}
+
+/* Gold divider for separators */
+html[data-theme="cathedral-dark"] [data-slot="separator"] {
+  background: linear-gradient(90deg, transparent, #c9a84c33, transparent);
+}
+
+/* ── WARM PARCHMENT ─────────────────────────────────────── */
+
+/* Header: dark warm brown */
+html[data-theme="warm-parchment"] header {
+  background: #3d2b1f !important;
+  border-color: #5c4033 !important;
+  color: #f4edd3 !important;
+}
+
+html[data-theme="warm-parchment"] header a,
+html[data-theme="warm-parchment"] header button {
+  color: #f4edd3 !important;
+}
+
+html[data-theme="warm-parchment"] header a[href="/"] {
+  font-family: 'Cormorant Garamond', serif;
+  color: #b8860b !important;
+}
+
+/* Tabs: gold underline, serif */
+html[data-theme="warm-parchment"] [role="tab"] {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+}
+
+html[data-theme="warm-parchment"] [role="tab"][data-state="active"] {
+  color: #8b2500;
+  box-shadow: 0 2px 0 0 #b8860b;
+}
+
+/* Comment depth: warm brown lines */
+html[data-theme="warm-parchment"] .border-l-2 {
+  border-color: #d4c9a8 !important;
+}
+
+/* Cards: warm ornamental borders */
+html[data-theme="warm-parchment"] [data-slot="card"] {
+  border: 1px solid #d4c9a8;
+  background: #f9f3e0;
+}
+
+/* Side dots: warm tinted */
+html[data-theme="warm-parchment"] .bg-blue-500 {
+  background-color: #3b5998 !important;
+}
+
+html[data-theme="warm-parchment"] .bg-amber-500 {
+  background-color: #8b2500 !important;
+}
+
+/* Separator: ornamental */
+html[data-theme="warm-parchment"] [data-slot="separator"] {
+  background: repeating-linear-gradient(90deg, #d4c9a8 0px, #d4c9a8 8px, transparent 8px, transparent 16px);
+}
+
+/* Debate description drop cap */
+html[data-theme="warm-parchment"] .debate-description::first-letter {
+  float: left;
+  font-size: 3rem;
+  line-height: 1;
+  font-family: 'Cormorant Garamond', serif;
+  color: #8b2500;
+  text-shadow: 1px 1px 0 rgba(184, 134, 11, 0.3);
+  margin-right: 0.1em;
+}
+
+/* ── NORDIC CLEAN ───────────────────────────────────────── */
+
+/* Header: white, thin border, ultra clean */
+html[data-theme="nordic-clean"] header {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Tabs: simple underline, no extra effects */
+html[data-theme="nordic-clean"] [role="tab"] {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
+html[data-theme="nordic-clean"] [role="tab"][data-state="active"] {
+  color: #3b82f6;
+  box-shadow: 0 2px 0 0 #3b82f6;
+}
+
+/* Cards: no shadow, thin borders only */
+html[data-theme="nordic-clean"] [data-slot="card"] {
+  box-shadow: none !important;
+  border: 1px solid #e5e7eb;
+}
+
+html[data-theme="nordic-clean"] [data-slot="card"]:hover {
+  background: #f8fafc;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Comment depth: thin clean lines */
+html[data-theme="nordic-clean"] .border-l-2 {
+  border-color: #e5e7eb !important;
+}
+
+/* Side dots: soft pastel */
+html[data-theme="nordic-clean"] .bg-blue-500 {
+  background-color: #3b82f6 !important;
+}
+
+html[data-theme="nordic-clean"] .bg-amber-500 {
+  background-color: #f43f5e !important;
+}
+
+/* Separator */
+html[data-theme="nordic-clean"] [data-slot="separator"] {
+  background: #e5e7eb;
+}
+
+/* ── INK & PAPER ────────────────────────────────────────── */
+
+/* Header: near-black with white text */
+html[data-theme="ink-and-paper"] header {
+  background: #111111 !important;
+  border-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="ink-and-paper"] header a,
+html[data-theme="ink-and-paper"] header button {
+  color: #ffffff !important;
+}
+
+html[data-theme="ink-and-paper"] header a[href="/"] {
+  font-family: 'Playfair Display', serif;
+}
+
+html[data-theme="ink-and-paper"] header a:hover {
+  color: #b91c1c !important;
+}
+
+/* Tabs: uppercase small-caps, crimson underline */
+html[data-theme="ink-and-paper"] [role="tab"] {
+  font-family: 'Source Serif 4', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+}
+
+html[data-theme="ink-and-paper"] [role="tab"][data-state="active"] {
+  color: #b91c1c;
+  box-shadow: 0 2px 0 0 #b91c1c;
+}
+
+/* Cards: no background, separated by rules */
+html[data-theme="ink-and-paper"] [data-slot="card"] {
+  background: transparent;
+  box-shadow: none !important;
+  border: none;
+  border-bottom: 1px solid #dddddd;
+  border-radius: 0;
+}
+
+/* Comment depth: thin black lines */
+html[data-theme="ink-and-paper"] .border-l-2 {
+  border-color: #111111 !important;
+  border-width: 1px !important;
+}
+
+/* Side dots */
+html[data-theme="ink-and-paper"] .bg-blue-500 {
+  background-color: #1d4ed8 !important;
+}
+
+html[data-theme="ink-and-paper"] .bg-amber-500 {
+  background-color: #b91c1c !important;
+}
+
+/* Debate description drop cap */
+html[data-theme="ink-and-paper"] .debate-description::first-letter {
+  float: left;
+  font-size: 3.4rem;
+  line-height: 1;
+  font-family: 'Playfair Display', serif;
+  color: #b91c1c;
+  margin-right: 0.1em;
+}
+
+/* Debate header: double border */
+html[data-theme="ink-and-paper"] .debate-header-card {
+  border: double 3px #111111;
+}
+
+/* Separator */
+html[data-theme="ink-and-paper"] [data-slot="separator"] {
+  background: #111111;
+}
+
+/* ── FOREST DEEP ────────────────────────────────────────── */
+
+/* Header: dark forest */
+html[data-theme="forest-deep"] header {
+  background: linear-gradient(180deg, #1f2b1d 0%, #151d14 100%) !important;
+  border-color: #2a3628 !important;
+}
+
+html[data-theme="forest-deep"] header a[href="/"] {
+  font-family: 'Bitter', serif;
+  color: #d4a44c;
+}
+
+/* Tabs: moss green underline */
+html[data-theme="forest-deep"] [role="tab"] {
+  font-family: 'Bitter', serif;
+}
+
+html[data-theme="forest-deep"] [role="tab"][data-state="active"] {
+  color: #6b8f5e;
+  box-shadow: 0 2px 0 0 #6b8f5e;
+}
+
+/* Cards: green-tinted shadows */
+html[data-theme="forest-deep"] [data-slot="card"] {
+  box-shadow: 0 4px 16px rgba(26, 36, 24, 0.5);
+}
+
+html[data-theme="forest-deep"] [data-slot="card"]:hover {
+  box-shadow: 0 6px 24px rgba(107, 143, 94, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Comment depth: green lines */
+html[data-theme="forest-deep"] .border-l-2 {
+  border-color: rgba(107, 143, 94, 0.25) !important;
+}
+
+html[data-theme="forest-deep"] .border-l-2:hover {
+  border-color: rgba(107, 143, 94, 0.5) !important;
+}
+
+/* Side dots */
+html[data-theme="forest-deep"] .bg-blue-500 {
+  background-color: #4a7c8a !important;
+}
+
+html[data-theme="forest-deep"] .bg-amber-500 {
+  background-color: #a85c3b !important;
+}
+
+/* Separator: green gradient */
+html[data-theme="forest-deep"] [data-slot="separator"] {
+  background: linear-gradient(90deg, transparent, rgba(107, 143, 94, 0.3), transparent);
+}
+
+/* Body: faint leaf pattern */
+html[data-theme="forest-deep"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.015;
+  background-image:
+    radial-gradient(circle at 15% 85%, #6b8f5e, transparent 30%),
+    radial-gradient(circle at 85% 15%, #d4a44c, transparent 30%);
+}
+
+/* ── NEON TERMINAL ──────────────────────────────────────── */
+
+/* Header: glassmorphism with neon */
+html[data-theme="neon-terminal"] header {
+  background: rgba(17, 17, 17, 0.9) !important;
+  backdrop-filter: blur(12px);
+  border-color: rgba(0, 229, 255, 0.1) !important;
+}
+
+html[data-theme="neon-terminal"] header a[href="/"] {
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5), 0 0 40px rgba(0, 229, 255, 0.2);
+  color: #00e5ff;
+}
+
+html[data-theme="neon-terminal"] header nav a {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+html[data-theme="neon-terminal"] header nav a:hover {
+  color: #00e5ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+/* Tabs: gradient underline, neon glow */
+html[data-theme="neon-terminal"] [role="tablist"] {
+  border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+html[data-theme="neon-terminal"] [role="tab"] {
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+}
+
+html[data-theme="neon-terminal"] [role="tab"][data-state="active"] {
+  color: #00e5ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 2px 0 0 #00e5ff, 0 4px 10px rgba(0, 229, 255, 0.2);
+}
+
+/* Cards: glassmorphism */
+html[data-theme="neon-terminal"] [data-slot="card"] {
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="neon-terminal"] [data-slot="card"]:hover {
+  border-color: rgba(0, 229, 255, 0.25) !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.08);
+}
+
+/* Comment depth: dotted cyan lines */
+html[data-theme="neon-terminal"] .border-l-2 {
+  border-style: dotted !important;
+  border-color: rgba(0, 229, 255, 0.2) !important;
+}
+
+html[data-theme="neon-terminal"] .border-l-2:hover {
+  border-color: rgba(0, 229, 255, 0.5) !important;
+}
+
+/* Side dots */
+html[data-theme="neon-terminal"] .bg-blue-500 {
+  background-color: #00e5ff !important;
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
+}
+
+html[data-theme="neon-terminal"] .bg-amber-500 {
+  background-color: #ff0080 !important;
+  box-shadow: 0 0 6px rgba(255, 0, 128, 0.5);
+}
+
+/* Stance badges: neon tinted glass */
+html[data-theme="neon-terminal"] .bg-blue-100 {
+  background: rgba(0, 229, 255, 0.08) !important;
+  color: #00e5ff !important;
+  border-color: rgba(0, 229, 255, 0.3) !important;
+}
+
+html[data-theme="neon-terminal"] .bg-red-100 {
+  background: rgba(255, 0, 128, 0.08) !important;
+  color: #ff0080 !important;
+  border-color: rgba(255, 0, 128, 0.3) !important;
+}
+
+html[data-theme="neon-terminal"] .bg-gray-100 {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #666 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Separator: gradient neon line */
+html[data-theme="neon-terminal"] [data-slot="separator"] {
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), rgba(255, 0, 128, 0.3), transparent);
+}
+
+/* Buttons: neon glow on hover */
+html[data-theme="neon-terminal"] button[data-slot="button"]:hover {
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+}
+
+/* ── BYZANTINE GOLD ─────────────────────────────────────── */
+
+/* Header: deep navy with gold */
+html[data-theme="byzantine-gold"] header {
+  background: linear-gradient(180deg, #0f1548 0%, #0a0f30 100%) !important;
+  border-color: #2a3470 !important;
+}
+
+html[data-theme="byzantine-gold"] header a[href="/"] {
+  font-family: 'Uncial Antiqua', serif;
+  color: #ffd700;
+  letter-spacing: 0.03em;
+}
+
+/* Tabs: gold text, gold underline */
+html[data-theme="byzantine-gold"] [role="tab"] {
+  font-family: 'Vollkorn', serif;
+}
+
+html[data-theme="byzantine-gold"] [role="tab"][data-state="active"] {
+  color: #ffd700;
+  box-shadow: 0 2px 0 0 #ffd700, 0 4px 10px rgba(255, 215, 0, 0.12);
+}
+
+/* Cards: 3px gold top border */
+html[data-theme="byzantine-gold"] [data-slot="card"] {
+  border-top: 3px solid #ffd700 !important;
+}
+
+/* Comment depth: thin gold lines */
+html[data-theme="byzantine-gold"] .border-l-2 {
+  border-color: rgba(255, 215, 0, 0.2) !important;
+}
+
+html[data-theme="byzantine-gold"] .border-l-2:hover {
+  border-color: rgba(255, 215, 0, 0.4) !important;
+}
+
+/* Side dots */
+html[data-theme="byzantine-gold"] .bg-blue-500 {
+  background-color: #1a237e !important;
+}
+
+html[data-theme="byzantine-gold"] .bg-amber-500 {
+  background-color: #b71c1c !important;
+}
+
+/* Avatars: gold ring border */
+html[data-theme="byzantine-gold"] img[alt*="avatar"],
+html[data-theme="byzantine-gold"] .rounded-full {
+  box-shadow: 0 0 0 2px #ffd70066;
+}
+
+/* Separator: gold gradient */
+html[data-theme="byzantine-gold"] [data-slot="separator"] {
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.25), transparent);
+}
+
+/* ── SOFT CLOUD ─────────────────────────────────────────── */
+
+/* Header: soft pastel */
+html[data-theme="soft-cloud"] header {
+  background: rgba(248, 247, 255, 0.95) !important;
+  border-color: #e5e7f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* Tabs: rounded pill tabs with pastel active */
+html[data-theme="soft-cloud"] [role="tablist"] {
+  background: #f3f0ff;
+  border-radius: 12px;
+  padding: 4px;
+  border: none;
+}
+
+html[data-theme="soft-cloud"] [role="tab"] {
+  font-family: 'Nunito', sans-serif;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+html[data-theme="soft-cloud"] [role="tab"][data-state="active"] {
+  background: #ffffff;
+  color: #8b5cf6;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.12);
+}
+
+/* Cards: rounded, soft shadows, bouncy */
+html[data-theme="soft-cloud"] [data-slot="card"] {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7f0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+html[data-theme="soft-cloud"] [data-slot="card"]:hover {
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Comment depth: soft pastel lines */
+html[data-theme="soft-cloud"] .border-l-2 {
+  border-color: #e5e7f0 !important;
+}
+
+/* Side dots: soft pastel */
+html[data-theme="soft-cloud"] .bg-blue-500 {
+  background-color: #93c5fd !important;
+}
+
+html[data-theme="soft-cloud"] .bg-amber-500 {
+  background-color: #fda4af !important;
+}
+
+/* Stance badges: pastel tinted pills */
+html[data-theme="soft-cloud"] .bg-blue-100 {
+  background: rgba(147, 197, 253, 0.2) !important;
+  color: #3b82f6 !important;
+  border-color: rgba(147, 197, 253, 0.4) !important;
+}
+
+html[data-theme="soft-cloud"] .bg-red-100 {
+  background: rgba(253, 164, 175, 0.2) !important;
+  color: #f43f5e !important;
+  border-color: rgba(253, 164, 175, 0.4) !important;
+}
+
+/* Buttons: pill-shaped */
+html[data-theme="soft-cloud"] button[data-slot="button"] {
+  border-radius: 24px !important;
+}
+
+/* Separator */
+html[data-theme="soft-cloud"] [data-slot="separator"] {
+  background: linear-gradient(90deg, transparent, #c4b5fd33, #fda4af33, transparent);
+}
+
+/* Badges: rounded */
+html[data-theme="soft-cloud"] [data-slot="badge"] {
+  border-radius: 12px;
+}
+
+/* ── ART DECO ───────────────────────────────────────────── */
+
+/* Header: navy with gold accents */
+html[data-theme="art-deco"] header {
+  background: linear-gradient(180deg, #0d1a30 0%, #070f1e 100%) !important;
+  border-color: #2a3a5a !important;
+}
+
+html[data-theme="art-deco"] header a[href="/"] {
+  font-family: 'Poiret One', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #c9a84c;
+  font-size: 1.1rem;
+}
+
+/* Tabs: uppercase, gold underline, wide letter-spacing */
+html[data-theme="art-deco"] [role="tab"] {
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+html[data-theme="art-deco"] [role="tab"][data-state="active"] {
+  color: #c9a84c;
+  box-shadow: 0 2px 0 0 #c9a84c;
+}
+
+/* Cards: gold thin borders with corner ornaments */
+html[data-theme="art-deco"] [data-slot="card"] {
+  border: 1px solid rgba(201, 168, 76, 0.2) !important;
+  position: relative;
+}
+
+html[data-theme="art-deco"] [data-slot="card"]::before,
+html[data-theme="art-deco"] [data-slot="card"]::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(201, 168, 76, 0.35);
+  border-style: solid;
+}
+
+html[data-theme="art-deco"] [data-slot="card"]::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+html[data-theme="art-deco"] [data-slot="card"]::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+/* Comment depth: thin gold lines */
+html[data-theme="art-deco"] .border-l-2 {
+  border-color: rgba(201, 168, 76, 0.2) !important;
+}
+
+/* Side dots */
+html[data-theme="art-deco"] .bg-blue-500 {
+  background-color: #1e3a6e !important;
+}
+
+html[data-theme="art-deco"] .bg-amber-500 {
+  background-color: #6b2d3e !important;
+}
+
+/* Centered section headings */
+html[data-theme="art-deco"] .debate-header-card {
+  text-align: center;
+}
+
+/* Separator: gold chevron line */
+html[data-theme="art-deco"] [data-slot="separator"] {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 10%, #c9a84c33 30%, #c9a84c 50%, #c9a84c33 70%, transparent 90%);
+}
+
+/* ── SLATE ACADEMIC ─────────────────────────────────────── */
+
+/* Header: dark navy */
+html[data-theme="slate-academic"] header {
+  background: #002147 !important;
+  border-color: #1a3a5f !important;
+  color: #fffff0 !important;
+}
+
+html[data-theme="slate-academic"] header a,
+html[data-theme="slate-academic"] header button {
+  color: #fffff0 !important;
+}
+
+html[data-theme="slate-academic"] header a[href="/"] {
+  font-family: 'Libre Baskerville', serif;
+}
+
+html[data-theme="slate-academic"] header a:hover {
+  color: #a51c30 !important;
+}
+
+/* Tabs: serif, crimson active underline */
+html[data-theme="slate-academic"] [role="tab"] {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.8rem;
+}
+
+html[data-theme="slate-academic"] [role="tab"][data-state="active"] {
+  color: #a51c30;
+  box-shadow: 0 2px 0 0 #a51c30;
+}
+
+/* Cards: ivory with navy top border */
+html[data-theme="slate-academic"] [data-slot="card"] {
+  border-top: 2px solid #002147 !important;
+  box-shadow: none !important;
+  background: #fffff0;
+}
+
+/* Comment depth: thin navy lines */
+html[data-theme="slate-academic"] .border-l-2 {
+  border-color: #002147 !important;
+  border-width: 1px !important;
+}
+
+/* Side dots */
+html[data-theme="slate-academic"] .bg-blue-500 {
+  background-color: #002147 !important;
+}
+
+html[data-theme="slate-academic"] .bg-amber-500 {
+  background-color: #a51c30 !important;
+}
+
+/* Separator: thin navy rule */
+html[data-theme="slate-academic"] [data-slot="separator"] {
+  background: #002147;
+  height: 1px;
+}
+
+/* Footnote-style number formatting */
+html[data-theme="slate-academic"] .stat-number {
+  font-variant-numeric: oldstyle-nums;
+}
+
+/* ================================================================
+   APP-LEVEL — DEBATE LISTING PAGE STYLES
+   ================================================================ */
+
+/* ── Cathedral Dark: debates listing ── */
+html[data-theme="cathedral-dark"] .debates-page h1 {
+  font-family: 'Cinzel', serif;
+  color: #c9a84c;
+  letter-spacing: 0.03em;
+}
+
+/* ── Warm Parchment: debates listing ── */
+html[data-theme="warm-parchment"] .debates-page h1::first-letter {
+  color: #8b2500;
+  font-size: 1.2em;
+}
+
+/* ── Ink & Paper: debates listing ── */
+html[data-theme="ink-and-paper"] .debates-page h1 {
+  font-family: 'Playfair Display', serif;
+  border-bottom: 2px solid #111111;
+  padding-bottom: 0.5rem;
+}
+
+/* ── Neon Terminal: debates listing ── */
+html[data-theme="neon-terminal"] .debates-page h1 {
+  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+/* ── Byzantine Gold: debates listing ── */
+html[data-theme="byzantine-gold"] .debates-page h1 {
+  color: #ffd700;
+}
+
+/* ── Art Deco: debates listing ── */
+html[data-theme="art-deco"] .debates-page h1 {
+  text-align: center;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── Slate Academic: debates listing ── */
+html[data-theme="slate-academic"] .debates-page h1 {
+  font-family: 'Libre Baskerville', serif;
+  border-bottom: 1px solid #002147;
+  padding-bottom: 0.5rem;
+}
+
+/* ================================================================
+   APP-LEVEL — HARDCODED COLOR OVERRIDES FOR DARK THEMES
+   Comment cards use hardcoded gray/amber colors that need fixing
+   ================================================================ */
+
+/* Dark themes: fix hardcoded grays in comment cards */
+html[data-theme="cathedral-dark"] .text-gray-500,
+html[data-theme="forest-deep"] .text-gray-500,
+html[data-theme="neon-terminal"] .text-gray-500,
+html[data-theme="byzantine-gold"] .text-gray-500,
+html[data-theme="art-deco"] .text-gray-500 {
+  color: var(--muted-foreground) !important;
+}
+
+html[data-theme="cathedral-dark"] .text-gray-400,
+html[data-theme="forest-deep"] .text-gray-400,
+html[data-theme="neon-terminal"] .text-gray-400,
+html[data-theme="byzantine-gold"] .text-gray-400,
+html[data-theme="art-deco"] .text-gray-400 {
+  color: var(--muted-foreground) !important;
+}
+
+html[data-theme="cathedral-dark"] .text-gray-600,
+html[data-theme="forest-deep"] .text-gray-600,
+html[data-theme="neon-terminal"] .text-gray-600,
+html[data-theme="byzantine-gold"] .text-gray-600,
+html[data-theme="art-deco"] .text-gray-600 {
+  color: var(--muted-foreground) !important;
+}
+
+html[data-theme="cathedral-dark"] .bg-gray-300,
+html[data-theme="forest-deep"] .bg-gray-300,
+html[data-theme="neon-terminal"] .bg-gray-300,
+html[data-theme="byzantine-gold"] .bg-gray-300,
+html[data-theme="art-deco"] .bg-gray-300 {
+  background-color: var(--muted) !important;
+}
+
+html[data-theme="cathedral-dark"] .bg-gray-100,
+html[data-theme="forest-deep"] .bg-gray-100,
+html[data-theme="neon-terminal"] .bg-gray-100,
+html[data-theme="byzantine-gold"] .bg-gray-100,
+html[data-theme="art-deco"] .bg-gray-100 {
+  background-color: var(--muted) !important;
+  color: var(--muted-foreground) !important;
+}
+
+html[data-theme="cathedral-dark"] .border-gray-200,
+html[data-theme="forest-deep"] .border-gray-200,
+html[data-theme="neon-terminal"] .border-gray-200,
+html[data-theme="byzantine-gold"] .border-gray-200,
+html[data-theme="art-deco"] .border-gray-200 {
+  border-color: var(--border) !important;
+}
+
+/* Dark themes: fix hardcoded blue/red/amber backgrounds in stance colors */
+html[data-theme="cathedral-dark"] .bg-blue-100,
+html[data-theme="forest-deep"] .bg-blue-100,
+html[data-theme="byzantine-gold"] .bg-blue-100,
+html[data-theme="art-deco"] .bg-blue-100 {
+  background: rgba(var(--theme-side-a), 0.1) !important;
+}
+
+html[data-theme="cathedral-dark"] .text-blue-800,
+html[data-theme="forest-deep"] .text-blue-800,
+html[data-theme="byzantine-gold"] .text-blue-800,
+html[data-theme="art-deco"] .text-blue-800 {
+  color: var(--theme-side-a) !important;
+}
+
+html[data-theme="cathedral-dark"] .border-blue-200,
+html[data-theme="forest-deep"] .border-blue-200,
+html[data-theme="byzantine-gold"] .border-blue-200,
+html[data-theme="art-deco"] .border-blue-200 {
+  border-color: var(--theme-side-a) !important;
+}
+
+html[data-theme="cathedral-dark"] .bg-red-100,
+html[data-theme="forest-deep"] .bg-red-100,
+html[data-theme="byzantine-gold"] .bg-red-100,
+html[data-theme="art-deco"] .bg-red-100 {
+  background: rgba(var(--theme-side-b), 0.1) !important;
+}
+
+html[data-theme="cathedral-dark"] .text-red-800,
+html[data-theme="forest-deep"] .text-red-800,
+html[data-theme="byzantine-gold"] .text-red-800,
+html[data-theme="art-deco"] .text-red-800 {
+  color: var(--theme-side-b) !important;
+}
+
+html[data-theme="cathedral-dark"] .border-red-200,
+html[data-theme="forest-deep"] .border-red-200,
+html[data-theme="byzantine-gold"] .border-red-200,
+html[data-theme="art-deco"] .border-red-200 {
+  border-color: var(--theme-side-b) !important;
+}
+
+/* Dark themes: quarantine notice */
+html[data-theme="cathedral-dark"] .bg-amber-50,
+html[data-theme="forest-deep"] .bg-amber-50,
+html[data-theme="neon-terminal"] .bg-amber-50,
+html[data-theme="byzantine-gold"] .bg-amber-50,
+html[data-theme="art-deco"] .bg-amber-50 {
+  background: var(--muted) !important;
+  color: var(--foreground) !important;
+}
+
+html[data-theme="cathedral-dark"] .border-amber-200,
+html[data-theme="forest-deep"] .border-amber-200,
+html[data-theme="neon-terminal"] .border-amber-200,
+html[data-theme="byzantine-gold"] .border-amber-200,
+html[data-theme="art-deco"] .border-amber-200 {
+  border-color: var(--border) !important;
+}
+
+html[data-theme="cathedral-dark"] .text-amber-800,
+html[data-theme="forest-deep"] .text-amber-800,
+html[data-theme="neon-terminal"] .text-amber-800,
+html[data-theme="byzantine-gold"] .text-amber-800,
+html[data-theme="art-deco"] .text-amber-800 {
+  color: var(--foreground) !important;
+}
+
+/* ================================================================
+   APP-LEVEL — PROSE OVERRIDES FOR DARK THEMES
+   TipTap content renders with prose classes
+   ================================================================ */
+
+html[data-theme="cathedral-dark"] .prose,
+html[data-theme="forest-deep"] .prose,
+html[data-theme="neon-terminal"] .prose,
+html[data-theme="byzantine-gold"] .prose,
+html[data-theme="art-deco"] .prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--primary);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-quotes: var(--muted-foreground);
+  --tw-prose-code: var(--foreground);
+  color: var(--foreground);
+}

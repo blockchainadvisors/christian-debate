@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Christian Debate — Structured Discourse for the Body of Christ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #f4edd3;
+      --cream-light: #faf6e9;
+      --warm-brown: #5c4033;
+      --brown-light: #7a5c4f;
+      --deep-red: #8b2500;
+      --deep-red-light: #a83a15;
+      --gold: #b8860b;
+      --gold-light: #d4a017;
+      --ink: #3b2a1a;
+      --parchment-dark: #e8dfc5;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'EB Garamond', 'Georgia', serif;
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 18px;
+      background-color: var(--cream);
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(184, 134, 11, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(139, 37, 0, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(92, 64, 51, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 30% 30%, rgba(244, 237, 211, 0.8) 0%, transparent 40%),
+        radial-gradient(circle at 70% 70%, rgba(232, 223, 197, 0.6) 0%, transparent 40%);
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    /* ===== ORNAMENTAL BORDERS ===== */
+    .ornamental-border-top {
+      position: relative;
+    }
+
+    .ornamental-border-top::before {
+      content: '';
+      display: block;
+      height: 8px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          var(--gold) 0px, var(--gold) 4px,
+          transparent 4px, transparent 8px,
+          var(--deep-red) 8px, var(--deep-red) 12px,
+          transparent 12px, transparent 16px
+        );
+      opacity: 0.7;
+    }
+
+    .ornamental-border-bottom {
+      position: relative;
+    }
+
+    .ornamental-border-bottom::after {
+      content: '';
+      display: block;
+      height: 8px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          var(--deep-red) 0px, var(--deep-red) 4px,
+          transparent 4px, transparent 8px,
+          var(--gold) 8px, var(--gold) 12px,
+          transparent 12px, transparent 16px
+        );
+      opacity: 0.7;
+    }
+
+    /* ===== CELTIC BORDER FRAME ===== */
+    .celtic-frame {
+      border: 3px solid var(--gold);
+      border-image: repeating-linear-gradient(
+        45deg,
+        var(--gold) 0px, var(--gold) 6px,
+        transparent 6px, transparent 10px,
+        var(--deep-red) 10px, var(--deep-red) 16px,
+        transparent 16px, transparent 20px
+      ) 8;
+    }
+
+    /* ===== DECORATIVE INITIAL CAPITALS ===== */
+    .drop-cap::first-letter {
+      float: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4em;
+      line-height: 0.8;
+      padding-right: 0.08em;
+      padding-top: 0.05em;
+      color: var(--deep-red);
+      font-weight: 700;
+      text-shadow: 1px 1px 0 var(--gold);
+    }
+
+    /* ===== SECTION DIVIDERS ===== */
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 48px auto;
+      max-width: 400px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* Chi-Rho motif via CSS */
+    .chi-rho {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .chi-rho::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 28px;
+      background: var(--gold);
+      transform: translate(-50%, -50%);
+      border-radius: 1px;
+    }
+
+    .chi-rho::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 22px;
+      background: var(--gold);
+      transform: translate(-50%, -50%) rotate(45deg);
+      border-radius: 1px;
+    }
+
+    /* Rho loop */
+    .chi-rho-loop {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 12px;
+      height: 10px;
+      border: 2px solid var(--gold);
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      transform: translateX(-20%);
+    }
+
+    /* Cross motif */
+    .cross-divider {
+      position: relative;
+      width: 20px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .cross-divider::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 50%;
+      width: 2px;
+      height: 22px;
+      background: var(--deep-red);
+      transform: translateX(-50%);
+    }
+
+    .cross-divider::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      width: 14px;
+      height: 2px;
+      background: var(--deep-red);
+      transform: translateX(-50%);
+    }
+
+    /* ===== DECORATIVE FLOURISH RULE ===== */
+    .flourish-rule {
+      border: none;
+      height: 3px;
+      max-width: 200px;
+      margin: 32px auto;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--gold) 20%,
+        var(--deep-red) 50%,
+        var(--gold) 80%,
+        transparent
+      );
+      border-radius: 2px;
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-left {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .fade-in-right {
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(244, 237, 211, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--gold);
+      box-shadow: 0 2px 16px rgba(92, 64, 51, 0.1);
+      transition: padding 0.3s ease;
+    }
+
+    nav.scrolled {
+      padding: 8px 32px;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--deep-red);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-logo span {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--warm-brown);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--deep-red);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--warm-brown);
+      transition: all 0.3s ease;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, rgba(184, 134, 11, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(139, 37, 0, 0.05) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    /* Decorative corner ornaments */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 100px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 3px solid transparent;
+      border-image: repeating-linear-gradient(
+        0deg,
+        var(--gold) 0px, var(--gold) 10px,
+        transparent 10px, transparent 18px,
+        var(--deep-red) 18px, var(--deep-red) 22px,
+        transparent 22px, transparent 30px
+      ) 6;
+      margin: 20px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      max-width: 780px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      animation: fadeDown 1s ease 0.2s both;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      color: var(--deep-red);
+      margin-bottom: 8px;
+      animation: fadeDown 1s ease 0.4s both;
+      text-shadow: 1px 1px 0 rgba(184, 134, 11, 0.2);
+    }
+
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      color: var(--warm-brown);
+      font-style: italic;
+      margin-bottom: 36px;
+      animation: fadeDown 1s ease 0.6s both;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: var(--brown-light);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      animation: fadeDown 1s ease 0.8s both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeDown 1s ease 1s both;
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 14px 36px;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--deep-red);
+      color: var(--cream);
+      border-color: var(--deep-red);
+      box-shadow: 0 4px 16px rgba(139, 37, 0, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--deep-red-light);
+      border-color: var(--deep-red-light);
+      box-shadow: 0 6px 24px rgba(139, 37, 0, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--warm-brown);
+      border-color: var(--gold);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(184, 134, 11, 0.1);
+      border-color: var(--gold-light);
+      transform: translateY(-2px);
+    }
+
+    /* ===== SECTION COMMON ===== */
+    section {
+      padding: 80px 24px;
+    }
+
+    .section-container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      color: var(--deep-red);
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: var(--brown-light);
+      max-width: 600px;
+      margin: 0 auto;
+      font-style: italic;
+    }
+
+    /* ===== FEATURES ===== */
+    #features {
+      background:
+        radial-gradient(ellipse at 80% 50%, rgba(184, 134, 11, 0.04) 0%, transparent 50%),
+        linear-gradient(180deg, var(--cream) 0%, var(--cream-light) 50%, var(--cream) 100%);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .feature-card {
+      background: var(--cream-light);
+      padding: 36px 28px;
+      border-radius: 6px;
+      border: 1px solid var(--parchment-dark);
+      box-shadow: 0 4px 20px rgba(92, 64, 51, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--deep-red), var(--gold));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(92, 64, 51, 0.14);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+      width: 56px;
+      height: 56px;
+      line-height: 56px;
+      text-align: center;
+      background: rgba(184, 134, 11, 0.1);
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      color: var(--deep-red);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+    }
+
+    .feature-card h3 {
+      font-size: 1.4rem;
+      color: var(--warm-brown);
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      color: var(--brown-light);
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    #how-it-works {
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(139, 37, 0, 0.03) 0%, transparent 50%),
+        var(--cream);
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      left: 32px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: repeating-linear-gradient(
+        180deg,
+        var(--gold) 0px, var(--gold) 8px,
+        transparent 8px, transparent 14px
+      );
+    }
+
+    .step {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--cream-light);
+      border: 3px solid var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--deep-red);
+      box-shadow: 0 4px 12px rgba(92, 64, 51, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-content {
+      padding-top: 8px;
+    }
+
+    .step-content h3 {
+      font-size: 1.5rem;
+      color: var(--warm-brown);
+      margin-bottom: 8px;
+    }
+
+    .step-content p {
+      color: var(--brown-light);
+      max-width: 600px;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    #testimonials {
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(184, 134, 11, 0.06) 0%, transparent 60%),
+        linear-gradient(180deg, var(--cream) 0%, var(--cream-light) 100%);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+    }
+
+    .testimonial-card {
+      background: var(--cream-light);
+      padding: 32px 28px;
+      border-radius: 6px;
+      border: 1px solid var(--parchment-dark);
+      box-shadow: 0 4px 20px rgba(92, 64, 51, 0.08);
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '\201C';
+      position: absolute;
+      top: 12px;
+      left: 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      color: var(--gold);
+      opacity: 0.35;
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      color: var(--warm-brown);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+      padding-top: 16px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--deep-red));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .testimonial-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      color: var(--warm-brown);
+      font-size: 1.05rem;
+    }
+
+    .testimonial-role {
+      font-size: 0.85rem;
+      color: var(--brown-light);
+    }
+
+    /* ===== CTA ===== */
+    #cta {
+      text-align: center;
+      padding: 100px 24px;
+      position: relative;
+      background:
+        radial-gradient(ellipse at center, rgba(139, 37, 0, 0.06) 0%, transparent 60%),
+        var(--cream);
+    }
+
+    .cta-frame {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 56px 40px;
+      border: 3px solid var(--gold);
+      border-image: repeating-linear-gradient(
+        45deg,
+        var(--gold) 0px, var(--gold) 8px,
+        transparent 8px, transparent 14px,
+        var(--deep-red) 14px, var(--deep-red) 18px,
+        transparent 18px, transparent 24px
+      ) 10;
+      position: relative;
+    }
+
+    .cta-frame h2 {
+      font-size: clamp(2rem, 4vw, 2.6rem);
+      color: var(--deep-red);
+      margin-bottom: 16px;
+    }
+
+    .cta-frame p {
+      font-size: 1.15rem;
+      color: var(--warm-brown);
+      font-style: italic;
+      margin-bottom: 32px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-verse {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--brown-light);
+      margin-top: 28px;
+      font-style: italic;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 2px solid var(--gold);
+      background: rgba(92, 64, 51, 0.04);
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      color: var(--brown-light);
+    }
+
+    footer a {
+      color: var(--deep-red);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(244, 237, 211, 0.97);
+        flex-direction: column;
+        padding: 20px 32px;
+        gap: 16px;
+        border-bottom: 2px solid var(--gold);
+        box-shadow: 0 8px 24px rgba(92, 64, 51, 0.1);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .hero {
+        padding: 100px 20px 60px;
+        min-height: auto;
+      }
+
+      .hero::after {
+        margin: 10px;
+      }
+
+      section {
+        padding: 60px 20px;
+      }
+
+      .steps::before {
+        left: 24px;
+      }
+
+      .step-number {
+        width: 48px;
+        height: 48px;
+        font-size: 1.4rem;
+      }
+
+      .features-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-frame {
+        padding: 40px 24px;
+      }
+
+      .drop-cap::first-letter {
+        font-size: 3em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 16px;
+      }
+
+      nav {
+        padding: 10px 16px;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .step {
+        flex-direction: column;
+        gap: 12px;
+        padding-left: 12px;
+      }
+
+      .steps::before {
+        display: none;
+      }
+    }
+
+    /* ===== PULSING GLOW ON GOLD ELEMENTS ===== */
+    @keyframes gentleGlow {
+      0%, 100% { box-shadow: 0 4px 12px rgba(184, 134, 11, 0.15); }
+      50% { box-shadow: 0 4px 20px rgba(184, 134, 11, 0.3); }
+    }
+
+    .step-number {
+      animation: gentleGlow 4s ease-in-out infinite;
+    }
+
+    /* ===== STAGGER CHILDREN ===== */
+    .stagger > *:nth-child(1) { transition-delay: 0s; }
+    .stagger > *:nth-child(2) { transition-delay: 0.12s; }
+    .stagger > *:nth-child(3) { transition-delay: 0.24s; }
+    .stagger > *:nth-child(4) { transition-delay: 0.36s; }
+    .stagger > *:nth-child(5) { transition-delay: 0.48s; }
+    .stagger > *:nth-child(6) { transition-delay: 0.6s; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Christian<span>Debate</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#cta">Join</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-subtitle">A Place for Earnest Discourse</p>
+      <h1>Christian Debate</h1>
+      <p class="hero-tagline">Iron sharpeneth iron; so a man sharpeneth the countenance of his friend.</p>
+      <p class="hero-description">
+        A structured platform where believers engage in thoughtful, multi-view debates.
+        Explore every perspective. Sharpen every argument. Seek truth together.
+      </p>
+      <div class="hero-cta">
+        <a href="#cta" class="btn btn-primary">Begin the Conversation</a>
+        <a href="#features" class="btn btn-secondary">Explore Features</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="chi-rho"><div class="chi-rho-loop"></div></div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features" class="ornamental-border-top">
+    <div class="section-container">
+      <div class="section-header fade-in">
+        <h2>Crafted for Depth</h2>
+        <p>Every feature designed to elevate discourse beyond shallow exchanges</p>
+      </div>
+      <hr class="flourish-rule" />
+      <div class="features-grid stagger">
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon">T</span>
+          <h3>Thread View</h3>
+          <p>Follow the natural flow of conversation with nested replies, seeing exactly how arguments develop and interweave across the discussion.</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon">S</span>
+          <h3>Sides View</h3>
+          <p>See Pro and Con arguments presented side by side. Instantly grasp the strongest positions on each side of a question.</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon">B</span>
+          <h3>Best Exchanges</h3>
+          <p>Surface the most compelling point-counterpoint pairs. The community highlights exchanges where iron truly sharpens iron.</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon">V</span>
+          <h3>Neutral Verdict</h3>
+          <p>An impartial synthesis weighing the strongest arguments from every side, helping readers form well-considered conclusions.</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon">R</span>
+          <h3>Reasoned Voting</h3>
+          <p>Go beyond simple upvotes. Categorize why an argument resonates: logical, scriptural, experiential, or novel insight.</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon">A</span>
+          <h3>Analytics Engine</h3>
+          <p>Track stance shifts, argument effectiveness, and community consensus. See how debates evolve over time with rich visual data.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="cross-divider"></div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works">
+    <div class="section-container">
+      <div class="section-header fade-in">
+        <h2>The Way of Discourse</h2>
+        <p>A deliberate process that honors both conviction and humility</p>
+      </div>
+      <hr class="flourish-rule" />
+      <div class="steps">
+
+        <div class="step fade-in-left">
+          <div class="step-number">I</div>
+          <div class="step-content">
+            <h3>Declare Your Stance</h3>
+            <p class="drop-cap">Before entering the arena of ideas, declare where you stand. Your initial position is recorded, creating an honest foundation for the exchange that follows.</p>
+          </div>
+        </div>
+
+        <div class="step fade-in-left">
+          <div class="step-number">II</div>
+          <div class="step-content">
+            <h3>Present Your Case</h3>
+            <p class="drop-cap">Craft your argument with the rich text editor. Support your reasoning with scripture, logic, and evidence. Quality of thought is valued above volume of words.</p>
+          </div>
+        </div>
+
+        <div class="step fade-in-left">
+          <div class="step-number">III</div>
+          <div class="step-content">
+            <h3>Engage and Respond</h3>
+            <p class="drop-cap">Enter dialogue with those who see differently. Reply to specific points, acknowledge strong arguments, and refine your own position through the exchange.</p>
+          </div>
+        </div>
+
+        <div class="step fade-in-left">
+          <div class="step-number">IV</div>
+          <div class="step-content">
+            <h3>Vote with Reason</h3>
+            <p class="drop-cap">When you encounter a compelling argument, vote and explain why it moved you. Was it the scriptural basis? The logical clarity? A fresh perspective you had not considered?</p>
+          </div>
+        </div>
+
+        <div class="step fade-in-left">
+          <div class="step-number">V</div>
+          <div class="step-content">
+            <h3>Witness the Verdict</h3>
+            <p class="drop-cap">As the community engages, a neutral verdict emerges. Track how stances shift, which arguments proved most persuasive, and where genuine consensus forms.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="chi-rho"><div class="chi-rho-loop"></div></div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="ornamental-border-bottom">
+    <div class="section-container">
+      <div class="section-header fade-in">
+        <h2>Voices from the Community</h2>
+        <p>What fellow believers are saying about structured Christian discourse</p>
+      </div>
+      <hr class="flourish-rule" />
+      <div class="testimonials-grid stagger">
+
+        <div class="testimonial-card fade-in">
+          <p class="testimonial-text">This platform transformed how our church approaches doctrinal questions. Instead of heated arguments, we now have structured, loving exchanges where everyone feels heard.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MR</div>
+            <div>
+              <div class="testimonial-name">Marcus Reed</div>
+              <div class="testimonial-role">Pastor, Grace Community Church</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in">
+          <p class="testimonial-text">The Sides View alone changed my perspective on eschatology. Seeing the strongest arguments laid out clearly, side by side, gave me a deeper appreciation for positions I once dismissed.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SL</div>
+            <div>
+              <div class="testimonial-name">Sarah Langford</div>
+              <div class="testimonial-role">Seminary Student</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in">
+          <p class="testimonial-text">Reasoned voting is a revelation. Knowing why people find an argument compelling -- not just that they do -- has made every discussion immeasurably richer.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">DK</div>
+            <div>
+              <div class="testimonial-name">David Kim</div>
+              <div class="testimonial-role">Theology Professor</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="cross-divider"></div>
+  </div>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="section-container fade-in">
+      <div class="cta-frame">
+        <h2>Join the Discourse</h2>
+        <p>Step into a space where conviction and charity meet. Where truth is sought with open minds and earnest hearts.</p>
+        <a href="#" class="btn btn-primary">Create Your Account</a>
+        <p class="cta-verse">"Come now, and let us reason together, saith the Lord." &mdash; Isaiah 1:18</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="divider" style="margin-top: 0;">
+      <div class="chi-rho"><div class="chi-rho-loop"></div></div>
+    </div>
+    <p>&copy; 2026 Christian Debate. Crafted with reverence for the pursuit of truth.</p>
+    <p style="margin-top: 8px; font-size: 0.85rem;">
+      <a href="#">Privacy</a> &middot; <a href="#">Terms</a> &middot; <a href="#">Contact</a>
+    </p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    /* ===== SCROLL ANIMATIONS ===== */
+    (function () {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach((el) => {
+        observer.observe(el);
+      });
+    })();
+
+    /* ===== NAVBAR SCROLL EFFECT ===== */
+    (function () {
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+    })();
+
+    /* ===== MOBILE NAV TOGGLE ===== */
+    (function () {
+      const toggle = document.getElementById('navToggle');
+      const links = document.getElementById('navLinks');
+
+      toggle.addEventListener('click', () => {
+        links.classList.toggle('open');
+      });
+
+      links.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          links.classList.remove('open');
+        });
+      });
+    })();
+
+    /* ===== SMOOTH SCROLL FOR ANCHOR LINKS ===== */
+    (function () {
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', function (e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            const offset = document.getElementById('navbar').offsetHeight + 16;
+            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

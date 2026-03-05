@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Debate Admin - Warm Parchment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --bg:#f4edd3;
+    --bg-card:#faf6e8;
+    --sidebar:#3d2b1f;
+    --sidebar-hover:#55402f;
+    --text:#5c4033;
+    --text-light:#8b7355;
+    --text-sidebar:#f4edd3;
+    --accent-red:#8b2500;
+    --accent-gold:#b8860b;
+    --accent-gold-light:#d4a843;
+    --border:#c9b99a;
+    --border-light:#ddd2b5;
+    --shadow:rgba(93,64,51,.12);
+    --green:#3a7d44;
+    --blue:#2e5a88;
+    --orange:#c47f17;
+  }
+
+  body{
+    font-family:'EB Garamond',Georgia,serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    background-image:radial-gradient(ellipse at 20% 50%,rgba(184,134,11,.06) 0%,transparent 50%),
+                      radial-gradient(ellipse at 80% 20%,rgba(139,37,0,.04) 0%,transparent 50%),
+                      radial-gradient(ellipse at 50% 80%,rgba(184,134,11,.05) 0%,transparent 50%);
+  }
+
+  h1,h2,h3,h4,h5{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--text)}
+  a{color:var(--accent-red);text-decoration:none}
+
+  /* ── Sidebar ── */
+  .sidebar{
+    width:260px;
+    min-height:100vh;
+    background:var(--sidebar);
+    color:var(--text-sidebar);
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    top:0;left:0;bottom:0;
+    z-index:100;
+    transition:transform .3s ease;
+  }
+  .sidebar-logo{
+    padding:24px 20px;
+    border-bottom:1px solid rgba(244,237,211,.12);
+    display:flex;align-items:center;gap:12px;
+  }
+  .sidebar-logo .logo-icon{
+    width:36px;height:36px;
+    background:var(--accent-gold);
+    border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-weight:700;font-size:18px;color:#fff;
+  }
+  .sidebar-logo h1{
+    font-size:16px;color:var(--text-sidebar);line-height:1.2;
+    font-family:'Cormorant Garamond',serif;font-weight:600;
+  }
+  .sidebar-logo h1 span{display:block;font-size:11px;opacity:.6;font-family:'EB Garamond',serif;font-weight:400;letter-spacing:1px;text-transform:uppercase}
+
+  .sidebar-nav{flex:1;padding:16px 0}
+  .sidebar-nav a{
+    display:flex;align-items:center;gap:12px;
+    padding:11px 20px;
+    color:rgba(244,237,211,.7);
+    font-size:15px;
+    transition:all .2s ease;
+    border-left:3px solid transparent;
+    cursor:pointer;
+    position:relative;
+  }
+  .sidebar-nav a:hover{
+    color:var(--text-sidebar);
+    background:rgba(244,237,211,.06);
+    border-left-color:var(--accent-gold-light);
+  }
+  .sidebar-nav a.active{
+    color:var(--text-sidebar);
+    background:rgba(244,237,211,.08);
+    border-left-color:var(--accent-gold);
+  }
+  .sidebar-nav a .nav-icon{width:20px;text-align:center;font-size:16px;flex-shrink:0}
+  .sidebar-nav a .badge{
+    margin-left:auto;
+    background:var(--accent-red);
+    color:#fff;font-size:11px;
+    padding:2px 7px;border-radius:10px;
+    font-family:'EB Garamond',serif;
+  }
+
+  .sidebar-user{
+    padding:16px 20px;
+    border-top:1px solid rgba(244,237,211,.12);
+    display:flex;align-items:center;gap:10px;
+  }
+  .sidebar-user .avatar{
+    width:34px;height:34px;border-radius:50%;
+    background:var(--accent-gold);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14px;color:#fff;
+  }
+  .sidebar-user .user-info{font-size:13px;line-height:1.3}
+  .sidebar-user .user-info .name{color:var(--text-sidebar);font-weight:500}
+  .sidebar-user .user-info .role{color:rgba(244,237,211,.5);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+
+  /* ── Main Content ── */
+  .main{
+    flex:1;
+    margin-left:260px;
+    min-height:100vh;
+    display:flex;flex-direction:column;
+  }
+
+  /* ── Top Bar ── */
+  .topbar{
+    padding:16px 32px;
+    background:var(--bg-card);
+    border-bottom:1px solid var(--border-light);
+    display:flex;align-items:center;gap:16px;
+    position:sticky;top:0;z-index:50;
+    box-shadow:0 1px 4px var(--shadow);
+  }
+  .topbar .search{
+    flex:1;max-width:420px;position:relative;
+  }
+  .topbar .search input{
+    width:100%;padding:9px 14px 9px 36px;
+    border:1px solid var(--border);border-radius:6px;
+    background:var(--bg);
+    font-family:'EB Garamond',serif;font-size:14px;color:var(--text);
+    transition:border-color .2s;
+  }
+  .topbar .search input:focus{outline:none;border-color:var(--accent-gold)}
+  .topbar .search::before{
+    content:"\1F50D";position:absolute;left:12px;top:50%;transform:translateY(-50%);
+    font-size:14px;opacity:.5;
+  }
+  .topbar .actions{display:flex;align-items:center;gap:12px;margin-left:auto}
+  .topbar .notif-btn{
+    position:relative;background:none;border:1px solid var(--border);
+    border-radius:6px;padding:8px 10px;cursor:pointer;font-size:16px;
+    color:var(--text);transition:all .2s;
+  }
+  .topbar .notif-btn:hover{border-color:var(--accent-gold);background:var(--bg)}
+  .topbar .notif-btn .notif-badge{
+    position:absolute;top:-4px;right:-4px;
+    background:var(--accent-red);color:#fff;
+    font-size:10px;width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'EB Garamond',serif;
+  }
+  .quick-action-btn{
+    padding:8px 16px;
+    background:var(--accent-red);color:#fff;
+    border:none;border-radius:6px;
+    font-family:'EB Garamond',serif;font-size:13px;
+    cursor:pointer;transition:background .2s;
+  }
+  .quick-action-btn:hover{background:#a02e00}
+
+  /* ── Content Area ── */
+  .content{padding:28px 32px;flex:1}
+  .page-title{
+    font-size:28px;margin-bottom:6px;
+    font-family:'Cormorant Garamond',serif;
+  }
+  .page-title::first-letter{
+    font-size:38px;color:var(--accent-red);font-weight:700;
+  }
+  .page-subtitle{color:var(--text-light);font-size:14px;margin-bottom:24px}
+
+  /* ── Sections (toggled by nav) ── */
+  .section{display:none}
+  .section.active{display:block}
+
+  /* ── Stat Cards ── */
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:18px;margin-bottom:28px;
+  }
+  .stat-card{
+    background:var(--bg-card);
+    border:1px solid var(--border-light);
+    border-radius:8px;
+    padding:20px;
+    box-shadow:0 2px 8px var(--shadow);
+    transition:transform .2s,box-shadow .2s;
+  }
+  .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 14px var(--shadow)}
+  .stat-card .stat-label{font-size:13px;color:var(--text-light);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+  .stat-card .stat-value{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--text)}
+  .stat-card .stat-change{font-size:12px;margin-top:4px}
+  .stat-card .stat-change.up{color:var(--green)}
+  .stat-card .stat-change.down{color:var(--accent-red)}
+
+  /* ── Bar Chart ── */
+  .chart-section{
+    display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:28px;
+  }
+  .card{
+    background:var(--bg-card);
+    border:1px solid var(--border-light);
+    border-radius:8px;
+    padding:22px;
+    box-shadow:0 2px 8px var(--shadow);
+  }
+  .card-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:18px;font-weight:600;margin-bottom:16px;
+    padding-bottom:10px;border-bottom:1px solid var(--border-light);
+  }
+  .card-title::first-letter{font-size:24px;color:var(--accent-red);font-weight:700}
+
+  .bar-chart{display:flex;align-items:flex-end;gap:12px;height:180px;padding-top:10px}
+  .bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .bar-pair{display:flex;gap:3px;align-items:flex-end;height:150px;width:100%}
+  .bar{
+    flex:1;border-radius:3px 3px 0 0;
+    transition:opacity .2s;min-width:12px;
+    position:relative;
+  }
+  .bar:hover{opacity:.8}
+  .bar.approved{background:var(--green)}
+  .bar.removed{background:var(--accent-red)}
+  .bar-label{font-size:10px;color:var(--text-light);white-space:nowrap}
+  .chart-legend{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--text-light)}
+  .chart-legend span::before{
+    content:'';display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle;
+  }
+  .chart-legend .leg-approved::before{background:var(--green)}
+  .chart-legend .leg-removed::before{background:var(--accent-red)}
+
+  /* ── Donut Chart ── */
+  .donut-container{display:flex;flex-direction:column;align-items:center}
+  .donut{
+    width:160px;height:160px;border-radius:50%;
+    background:conic-gradient(
+      var(--accent-gold) 0% 0.2%,
+      var(--accent-red) 0.2% 0.6%,
+      var(--green) 0.6% 20.6%,
+      var(--blue) 20.6% 51.6%,
+      var(--border) 51.6% 94.6%,
+      var(--text-light) 94.6% 100%
+    );
+    position:relative;
+    margin-bottom:16px;
+  }
+  .donut::after{
+    content:'';position:absolute;
+    top:30px;left:30px;right:30px;bottom:30px;
+    background:var(--bg-card);border-radius:50%;
+  }
+  .donut-legend{width:100%;font-size:12px}
+  .donut-legend .leg-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:4px 0;border-bottom:1px solid var(--border-light);
+  }
+  .donut-legend .leg-item:last-child{border-bottom:none}
+  .leg-dot{width:8px;height:8px;border-radius:50%;margin-right:8px;flex-shrink:0}
+
+  /* ── Activity Feed ── */
+  .activity-feed{margin-bottom:28px}
+  .activity-item{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:12px 0;border-bottom:1px solid var(--border-light);
+  }
+  .activity-item:last-child{border-bottom:none}
+  .activity-dot{
+    width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;
+  }
+  .activity-dot.approve{background:var(--green)}
+  .activity-dot.remove{background:var(--accent-red)}
+  .activity-dot.report{background:var(--orange)}
+  .activity-dot.user{background:var(--blue)}
+  .activity-dot.debate{background:var(--accent-gold)}
+  .activity-text{font-size:14px;flex:1}
+  .activity-text strong{font-weight:600}
+  .activity-time{font-size:11px;color:var(--text-light);white-space:nowrap;margin-top:2px}
+
+  /* ── Quarantine Queue ── */
+  .queue-card{
+    background:var(--bg-card);
+    border:1px solid var(--border-light);
+    border-left:4px solid var(--orange);
+    border-radius:0 8px 8px 0;
+    padding:18px 20px;
+    margin-bottom:16px;
+    box-shadow:0 2px 8px var(--shadow);
+  }
+  .queue-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .queue-author{display:flex;align-items:center;gap:8px}
+  .queue-author .avatar-sm{
+    width:28px;height:28px;border-radius:50%;
+    background:var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:600;color:var(--text);
+  }
+  .queue-author .name{font-weight:600;font-size:14px}
+  .queue-author .tier{font-size:11px;color:var(--text-light);padding:1px 6px;border:1px solid var(--border);border-radius:3px}
+  .reason-badge{
+    font-size:11px;padding:2px 8px;border-radius:4px;
+    font-weight:500;margin-left:auto;
+  }
+  .reason-badge.toxicity{background:#f5e0d0;color:#8b2500}
+  .reason-badge.spam{background:#e8e0c8;color:#5c4033}
+  .reason-badge.theology{background:#d4e6d8;color:#3a7d44}
+  .reason-badge.off-topic{background:#d5dfe8;color:#2e5a88}
+  .queue-content{
+    font-size:14px;line-height:1.6;
+    padding:10px 14px;
+    background:var(--bg);border-radius:4px;
+    border:1px solid var(--border-light);
+    margin-bottom:12px;
+  }
+  .queue-meta{font-size:11px;color:var(--text-light);margin-bottom:10px}
+  .queue-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{
+    padding:7px 16px;border-radius:5px;
+    font-family:'EB Garamond',serif;font-size:13px;
+    cursor:pointer;border:1px solid transparent;
+    transition:all .2s;
+  }
+  .btn-approve{background:var(--green);color:#fff;border-color:var(--green)}
+  .btn-approve:hover{background:#2d6535}
+  .btn-remove{background:var(--accent-red);color:#fff;border-color:var(--accent-red)}
+  .btn-remove:hover{background:#6e1e00}
+  .btn-lock{background:transparent;color:var(--text);border-color:var(--border)}
+  .btn-lock:hover{background:var(--bg);border-color:var(--accent-gold)}
+  .btn-outline{background:transparent;color:var(--text);border-color:var(--border)}
+  .btn-outline:hover{border-color:var(--accent-gold);background:var(--bg)}
+
+  /* ── Users Table ── */
+  .table-wrap{overflow-x:auto;margin-bottom:24px}
+  table{
+    width:100%;border-collapse:collapse;
+    background:var(--bg-card);
+    border:1px solid var(--border-light);
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 2px 8px var(--shadow);
+  }
+  th{
+    text-align:left;padding:12px 14px;
+    font-family:'Cormorant Garamond',serif;font-size:13px;
+    font-weight:600;color:var(--text-light);
+    text-transform:uppercase;letter-spacing:.5px;
+    background:rgba(201,185,154,.15);
+    border-bottom:2px solid var(--border-light);
+  }
+  td{
+    padding:11px 14px;font-size:14px;
+    border-bottom:1px solid var(--border-light);
+    vertical-align:middle;
+  }
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(184,134,11,.03)}
+  .user-cell{display:flex;align-items:center;gap:10px}
+  .user-cell .avatar-sm{
+    width:30px;height:30px;border-radius:50%;
+    background:var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:600;color:var(--text);flex-shrink:0;
+  }
+  .tier-badge{
+    font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;
+  }
+  .tier-new{background:#e8e0c8;color:var(--text)}
+  .tier-established{background:#d5dfe8;color:var(--blue)}
+  .tier-trusted{background:#d4e6d8;color:var(--green)}
+  .tier-mod{background:#f5e0d0;color:var(--accent-red)}
+  .tier-admin{background:var(--accent-gold);color:#fff}
+  .actions-dropdown{
+    padding:5px 10px;border:1px solid var(--border);border-radius:4px;
+    background:var(--bg-card);font-family:'EB Garabmond',serif;font-size:12px;
+    cursor:pointer;color:var(--text);
+  }
+
+  /* ── Reports ── */
+  .report-card{
+    background:var(--bg-card);
+    border:1px solid var(--border-light);
+    border-left:4px solid var(--accent-red);
+    border-radius:0 8px 8px 0;
+    padding:18px 20px;margin-bottom:16px;
+    box-shadow:0 2px 8px var(--shadow);
+  }
+  .report-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .report-reason{
+    font-size:11px;padding:2px 8px;border-radius:4px;
+    background:#f5e0d0;color:var(--accent-red);font-weight:500;
+    margin-left:auto;
+  }
+  .report-content{
+    padding:10px 14px;background:var(--bg);
+    border:1px solid var(--border-light);border-radius:4px;
+    font-size:14px;line-height:1.6;margin-bottom:10px;
+  }
+  .report-meta{font-size:12px;color:var(--text-light);margin-bottom:10px}
+
+  /* ── Analytics ── */
+  .analytics-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:18px;margin-bottom:28px;
+  }
+  .health-card{
+    background:var(--bg-card);border:1px solid var(--border-light);
+    border-radius:8px;padding:18px;text-align:center;
+    box-shadow:0 2px 8px var(--shadow);
+  }
+  .health-card .health-label{font-size:12px;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .health-card .health-value{font-family:'Cormorant Garabmond',serif;font-size:28px;font-weight:700}
+  .health-card .health-bar{
+    height:6px;background:var(--border-light);border-radius:3px;margin-top:8px;overflow:hidden;
+  }
+  .health-card .health-bar-fill{height:100%;border-radius:3px;transition:width .6s}
+
+  .analytics-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px}
+  .top-debate-item{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 0;border-bottom:1px solid var(--border-light);font-size:14px;
+  }
+  .top-debate-item:last-child{border-bottom:none}
+  .top-debate-rank{
+    width:24px;height:24px;border-radius:50%;
+    background:var(--accent-gold);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:600;flex-shrink:0;
+  }
+  .top-debate-count{margin-left:auto;font-size:12px;color:var(--text-light)}
+
+  .vote-reason-bar{margin-bottom:10px}
+  .vote-reason-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px}
+  .vote-reason-track{height:8px;background:var(--border-light);border-radius:4px;overflow:hidden}
+  .vote-reason-fill{height:100%;border-radius:4px}
+
+  .taxonomy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px}
+  .taxonomy-stat{
+    text-align:center;padding:14px;
+    background:var(--bg);border:1px solid var(--border-light);border-radius:6px;
+  }
+  .taxonomy-stat .tax-value{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--accent-red)}
+  .taxonomy-stat .tax-label{font-size:11px;color:var(--text-light);margin-top:2px}
+
+  /* debates table */
+  .status-badge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+  .status-active{background:#d4e6d8;color:var(--green)}
+  .status-closed{background:#e8e0c8;color:var(--text-light)}
+  .status-locked{background:#f5e0d0;color:var(--accent-red)}
+
+  /* ── Mobile toggle ── */
+  .mobile-toggle{
+    display:none;
+    position:fixed;top:12px;left:12px;z-index:200;
+    background:var(--sidebar);color:var(--text-sidebar);
+    border:none;border-radius:6px;padding:8px 12px;
+    font-size:20px;cursor:pointer;
+  }
+
+  /* ── Ornamental borders ── */
+  .ornament{
+    text-align:center;margin:24px 0 20px;
+    color:var(--border);font-size:14px;letter-spacing:6px;
+  }
+
+  /* ── Responsive ── */
+  @media(max-width:1024px){
+    .chart-section,.analytics-cols{grid-template-columns:1fr}
+  }
+  @media(max-width:768px){
+    .sidebar{transform:translateX(-100%)}
+    .sidebar.open{transform:translateX(0)}
+    .main{margin-left:0}
+    .mobile-toggle{display:block}
+    .content{padding:20px 16px}
+    .topbar{padding:12px 16px}
+    .stat-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:480px){
+    .stat-grid{grid-template-columns:1fr}
+    .queue-header{flex-direction:column;align-items:flex-start}
+    .reason-badge{margin-left:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- Mobile Toggle -->
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">CD</div>
+    <h1>Christian Debate<span>Admin Panel</span></h1>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="active" data-section="dashboard">
+      <span class="nav-icon">&#9678;</span> Dashboard
+    </a>
+    <a href="#" data-section="quarantine">
+      <span class="nav-icon">&#9888;</span> Quarantine Queue
+      <span class="badge">12</span>
+    </a>
+    <a href="#" data-section="reports">
+      <span class="nav-icon">&#9873;</span> Reports
+      <span class="badge">5</span>
+    </a>
+    <a href="#" data-section="users">
+      <span class="nav-icon">&#9823;</span> Users
+    </a>
+    <a href="#" data-section="debates">
+      <span class="nav-icon">&#9997;</span> Debates
+    </a>
+    <a href="#" data-section="analytics">
+      <span class="nav-icon">&#9733;</span> Analytics
+    </a>
+    <a href="#" data-section="settings">
+      <span class="nav-icon">&#9881;</span> Settings
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="avatar">SM</div>
+    <div class="user-info">
+      <div class="name">Sarah M.</div>
+      <div class="role">Administrator</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="search">
+      <input type="text" placeholder="Search users, debates, comments...">
+    </div>
+    <div class="actions">
+      <button class="notif-btn">
+        &#128276;
+        <span class="notif-badge">3</span>
+      </button>
+      <button class="quick-action-btn">+ New Debate</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ═══════════════════ DASHBOARD ═══════════════════ -->
+    <div class="section active" id="sec-dashboard">
+      <h2 class="page-title">Dashboard</h2>
+      <p class="page-subtitle">Overview of platform activity and moderation status</p>
+
+      <!-- Stat Cards -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Users</div>
+          <div class="stat-value">2,847</div>
+          <div class="stat-change up">+124 this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Debates</div>
+          <div class="stat-value">156</div>
+          <div class="stat-change up">+8 this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Comments Today</div>
+          <div class="stat-value">423</div>
+          <div class="stat-change down">-12% vs yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Quarantined</div>
+          <div class="stat-value">12</div>
+          <div class="stat-change down">Needs review</div>
+        </div>
+      </div>
+
+      <!-- Chart + Donut -->
+      <div class="chart-section">
+        <div class="card">
+          <div class="card-title">Moderation Activity (Last 7 Days)</div>
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar-pair">
+                <div class="bar approved" style="height:65%"></div>
+                <div class="bar removed" style="height:20%"></div>
+              </div>
+              <div class="bar-label">Mon</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-pair">
+                <div class="bar approved" style="height:80%"></div>
+                <div class="bar removed" style="height:30%"></div>
+              </div>
+              <div class="bar-label">Tue</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-pair">
+                <div class="bar approved" style="height:55%"></div>
+                <div class="bar removed" style="height:15%"></div>
+              </div>
+              <div class="bar-label">Wed</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-pair">
+                <div class="bar approved" style="height:90%"></div>
+                <div class="bar removed" style="height:35%"></div>
+              </div>
+              <div class="bar-label">Thu</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-pair">
+                <div class="bar approved" style="height:70%"></div>
+                <div class="bar removed" style="height:25%"></div>
+              </div>
+              <div class="bar-label">Fri</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-pair">
+                <div class="bar approved" style="height:45%"></div>
+                <div class="bar removed" style="height:10%"></div>
+              </div>
+              <div class="bar-label">Sat</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-pair">
+                <div class="bar approved" style="height:40%"></div>
+                <div class="bar removed" style="height:12%"></div>
+              </div>
+              <div class="bar-label">Sun</div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <span class="leg-approved">Approved</span>
+            <span class="leg-removed">Removed</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Trust Tier Distribution</div>
+          <div class="donut-container">
+            <div class="donut"></div>
+            <div class="donut-legend">
+              <div class="leg-item">
+                <span><span class="leg-dot" style="background:var(--text-light);display:inline-block"></span> New</span>
+                <span>43%</span>
+              </div>
+              <div class="leg-item">
+                <span><span class="leg-dot" style="background:var(--border);display:inline-block"></span> Established</span>
+                <span>31%</span>
+              </div>
+              <div class="leg-item">
+                <span><span class="leg-dot" style="background:var(--blue);display:inline-block"></span> Trusted</span>
+                <span>20%</span>
+              </div>
+              <div class="leg-item">
+                <span><span class="leg-dot" style="background:var(--green);display:inline-block"></span> Moderator</span>
+                <span>0.4%</span>
+              </div>
+              <div class="leg-item">
+                <span><span class="leg-dot" style="background:var(--accent-red);display:inline-block"></span> Admin</span>
+                <span>0.2%</span>
+              </div>
+              <div class="leg-item">
+                <span><span class="leg-dot" style="background:var(--accent-gold);display:inline-block"></span> Other</span>
+                <span>5.4%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="card activity-feed">
+        <div class="card-title">Recent Activity</div>
+        <div class="activity-item">
+          <span class="activity-dot approve"></span>
+          <div class="activity-text"><strong>Sarah M.</strong> approved a quarantined comment by <strong>Marcus T.</strong> in "Sola Scriptura vs. Sacred Tradition"</div>
+          <span class="activity-time">4 min ago</span>
+        </div>
+        <div class="activity-item">
+          <span class="activity-dot report"></span>
+          <div class="activity-text"><strong>James L.</strong> reported a comment by <strong>Anonymous</strong> for "Personal attack"</div>
+          <span class="activity-time">18 min ago</span>
+        </div>
+        <div class="activity-item">
+          <span class="activity-dot remove"></span>
+          <div class="activity-text"><strong>David K.</strong> removed a spam comment from "Predestination and Free Will"</div>
+          <span class="activity-time">42 min ago</span>
+        </div>
+        <div class="activity-item">
+          <span class="activity-dot user"></span>
+          <div class="activity-text"><strong>Rachel P.</strong> was promoted to <strong>Trusted</strong> tier (reputation: 1,250)</div>
+          <span class="activity-time">1 hr ago</span>
+        </div>
+        <div class="activity-item">
+          <span class="activity-dot debate"></span>
+          <div class="activity-text">New debate created: <strong>"Is Just War Theory Biblical?"</strong> by <strong>Thomas A.</strong></div>
+          <span class="activity-time">2 hr ago</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ QUARANTINE QUEUE ═══════════════════ -->
+    <div class="section" id="sec-quarantine">
+      <h2 class="page-title">Quarantine Queue</h2>
+      <p class="page-subtitle">12 comments awaiting moderation review</p>
+
+      <div class="queue-card">
+        <div class="queue-header">
+          <div class="queue-author">
+            <div class="avatar-sm">JD</div>
+            <span class="name">John D.</span>
+            <span class="tier">New</span>
+          </div>
+          <span class="reason-badge toxicity">Toxicity Detected</span>
+        </div>
+        <div class="queue-meta">In "Sola Scriptura vs. Sacred Tradition" &middot; 12 minutes ago</div>
+        <div class="queue-content">
+          Anyone who believes in infant baptism is clearly not reading their Bible. You people are deceived and leading others astray with your man-made traditions. Wake up!
+        </div>
+        <div class="queue-actions">
+          <button class="btn btn-approve">Approve</button>
+          <button class="btn btn-remove">Remove</button>
+          <button class="btn btn-lock">Lock Thread</button>
+        </div>
+      </div>
+
+      <div class="queue-card">
+        <div class="queue-header">
+          <div class="queue-author">
+            <div class="avatar-sm">AX</div>
+            <span class="name">Alex X.</span>
+            <span class="tier">New</span>
+          </div>
+          <span class="reason-badge spam">Spam</span>
+        </div>
+        <div class="queue-meta">In "Predestination and Free Will" &middot; 28 minutes ago</div>
+        <div class="queue-content">
+          Check out my amazing Bible study course at www.example-spam.com!! 50% off this week only! God wants you to prosper!!!
+        </div>
+        <div class="queue-actions">
+          <button class="btn btn-approve">Approve</button>
+          <button class="btn btn-remove">Remove</button>
+          <button class="btn btn-lock">Lock Thread</button>
+        </div>
+      </div>
+
+      <div class="queue-card">
+        <div class="queue-header">
+          <div class="queue-author">
+            <div class="avatar-sm">EP</div>
+            <span class="name">Elena P.</span>
+            <span class="tier">Established</span>
+          </div>
+          <span class="reason-badge theology">Theological Sensitivity</span>
+        </div>
+        <div class="queue-meta">In "The Trinity: Essential or Interpretive?" &middot; 1 hour ago</div>
+        <div class="queue-content">
+          I believe the doctrine of the Trinity was a later development influenced by Hellenistic philosophy rather than rooted in early Jewish-Christian worship. The Shema clearly states God is one, and the councils that formalized Trinitarian doctrine were politically motivated.
+        </div>
+        <div class="queue-actions">
+          <button class="btn btn-approve">Approve</button>
+          <button class="btn btn-remove">Remove</button>
+          <button class="btn btn-lock">Lock Thread</button>
+        </div>
+      </div>
+
+      <div class="queue-card">
+        <div class="queue-header">
+          <div class="queue-author">
+            <div class="avatar-sm">RW</div>
+            <span class="name">Robert W.</span>
+            <span class="tier">New</span>
+          </div>
+          <span class="reason-badge off-topic">Off-Topic</span>
+        </div>
+        <div class="queue-meta">In "Is Just War Theory Biblical?" &middot; 2 hours ago</div>
+        <div class="queue-content">
+          This has nothing to do with war, but can someone explain why my church switched to grape juice for communion? Is there a theological reason or is it just an American thing? Genuinely curious.
+        </div>
+        <div class="queue-actions">
+          <button class="btn btn-approve">Approve</button>
+          <button class="btn btn-remove">Remove</button>
+          <button class="btn btn-lock">Lock Thread</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ REPORTS ═══════════════════ -->
+    <div class="section" id="sec-reports">
+      <h2 class="page-title">Reports</h2>
+      <p class="page-subtitle">5 pending reports from community members</p>
+
+      <div class="report-card">
+        <div class="report-header">
+          <div class="queue-author">
+            <div class="avatar-sm">JL</div>
+            <span class="name">James L.</span>
+          </div>
+          <span style="font-size:12px;color:var(--text-light)">reported</span>
+          <div class="queue-author">
+            <div class="avatar-sm">AN</div>
+            <span class="name">Anonymous</span>
+          </div>
+          <span class="report-reason">Personal Attack</span>
+        </div>
+        <div class="report-content">
+          You clearly have never attended seminary or read any serious theology. Stick to your Sunday school flannel boards and leave the real discussion to adults.
+        </div>
+        <div class="report-meta">In "Calvinism vs. Arminianism" &middot; Reported 18 minutes ago</div>
+        <div class="queue-actions">
+          <button class="btn btn-remove">Remove Comment</button>
+          <button class="btn btn-outline">Warn User</button>
+          <button class="btn btn-outline">Dismiss Report</button>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-header">
+          <div class="queue-author">
+            <div class="avatar-sm">RP</div>
+            <span class="name">Rachel P.</span>
+          </div>
+          <span style="font-size:12px;color:var(--text-light)">reported</span>
+          <div class="queue-author">
+            <div class="avatar-sm">MT</div>
+            <span class="name">Mike T.</span>
+          </div>
+          <span class="report-reason">Misinformation</span>
+        </div>
+        <div class="report-content">
+          The Dead Sea Scrolls prove that the New Testament was written in the 3rd century AD and was heavily edited by Constantine's scribes. This is well-documented historical fact.
+        </div>
+        <div class="report-meta">In "Biblical Manuscript Reliability" &middot; Reported 1 hour ago</div>
+        <div class="queue-actions">
+          <button class="btn btn-remove">Remove Comment</button>
+          <button class="btn btn-outline">Warn User</button>
+          <button class="btn btn-outline">Dismiss Report</button>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-header">
+          <div class="queue-author">
+            <div class="avatar-sm">DK</div>
+            <span class="name">David K.</span>
+          </div>
+          <span style="font-size:12px;color:var(--text-light)">reported</span>
+          <div class="queue-author">
+            <div class="avatar-sm">SS</div>
+            <span class="name">Steve S.</span>
+          </div>
+          <span class="report-reason">Harassment</span>
+        </div>
+        <div class="report-content">
+          I've seen your other posts and you're always stirring up trouble. People like you are the reason Christianity has a bad reputation. Maybe find a different hobby.
+        </div>
+        <div class="report-meta">In "Women in Church Leadership" &middot; Reported 3 hours ago</div>
+        <div class="queue-actions">
+          <button class="btn btn-remove">Remove Comment</button>
+          <button class="btn btn-outline">Warn User</button>
+          <button class="btn btn-outline">Dismiss Report</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ USERS ═══════════════════ -->
+    <div class="section" id="sec-users">
+      <h2 class="page-title">Users</h2>
+      <p class="page-subtitle">2,847 registered members</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Trust Tier</th>
+              <th>Reputation</th>
+              <th>Comments</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="user-cell"><div class="avatar-sm">SM</div> Sarah M.</div></td>
+              <td>sarah.m@example.com</td>
+              <td><span class="tier-badge tier-admin">Admin</span></td>
+              <td>4,820</td>
+              <td>1,247</td>
+              <td>Jan 2024</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View Profile</option><option>Edit</option><option>Suspend</option></select></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="avatar-sm">DK</div> David K.</div></td>
+              <td>david.k@example.com</td>
+              <td><span class="tier-badge tier-mod">Moderator</span></td>
+              <td>3,150</td>
+              <td>892</td>
+              <td>Mar 2024</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View Profile</option><option>Edit</option><option>Suspend</option></select></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="avatar-sm">RP</div> Rachel P.</div></td>
+              <td>rachel.p@example.com</td>
+              <td><span class="tier-badge tier-trusted">Trusted</span></td>
+              <td>1,250</td>
+              <td>534</td>
+              <td>Jun 2024</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View Profile</option><option>Edit</option><option>Promote</option><option>Suspend</option></select></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="avatar-sm">MT</div> Marcus T.</div></td>
+              <td>marcus.t@example.com</td>
+              <td><span class="tier-badge tier-established">Established</span></td>
+              <td>680</td>
+              <td>213</td>
+              <td>Sep 2024</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View Profile</option><option>Edit</option><option>Promote</option><option>Suspend</option></select></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="avatar-sm">JD</div> John D.</div></td>
+              <td>john.d@example.com</td>
+              <td><span class="tier-badge tier-new">New</span></td>
+              <td>45</td>
+              <td>12</td>
+              <td>Feb 2026</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View Profile</option><option>Edit</option><option>Suspend</option></select></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="avatar-sm">AX</div> Alex X.</div></td>
+              <td>alex.x@example.com</td>
+              <td><span class="tier-badge tier-new">New</span></td>
+              <td>5</td>
+              <td>3</td>
+              <td>Mar 2026</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View Profile</option><option>Edit</option><option>Suspend</option><option>Ban</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ DEBATES ═══════════════════ -->
+    <div class="section" id="sec-debates">
+      <h2 class="page-title">Debates</h2>
+      <p class="page-subtitle">156 active debates across the platform</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Creator</th>
+              <th>Sides</th>
+              <th>Comments</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Sola Scriptura vs. Sacred Tradition</strong></td>
+              <td><span class="status-badge status-active">Active</span></td>
+              <td>Marcus T.</td>
+              <td>2</td>
+              <td>247</td>
+              <td>Jan 15, 2026</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View</option><option>Edit</option><option>Lock</option><option>Close</option></select></td>
+            </tr>
+            <tr>
+              <td><strong>Predestination and Free Will</strong></td>
+              <td><span class="status-badge status-active">Active</span></td>
+              <td>Rachel P.</td>
+              <td>3</td>
+              <td>189</td>
+              <td>Feb 2, 2026</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View</option><option>Edit</option><option>Lock</option><option>Close</option></select></td>
+            </tr>
+            <tr>
+              <td><strong>The Trinity: Essential or Interpretive?</strong></td>
+              <td><span class="status-badge status-active">Active</span></td>
+              <td>David K.</td>
+              <td>2</td>
+              <td>156</td>
+              <td>Feb 10, 2026</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View</option><option>Edit</option><option>Lock</option><option>Close</option></select></td>
+            </tr>
+            <tr>
+              <td><strong>Calvinism vs. Arminianism</strong></td>
+              <td><span class="status-badge status-locked">Locked</span></td>
+              <td>Sarah M.</td>
+              <td>2</td>
+              <td>312</td>
+              <td>Dec 5, 2025</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View</option><option>Edit</option><option>Unlock</option></select></td>
+            </tr>
+            <tr>
+              <td><strong>Is Just War Theory Biblical?</strong></td>
+              <td><span class="status-badge status-active">Active</span></td>
+              <td>Thomas A.</td>
+              <td>3</td>
+              <td>23</td>
+              <td>Mar 4, 2026</td>
+              <td><select class="actions-dropdown"><option>Actions...</option><option>View</option><option>Edit</option><option>Lock</option><option>Close</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ ANALYTICS ═══════════════════ -->
+    <div class="section" id="sec-analytics">
+      <h2 class="page-title">Analytics</h2>
+      <p class="page-subtitle">Platform health metrics and engagement data</p>
+
+      <!-- Health Metrics -->
+      <div class="analytics-grid">
+        <div class="health-card">
+          <div class="health-label">Civility Score</div>
+          <div class="health-value" style="color:var(--green)">87%</div>
+          <div class="health-bar"><div class="health-bar-fill" style="width:87%;background:var(--green)"></div></div>
+        </div>
+        <div class="health-card">
+          <div class="health-label">Engagement Rate</div>
+          <div class="health-value" style="color:var(--blue)">64%</div>
+          <div class="health-bar"><div class="health-bar-fill" style="width:64%;background:var(--blue)"></div></div>
+        </div>
+        <div class="health-card">
+          <div class="health-label">Avg. Response Time</div>
+          <div class="health-value" style="color:var(--accent-gold)">2.4h</div>
+          <div class="health-bar"><div class="health-bar-fill" style="width:45%;background:var(--accent-gold)"></div></div>
+        </div>
+        <div class="health-card">
+          <div class="health-label">Mod Queue Health</div>
+          <div class="health-value" style="color:var(--green)">Good</div>
+          <div class="health-bar"><div class="health-bar-fill" style="width:78%;background:var(--green)"></div></div>
+        </div>
+      </div>
+
+      <div class="analytics-cols">
+        <!-- Top Debates -->
+        <div class="card">
+          <div class="card-title">Top Debates by Engagement</div>
+          <div class="top-debate-item">
+            <span class="top-debate-rank">1</span>
+            <span>Calvinism vs. Arminianism</span>
+            <span class="top-debate-count">312 comments</span>
+          </div>
+          <div class="top-debate-item">
+            <span class="top-debate-rank">2</span>
+            <span>Sola Scriptura vs. Sacred Tradition</span>
+            <span class="top-debate-count">247 comments</span>
+          </div>
+          <div class="top-debate-item">
+            <span class="top-debate-rank">3</span>
+            <span>Predestination and Free Will</span>
+            <span class="top-debate-count">189 comments</span>
+          </div>
+          <div class="top-debate-item">
+            <span class="top-debate-rank">4</span>
+            <span>The Trinity: Essential or Interpretive?</span>
+            <span class="top-debate-count">156 comments</span>
+          </div>
+          <div class="top-debate-item">
+            <span class="top-debate-rank">5</span>
+            <span>Women in Church Leadership</span>
+            <span class="top-debate-count">134 comments</span>
+          </div>
+        </div>
+
+        <!-- Vote Reason Distribution -->
+        <div class="card">
+          <div class="card-title">Vote Reason Distribution</div>
+          <div class="vote-reason-bar">
+            <div class="vote-reason-label"><span>Well-Reasoned</span><span>38%</span></div>
+            <div class="vote-reason-track"><div class="vote-reason-fill" style="width:38%;background:var(--green)"></div></div>
+          </div>
+          <div class="vote-reason-bar">
+            <div class="vote-reason-label"><span>Scriptural Support</span><span>27%</span></div>
+            <div class="vote-reason-track"><div class="vote-reason-fill" style="width:27%;background:var(--accent-gold)"></div></div>
+          </div>
+          <div class="vote-reason-bar">
+            <div class="vote-reason-label"><span>Charitable Tone</span><span>18%</span></div>
+            <div class="vote-reason-track"><div class="vote-reason-fill" style="width:18%;background:var(--blue)"></div></div>
+          </div>
+          <div class="vote-reason-bar">
+            <div class="vote-reason-label"><span>Novel Insight</span><span>11%</span></div>
+            <div class="vote-reason-track"><div class="vote-reason-fill" style="width:11%;background:var(--accent-red)"></div></div>
+          </div>
+          <div class="vote-reason-bar">
+            <div class="vote-reason-label"><span>Historical Context</span><span>6%</span></div>
+            <div class="vote-reason-track"><div class="vote-reason-fill" style="width:6%;background:var(--text-light)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Engagement Chart -->
+      <div class="card" style="margin-bottom:28px">
+        <div class="card-title">Weekly Engagement Trend</div>
+        <div class="bar-chart">
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:50%"></div>
+            </div>
+            <div class="bar-label">Wk 1</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:62%"></div>
+            </div>
+            <div class="bar-label">Wk 2</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:55%"></div>
+            </div>
+            <div class="bar-label">Wk 3</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:78%"></div>
+            </div>
+            <div class="bar-label">Wk 4</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:85%"></div>
+            </div>
+            <div class="bar-label">Wk 5</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:70%"></div>
+            </div>
+            <div class="bar-label">Wk 6</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:92%"></div>
+            </div>
+            <div class="bar-label">Wk 7</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar approved" style="height:88%"></div>
+            </div>
+            <div class="bar-label">Wk 8</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Taxonomy Stats -->
+      <div class="card">
+        <div class="card-title">Taxonomy Statistics</div>
+        <div class="taxonomy-grid">
+          <div class="taxonomy-stat">
+            <div class="tax-value">24</div>
+            <div class="tax-label">Doctrinal Topics</div>
+          </div>
+          <div class="taxonomy-stat">
+            <div class="tax-value">8</div>
+            <div class="tax-label">Denominations</div>
+          </div>
+          <div class="taxonomy-stat">
+            <div class="tax-value">15</div>
+            <div class="tax-label">Ethical Issues</div>
+          </div>
+          <div class="taxonomy-stat">
+            <div class="tax-value">12</div>
+            <div class="tax-label">Historical Periods</div>
+          </div>
+          <div class="taxonomy-stat">
+            <div class="tax-value">6</div>
+            <div class="tax-label">Biblical Books</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ SETTINGS ═══════════════════ -->
+    <div class="section" id="sec-settings">
+      <h2 class="page-title">Settings</h2>
+      <p class="page-subtitle">Platform configuration and moderation policies</p>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Moderation Thresholds</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:14px">
+          <div>
+            <label style="display:block;margin-bottom:4px;color:var(--text-light);font-size:12px;text-transform:uppercase;letter-spacing:.5px">Toxicity Score Threshold</label>
+            <input type="range" min="0" max="100" value="65" style="width:100%">
+            <span style="font-size:12px;color:var(--text-light)">Current: 0.65</span>
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:4px;color:var(--text-light);font-size:12px;text-transform:uppercase;letter-spacing:.5px">Auto-quarantine for New Users</label>
+            <input type="range" min="0" max="100" value="80" style="width:100%">
+            <span style="font-size:12px;color:var(--text-light)">Current: 0.80</span>
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:4px;color:var(--text-light);font-size:12px;text-transform:uppercase;letter-spacing:.5px">Reports to Auto-Hide</label>
+            <input type="number" value="3" min="1" max="10" style="padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-family:'EB Garamond',serif;width:80px;background:var(--bg)">
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:4px;color:var(--text-light);font-size:12px;text-transform:uppercase;letter-spacing:.5px">Trust Promotion Threshold</label>
+            <input type="number" value="500" min="100" max="5000" step="50" style="padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-family:'EB Garamond',serif;width:80px;background:var(--bg)">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">General Settings</div>
+        <div style="font-size:14px;line-height:2.2">
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox" checked> Enable email notifications for new reports
+          </label>
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox" checked> Auto-lock threads after 30 days of inactivity
+          </label>
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox"> Require email verification for new accounts
+          </label>
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox" checked> Show trust tier badges publicly
+          </label>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- .content -->
+</div><!-- .main -->
+
+<script>
+  // Section navigation
+  const navLinks = document.querySelectorAll('.sidebar-nav a');
+  const sections = document.querySelectorAll('.section');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = link.dataset.section;
+
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+      sections.forEach(s => s.classList.remove('active'));
+      const sec = document.getElementById('sec-' + target);
+      if (sec) sec.classList.add('active');
+
+      // Close mobile sidebar
+      document.querySelector('.sidebar').classList.remove('open');
+
+      // Update page title based on section
+      const titles = {
+        dashboard: ['Dashboard', 'Overview of platform activity and moderation status'],
+        quarantine: ['Quarantine Queue', '12 comments awaiting moderation review'],
+        reports: ['Reports', '5 pending reports from community members'],
+        users: ['Users', '2,847 registered members'],
+        debates: ['Debates', '156 active debates across the platform'],
+        analytics: ['Analytics', 'Platform health metrics and engagement data'],
+        settings: ['Settings', 'Platform configuration and moderation policies']
+      };
+    });
+  });
+</script>
+</body>
+</html>

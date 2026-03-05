@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Debate - Forest Deep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #1a2418;
+    --bg-card: #242e22;
+    --bg-card-hover: #2a3628;
+    --border-card: #344530;
+    --border-light: #3d5236;
+    --text-primary: #e8e4d9;
+    --text-secondary: #b5b0a3;
+    --text-muted: #8a8578;
+    --moss: #6b8f5e;
+    --moss-light: #7da86e;
+    --moss-dim: #4a6840;
+    --amber: #d4a44c;
+    --amber-light: #e0b85e;
+    --earth: #8b6f4e;
+    --earth-light: #a68860;
+    --side-a: #4a7c8a;
+    --side-a-light: #5a94a4;
+    --side-a-bg: rgba(74, 124, 138, 0.15);
+    --side-b: #a85c3b;
+    --side-b-light: #c06e4a;
+    --side-b-bg: rgba(168, 92, 59, 0.15);
+    --neutral: #7a7568;
+    --neutral-bg: rgba(122, 117, 104, 0.15);
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(20, 30, 18, 0.5);
+    --shadow-hover: 0 4px 20px rgba(20, 30, 18, 0.7);
+  }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(107, 143, 94, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(107, 143, 94, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(212, 164, 76, 0.02) 0%, transparent 60%);
+  }
+
+  /* Faint leaf pattern overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 10 Q50 25 40 40 Q30 25 40 10Z' fill='%236b8f5e'/%3E%3Cpath d='M15 50 Q25 40 30 55 Q20 55 15 50Z' fill='%236b8f5e'/%3E%3Cpath d='M60 55 Q70 45 72 60 Q62 58 60 55Z' fill='%236b8f5e'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4, h5 { font-family: 'Bitter', serif; font-weight: 600; }
+
+  a { color: var(--moss-light); text-decoration: none; }
+  a:hover { color: var(--amber); }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(180deg, #1e2a1c, var(--bg-deep));
+    border-bottom: 1px solid var(--border-card);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; max-width: 960px; margin: 0 auto;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bitter', serif; font-size: 1.2rem; font-weight: 700;
+    color: var(--text-primary);
+  }
+  .logo-icon {
+    width: 32px; height: 32px; background: linear-gradient(135deg, var(--moss), var(--amber));
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: #1a2418; font-weight: 700;
+  }
+  .nav-links { display: flex; align-items: center; gap: 24px; }
+  .nav-links a {
+    color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--moss-light); }
+  .nav-links a.active { color: var(--moss-light); }
+  .user-menu {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    padding: 6px 12px; border-radius: var(--radius);
+    border: 1px solid var(--border-card); background: var(--bg-card);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .user-menu:hover { border-color: var(--moss-dim); transform: scale(1.02); }
+  .user-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--moss), var(--earth));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; color: var(--text-primary);
+  }
+  .user-name { font-size: 0.85rem; color: var(--text-secondary); }
+  .user-chevron { font-size: 0.65rem; color: var(--text-muted); margin-left: 2px; }
+
+  /* ── Debate Header ── */
+  .debate-header {
+    padding: 28px 0 20px;
+  }
+  .debate-title {
+    font-size: 1.6rem; line-height: 1.3; margin-bottom: 12px;
+    background: linear-gradient(90deg, var(--text-primary), var(--amber-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .debate-sides {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 12px; font-size: 0.9rem;
+  }
+  .side-label {
+    padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem;
+  }
+  .side-label.a { background: var(--side-a-bg); color: var(--side-a-light); border: 1px solid rgba(74,124,138,0.3); }
+  .side-label.b { background: var(--side-b-bg); color: var(--side-b-light); border: 1px solid rgba(168,92,59,0.3); }
+  .vs-text { color: var(--text-muted); font-weight: 500; font-size: 0.8rem; }
+  .debate-meta {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    color: var(--text-muted); font-size: 0.82rem;
+  }
+  .debate-meta span { display: flex; align-items: center; gap: 4px; }
+  .tag-pill {
+    padding: 2px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 600;
+    background: rgba(107, 143, 94, 0.12); color: var(--moss-light);
+    border: 1px solid rgba(107, 143, 94, 0.2);
+  }
+  .status-badge {
+    padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700;
+    background: linear-gradient(135deg, rgba(107,143,94,0.2), rgba(212,164,76,0.2));
+    color: var(--amber); border: 1px solid rgba(212,164,76,0.3);
+  }
+
+  /* ── Stance Bar ── */
+  .stance-bar-section {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 16px; margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .stance-bar-label {
+    font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .stance-bar {
+    display: flex; height: 28px; border-radius: 14px; overflow: hidden;
+    background: rgba(0,0,0,0.3);
+  }
+  .stance-bar div {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; transition: flex 0.4s ease;
+  }
+  .stance-bar .a { flex: 42; background: linear-gradient(90deg, var(--side-a), var(--side-a-light)); color: #fff; }
+  .stance-bar .b { flex: 38; background: linear-gradient(90deg, var(--side-b), var(--side-b-light)); color: #fff; }
+  .stance-bar .n { flex: 20; background: linear-gradient(90deg, var(--neutral), #8a8578); color: #fff; }
+  .stance-bar-legend {
+    display: flex; justify-content: space-between; margin-top: 8px;
+    font-size: 0.78rem; color: var(--text-secondary);
+  }
+  .stance-bar-legend span { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex; gap: 0; border-bottom: 2px solid var(--border-card);
+    margin-bottom: 24px; overflow-x: auto;
+  }
+  .tab {
+    padding: 12px 20px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+    color: var(--text-muted); border-bottom: 3px solid transparent;
+    margin-bottom: -2px; white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s, transform 0.15s;
+    position: relative; user-select: none;
+  }
+  .tab:hover { color: var(--text-secondary); transform: translateY(-1px); }
+  .tab.active {
+    color: var(--moss-light); border-bottom-color: var(--moss);
+  }
+  /* Leaf dot indicator */
+  .tab.active::after {
+    content: '';
+    position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+    width: 8px; height: 6px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: var(--moss);
+  }
+
+  /* ── Tab Panels ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Thread View ── */
+  .stance-declaration {
+    background: linear-gradient(135deg, rgba(107,143,94,0.08), rgba(212,164,76,0.06));
+    border: 1px solid var(--border-card); border-radius: var(--radius);
+    padding: 14px 18px; margin-bottom: 20px;
+    font-size: 0.85rem; color: var(--text-secondary);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .stance-declaration .icon { font-size: 1.1rem; }
+
+  .comment {
+    position: relative; margin-bottom: 4px;
+  }
+  .comment-body {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 16px; margin-bottom: 8px;
+    box-shadow: var(--shadow); transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  }
+  .comment-body:hover {
+    border-color: var(--border-light); box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+  }
+  .comment-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .comment-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .comment-author { font-weight: 600; font-size: 0.88rem; }
+  .trust-tier {
+    font-size: 0.68rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .trust-tier.seedling { background: rgba(107,143,94,0.15); color: var(--moss-light); }
+  .trust-tier.oak { background: rgba(212,164,76,0.15); color: var(--amber); }
+  .trust-tier.elder { background: rgba(139,111,78,0.2); color: var(--earth-light); }
+  .stance-badge {
+    font-size: 0.7rem; font-weight: 700; padding: 2px 10px;
+    border-radius: 12px;
+  }
+  .stance-badge.a { background: var(--side-a-bg); color: var(--side-a-light); }
+  .stance-badge.b { background: var(--side-b-bg); color: var(--side-b-light); }
+  .stance-badge.neutral { background: var(--neutral-bg); color: #9a9588; }
+  .comment-time { font-size: 0.75rem; color: var(--text-muted); margin-left: auto; }
+  .comment-text { font-size: 0.9rem; line-height: 1.65; color: var(--text-secondary); margin-bottom: 10px; }
+  .comment-text blockquote {
+    border-left: 3px solid var(--moss-dim); padding-left: 12px; margin: 8px 0;
+    color: var(--text-muted); font-style: italic;
+  }
+  .taxonomy-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .taxonomy-tag {
+    font-size: 0.7rem; padding: 2px 8px; border-radius: 8px;
+    background: rgba(139,111,78,0.12); color: var(--earth-light);
+    border: 1px solid rgba(139,111,78,0.2);
+  }
+  .comment-actions {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .vote-btn {
+    display: flex; align-items: center; gap: 4px;
+    background: none; border: 1px solid var(--border-card);
+    color: var(--text-muted); font-size: 0.78rem; padding: 4px 10px;
+    border-radius: 16px; cursor: pointer; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .vote-btn:hover {
+    border-color: var(--moss); color: var(--moss-light);
+    background: rgba(107,143,94,0.08); transform: scale(1.05);
+  }
+  .vote-btn.amber:hover {
+    border-color: var(--amber); color: var(--amber);
+    background: rgba(212,164,76,0.08);
+  }
+  .reply-btn {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 0.78rem; cursor: pointer; font-family: inherit;
+    transition: color 0.2s;
+  }
+  .reply-btn:hover { color: var(--moss-light); }
+
+  /* Nested comments with depth lines */
+  .comment-children { padding-left: 24px; position: relative; }
+  .comment-children::before {
+    content: ''; position: absolute; left: 12px; top: 0; bottom: 16px;
+    width: 2px; border-radius: 1px;
+  }
+  .depth-1::before { background: rgba(107,143,94,0.3); }
+  .depth-2::before { background: rgba(107,143,94,0.2); }
+  .depth-3::before { background: rgba(107,143,94,0.12); }
+
+  .burden-notice {
+    background: rgba(212,164,76,0.08); border: 1px solid rgba(212,164,76,0.2);
+    border-radius: var(--radius); padding: 12px 16px; margin: 16px 0;
+    font-size: 0.82rem; color: var(--amber); display: flex; align-items: center; gap: 10px;
+  }
+  .burden-notice .icon { font-size: 1rem; }
+
+  /* ── Comment Editor ── */
+  .comment-editor {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 16px; margin-top: 20px;
+    box-shadow: var(--shadow);
+  }
+  .editor-label {
+    font-size: 0.82rem; font-weight: 600; color: var(--text-muted);
+    margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .editor-stance-row {
+    display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .editor-stance-btn {
+    padding: 6px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 600;
+    border: 1px solid var(--border-card); background: transparent;
+    color: var(--text-muted); cursor: pointer; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .editor-stance-btn:hover { transform: scale(1.04); }
+  .editor-stance-btn.a-sel { background: var(--side-a-bg); color: var(--side-a-light); border-color: rgba(74,124,138,0.4); }
+  .editor-stance-btn.b-sel { background: var(--side-b-bg); color: var(--side-b-light); border-color: rgba(168,92,59,0.4); }
+  .editor-textarea {
+    width: 100%; min-height: 100px; padding: 12px; font-size: 0.9rem;
+    font-family: 'Nunito Sans', sans-serif; color: var(--text-primary);
+    background: rgba(0,0,0,0.2); border: 1px solid var(--border-card);
+    border-radius: 8px; resize: vertical; line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+  .editor-textarea:focus { outline: none; border-color: var(--moss); }
+  .editor-textarea::placeholder { color: var(--text-muted); }
+  .editor-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+  .btn {
+    padding: 8px 20px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+    border: none; cursor: pointer; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: scale(1.04); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--moss), var(--moss-light));
+    color: #fff;
+  }
+  .btn-primary:hover { box-shadow: 0 2px 12px rgba(107,143,94,0.4); }
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+  }
+  .btn-ghost:hover { border-color: var(--text-muted); }
+
+  /* ── Sides View ── */
+  .sides-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .side-column h3 {
+    font-size: 1rem; margin-bottom: 14px; padding-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .side-column.a h3 { border-bottom: 2px solid var(--side-a); color: var(--side-a-light); }
+  .side-column.b h3 { border-bottom: 2px solid var(--side-b); color: var(--side-b-light); }
+  .side-card {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+    box-shadow: var(--shadow); transition: all 0.2s;
+  }
+  .side-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .side-card-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  }
+  .side-card-author { font-weight: 600; font-size: 0.85rem; }
+  .side-card-text { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5; }
+  .side-card-meta {
+    display: flex; align-items: center; gap: 12px; margin-top: 8px;
+    font-size: 0.75rem; color: var(--text-muted);
+  }
+
+  /* ── Best Exchanges ── */
+  .exchange-card {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+    box-shadow: var(--shadow); transition: all 0.2s;
+  }
+  .exchange-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .exchange-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-card);
+  }
+  .exchange-rank {
+    font-family: 'Bitter', serif; font-size: 1.3rem; font-weight: 700;
+    background: linear-gradient(135deg, var(--amber), var(--earth));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .exchange-quality {
+    font-size: 0.78rem; font-weight: 600; padding: 4px 12px;
+    border-radius: 12px; background: rgba(212,164,76,0.12);
+    color: var(--amber); border: 1px solid rgba(212,164,76,0.2);
+  }
+  .exchange-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .exchange-side {
+    padding: 12px; border-radius: 8px;
+  }
+  .exchange-side.a { background: var(--side-a-bg); border: 1px solid rgba(74,124,138,0.2); }
+  .exchange-side.b { background: var(--side-b-bg); border: 1px solid rgba(168,92,59,0.2); }
+  .exchange-side-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .exchange-side.a .exchange-side-label { color: var(--side-a-light); }
+  .exchange-side.b .exchange-side-label { color: var(--side-b-light); }
+  .exchange-side-author { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .exchange-side-text { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.55; }
+
+  /* ── Verdict View ── */
+  .verdict-section { margin-bottom: 24px; }
+  .verdict-tally {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 20px;
+    box-shadow: var(--shadow); margin-bottom: 20px;
+  }
+  .verdict-tally-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .verdict-tally h3 {
+    font-size: 1.05rem;
+    background: linear-gradient(90deg, var(--text-primary), var(--amber));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .live-badge {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    color: var(--moss-light); letter-spacing: 0.5px;
+  }
+  .live-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--moss-light);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .tally-bar {
+    display: flex; height: 36px; border-radius: 18px; overflow: hidden;
+    background: rgba(0,0,0,0.3); margin-bottom: 10px;
+  }
+  .tally-bar div {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700; color: #fff;
+  }
+  .tally-bar .a { flex: 48; background: linear-gradient(90deg, var(--side-a), var(--side-a-light)); }
+  .tally-bar .b { flex: 35; background: linear-gradient(90deg, var(--side-b), var(--side-b-light)); }
+  .tally-bar .n { flex: 17; background: linear-gradient(90deg, var(--neutral), #8a8578); }
+
+  .verdict-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 16px; text-align: center;
+    box-shadow: var(--shadow); transition: transform 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); }
+  .stat-value {
+    font-family: 'Bitter', serif; font-size: 1.6rem; font-weight: 700;
+    background: linear-gradient(135deg, var(--moss), var(--amber));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+  .vote-form {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius); padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .vote-form h3 {
+    font-size: 1rem; margin-bottom: 14px;
+  }
+  .vote-options { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .vote-option {
+    flex: 1; min-width: 120px; padding: 12px; border-radius: var(--radius);
+    border: 2px solid var(--border-card); background: transparent;
+    cursor: pointer; text-align: center; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .vote-option:hover { transform: scale(1.03); }
+  .vote-option.a { color: var(--side-a-light); }
+  .vote-option.a:hover, .vote-option.a.selected { border-color: var(--side-a); background: var(--side-a-bg); }
+  .vote-option.b { color: var(--side-b-light); }
+  .vote-option.b:hover, .vote-option.b.selected { border-color: var(--side-b); background: var(--side-b-bg); }
+  .vote-option.n { color: var(--text-muted); }
+  .vote-option.n:hover, .vote-option.n.selected { border-color: var(--neutral); background: var(--neutral-bg); }
+  .vote-option-label { font-weight: 700; font-size: 0.9rem; display: block; }
+  .vote-option-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; display: block; }
+  .vote-submit-row { display: flex; justify-content: flex-end; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sides-grid { grid-template-columns: 1fr; }
+    .exchange-pair { grid-template-columns: 1fr; }
+    .verdict-stats { grid-template-columns: 1fr; }
+    .debate-title { font-size: 1.3rem; }
+    .header-inner { flex-wrap: wrap; gap: 10px; }
+    .nav-links { gap: 14px; }
+    .comment-children { padding-left: 16px; }
+    .comment-children::before { left: 8px; }
+    .vote-options { flex-direction: column; }
+  }
+  @media (max-width: 480px) {
+    .tab { padding: 10px 14px; font-size: 0.82rem; }
+    .user-name { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ Header ════ -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">CD</div>
+      <span>Christian Debate</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#" class="active">Debates</a>
+      <a href="#">New Debate</a>
+    </nav>
+    <div class="user-menu">
+      <div class="user-avatar">JD</div>
+      <span class="user-name">John D.</span>
+      <span class="user-chevron">&#9662;</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ════ Debate Header ════ -->
+  <section class="debate-header">
+    <h1 class="debate-title">Is Sola Scriptura a Valid Doctrine?</h1>
+    <div class="debate-sides">
+      <span class="side-label a">Side A: Sola Scriptura</span>
+      <span class="vs-text">vs</span>
+      <span class="side-label b">Side B: Scripture + Tradition</span>
+    </div>
+    <div class="debate-meta">
+      <span>By <a href="#">TheologianMark</a></span>
+      <span>3 days ago</span>
+      <span><span class="tag-pill">Theology</span></span>
+      <span><span class="tag-pill">Reformation</span></span>
+      <span><span class="status-badge">Open</span></span>
+    </div>
+  </section>
+
+  <!-- ════ Stance Bar ════ -->
+  <section class="stance-bar-section">
+    <div class="stance-bar-label">Community Stance</div>
+    <div class="stance-bar">
+      <div class="a">42%</div>
+      <div class="b">38%</div>
+      <div class="n">20%</div>
+    </div>
+    <div class="stance-bar-legend">
+      <span><span class="legend-dot" style="background:var(--side-a)"></span> Sola Scriptura</span>
+      <span><span class="legend-dot" style="background:var(--side-b)"></span> Scripture + Tradition</span>
+      <span><span class="legend-dot" style="background:var(--neutral)"></span> Neutral</span>
+    </div>
+  </section>
+
+  <!-- ════ Tabs ════ -->
+  <div class="tabs" role="tablist">
+    <div class="tab active" role="tab" data-tab="thread">Thread</div>
+    <div class="tab" role="tab" data-tab="sides">Sides</div>
+    <div class="tab" role="tab" data-tab="exchanges">Best Exchanges</div>
+    <div class="tab" role="tab" data-tab="verdict">Verdict</div>
+  </div>
+
+  <!-- ════ THREAD VIEW ════ -->
+  <div class="tab-panel active" id="panel-thread">
+    <div class="stance-declaration">
+      <span class="icon">&#127793;</span>
+      <span>You are viewing as <strong>Neutral</strong>. Declare your stance to participate in voting.</span>
+    </div>
+
+    <!-- Comment 1 (root) -->
+    <div class="comment">
+      <div class="comment-body">
+        <div class="comment-header">
+          <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-a), #3a6a78);">PM</div>
+          <span class="comment-author">PastorMike</span>
+          <span class="trust-tier oak">Oak</span>
+          <span class="stance-badge a">Side A</span>
+          <span class="comment-time">2 days ago</span>
+        </div>
+        <div class="comment-text">
+          The principle of Sola Scriptura holds that Scripture alone is the final authority for faith and practice. As 2 Timothy 3:16-17 states, "All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness, so that the servant of God may be thoroughly equipped for every good work." The key phrase here is <em>thoroughly equipped</em> -- suggesting sufficiency.
+        </div>
+        <div class="taxonomy-tags">
+          <span class="taxonomy-tag">Hermeneutics</span>
+          <span class="taxonomy-tag">Authority</span>
+        </div>
+        <div class="comment-actions">
+          <button class="vote-btn">&#9650; 24</button>
+          <button class="vote-btn amber">&#9733; Insightful</button>
+          <button class="reply-btn">Reply</button>
+        </div>
+      </div>
+
+      <!-- Nested comment depth 1 -->
+      <div class="comment-children depth-1">
+        <div class="comment">
+          <div class="comment-body">
+            <div class="comment-header">
+              <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-b), #8a4a2d);">SC</div>
+              <span class="comment-author">SisterCatherine</span>
+              <span class="trust-tier elder">Elder</span>
+              <span class="stance-badge b">Side B</span>
+              <span class="comment-time">2 days ago</span>
+            </div>
+            <div class="comment-text">
+              <blockquote>"Thoroughly equipped" does not necessarily mean "exclusively equipped."</blockquote>
+              Consider that Paul also wrote in 2 Thessalonians 2:15, "Hold to the traditions which you were taught, whether by word of mouth or by letter." This explicitly references oral tradition alongside written Scripture. The early Church operated for decades before the New Testament canon was established.
+            </div>
+            <div class="taxonomy-tags">
+              <span class="taxonomy-tag">Patristics</span>
+              <span class="taxonomy-tag">Canon Formation</span>
+            </div>
+            <div class="comment-actions">
+              <button class="vote-btn">&#9650; 31</button>
+              <button class="vote-btn amber">&#9733; Insightful</button>
+              <button class="reply-btn">Reply</button>
+            </div>
+          </div>
+
+          <!-- Nested comment depth 2 -->
+          <div class="comment-children depth-2">
+            <div class="comment">
+              <div class="comment-body">
+                <div class="comment-header">
+                  <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-a), #3a6a78);">PM</div>
+                  <span class="comment-author">PastorMike</span>
+                  <span class="trust-tier oak">Oak</span>
+                  <span class="stance-badge a">Side A</span>
+                  <span class="comment-time">1 day ago</span>
+                </div>
+                <div class="comment-text">
+                  Fair point about the timeline. However, the traditions Paul refers to were apostolic teachings later inscripturated. Once the canon was closed, the written Word became the normative standard. Tradition is valuable for interpretation but is not co-equal with Scripture as an authority.
+                </div>
+                <div class="taxonomy-tags">
+                  <span class="taxonomy-tag">Canon</span>
+                </div>
+                <div class="comment-actions">
+                  <button class="vote-btn">&#9650; 18</button>
+                  <button class="vote-btn amber">&#9733; Insightful</button>
+                  <button class="reply-btn">Reply</button>
+                </div>
+              </div>
+
+              <!-- Nested comment depth 3 -->
+              <div class="comment-children depth-3">
+                <div class="comment">
+                  <div class="comment-body">
+                    <div class="comment-header">
+                      <div class="comment-avatar" style="background: linear-gradient(135deg, var(--neutral), #6a6558);">DL</div>
+                      <span class="comment-author">DeaconLuke</span>
+                      <span class="trust-tier seedling">Seedling</span>
+                      <span class="stance-badge neutral">Neutral</span>
+                      <span class="comment-time">22 hours ago</span>
+                    </div>
+                    <div class="comment-text">
+                      Both sides make compelling arguments here. It seems like the crux is whether "tradition" refers to a living, developing body of teaching or a fixed deposit that was eventually written down. Could both of you define more precisely what you mean by "tradition"?
+                    </div>
+                    <div class="comment-actions">
+                      <button class="vote-btn">&#9650; 12</button>
+                      <button class="vote-btn amber">&#9733; Insightful</button>
+                      <button class="reply-btn">Reply</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Burden of Proof Notice -->
+    <div class="burden-notice">
+      <span class="icon">&#9878;</span>
+      <span><strong>Burden of Proof:</strong> Side A bears the initial burden as the affirmative claim. Side B must demonstrate that tradition holds binding authority alongside Scripture.</span>
+    </div>
+
+    <!-- Comment Editor -->
+    <div class="comment-editor">
+      <div class="editor-label">Add your response</div>
+      <div class="editor-stance-row">
+        <button class="editor-stance-btn a-sel">Side A: Sola Scriptura</button>
+        <button class="editor-stance-btn b-sel">Side B: Scripture + Tradition</button>
+        <button class="editor-stance-btn" style="border-color: rgba(122,117,104,0.3); color: var(--text-muted);">Neutral</button>
+      </div>
+      <textarea class="editor-textarea" placeholder="Share your argument with Scripture references and reasoning..."></textarea>
+      <div class="editor-footer">
+        <button class="btn btn-ghost">Cancel</button>
+        <button class="btn btn-primary">Post Response</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ SIDES VIEW ════ -->
+  <div class="tab-panel" id="panel-sides">
+    <div class="sides-grid">
+      <div class="side-column a">
+        <h3><span class="legend-dot" style="background:var(--side-a); width:10px; height:10px;"></span> Sola Scriptura</h3>
+        <div class="side-card">
+          <div class="side-card-header">
+            <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-a), #3a6a78); width:26px; height:26px; font-size:0.65rem;">PM</div>
+            <span class="side-card-author">PastorMike</span>
+            <span class="trust-tier oak" style="font-size:0.62rem;">Oak</span>
+          </div>
+          <div class="side-card-text">2 Timothy 3:16-17 teaches Scripture's sufficiency. The phrase "thoroughly equipped" implies nothing else is required for doctrine and practice.</div>
+          <div class="side-card-meta">
+            <span>&#9650; 24</span>
+            <span>4 replies</span>
+            <span>2 days ago</span>
+          </div>
+        </div>
+        <div class="side-card">
+          <div class="side-card-header">
+            <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-a), #3a6a78); width:26px; height:26px; font-size:0.65rem;">RJ</div>
+            <span class="side-card-author">ReformedJoy</span>
+            <span class="trust-tier seedling" style="font-size:0.62rem;">Seedling</span>
+          </div>
+          <div class="side-card-text">Jesus rebuked the Pharisees for placing tradition above Scripture (Mark 7:8-13). This pattern repeats when any tradition gains co-equal status.</div>
+          <div class="side-card-meta">
+            <span>&#9650; 15</span>
+            <span>2 replies</span>
+            <span>1 day ago</span>
+          </div>
+        </div>
+        <div class="side-card">
+          <div class="side-card-header">
+            <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-a), #3a6a78); width:26px; height:26px; font-size:0.65rem;">BW</div>
+            <span class="side-card-author">BereanWatcher</span>
+            <span class="trust-tier seedling" style="font-size:0.62rem;">Seedling</span>
+          </div>
+          <div class="side-card-text">The Bereans in Acts 17:11 examined everything against Scripture. This is the model for every generation of believers.</div>
+          <div class="side-card-meta">
+            <span>&#9650; 9</span>
+            <span>1 reply</span>
+            <span>18 hours ago</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-column b">
+        <h3><span class="legend-dot" style="background:var(--side-b); width:10px; height:10px;"></span> Scripture + Tradition</h3>
+        <div class="side-card">
+          <div class="side-card-header">
+            <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-b), #8a4a2d); width:26px; height:26px; font-size:0.65rem;">SC</div>
+            <span class="side-card-author">SisterCatherine</span>
+            <span class="trust-tier elder" style="font-size:0.62rem;">Elder</span>
+          </div>
+          <div class="side-card-text">2 Thessalonians 2:15 explicitly affirms both oral and written tradition. The Church predates the canon and guided its formation.</div>
+          <div class="side-card-meta">
+            <span>&#9650; 31</span>
+            <span>5 replies</span>
+            <span>2 days ago</span>
+          </div>
+        </div>
+        <div class="side-card">
+          <div class="side-card-header">
+            <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-b), #8a4a2d); width:26px; height:26px; font-size:0.65rem;">FA</div>
+            <span class="side-card-author">FrAnthony</span>
+            <span class="trust-tier oak" style="font-size:0.62rem;">Oak</span>
+          </div>
+          <div class="side-card-text">Without Sacred Tradition, who decides the canon? The 27 books of the NT were affirmed by Church councils -- a tradition-guided process.</div>
+          <div class="side-card-meta">
+            <span>&#9650; 22</span>
+            <span>3 replies</span>
+            <span>1 day ago</span>
+          </div>
+        </div>
+        <div class="side-card">
+          <div class="side-card-header">
+            <div class="comment-avatar" style="background: linear-gradient(135deg, var(--side-b), #8a4a2d); width:26px; height:26px; font-size:0.65rem;">OC</div>
+            <span class="side-card-author">OrthodoxChris</span>
+            <span class="trust-tier seedling" style="font-size:0.62rem;">Seedling</span>
+          </div>
+          <div class="side-card-text">The early Church Fathers unanimously understood Scripture within the context of apostolic tradition. Sola Scriptura is a 16th-century innovation.</div>
+          <div class="side-card-meta">
+            <span>&#9650; 17</span>
+            <span>2 replies</span>
+            <span>20 hours ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ BEST EXCHANGES ════ -->
+  <div class="tab-panel" id="panel-exchanges">
+    <div class="exchange-card">
+      <div class="exchange-header">
+        <span class="exchange-rank">#1 Top Exchange</span>
+        <span class="exchange-quality">Quality Score: 94</span>
+      </div>
+      <div class="exchange-pair">
+        <div class="exchange-side a">
+          <div class="exchange-side-label">Sola Scriptura</div>
+          <div class="exchange-side-author">PastorMike</div>
+          <div class="exchange-side-text">2 Timothy 3:16-17 explicitly states Scripture makes the believer "thoroughly equipped." If thoroughly equipped, what deficiency requires supplemental tradition as a binding authority?</div>
+        </div>
+        <div class="exchange-side b">
+          <div class="exchange-side-label">Scripture + Tradition</div>
+          <div class="exchange-side-author">SisterCatherine</div>
+          <div class="exchange-side-text">"Thoroughly equipped" does not exclude other means. A doctor is "thoroughly trained" by medical school, yet still relies on ongoing practice and mentorship. Similarly, Scripture equips within the context of the Church's teaching tradition.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exchange-card">
+      <div class="exchange-header">
+        <span class="exchange-rank">#2 Top Exchange</span>
+        <span class="exchange-quality">Quality Score: 87</span>
+      </div>
+      <div class="exchange-pair">
+        <div class="exchange-side a">
+          <div class="exchange-side-label">Sola Scriptura</div>
+          <div class="exchange-side-author">ReformedJoy</div>
+          <div class="exchange-side-text">Jesus Himself rebuked the Pharisees for elevating tradition over the Word of God (Mark 7:8-13). This is a direct warning against allowing any tradition to gain co-equal authority with Scripture.</div>
+        </div>
+        <div class="exchange-side b">
+          <div class="exchange-side-label">Scripture + Tradition</div>
+          <div class="exchange-side-author">FrAnthony</div>
+          <div class="exchange-side-text">Jesus rebuked human traditions that contradicted God's Word, not all tradition. He distinguished between the "traditions of men" and divinely guided apostolic teaching. The Catholic/Orthodox view specifically affirms tradition that is consonant with Scripture.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ VERDICT VIEW ════ -->
+  <div class="tab-panel" id="panel-verdict">
+    <div class="verdict-tally">
+      <div class="verdict-tally-header">
+        <h3>Community Verdict</h3>
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          Live Tally
+        </div>
+      </div>
+      <div class="tally-bar">
+        <div class="a">48%</div>
+        <div class="b">35%</div>
+        <div class="n">17%</div>
+      </div>
+      <div class="stance-bar-legend">
+        <span><span class="legend-dot" style="background:var(--side-a)"></span> Sola Scriptura &mdash; 48%</span>
+        <span><span class="legend-dot" style="background:var(--side-b)"></span> Scripture + Tradition &mdash; 35%</span>
+        <span><span class="legend-dot" style="background:var(--neutral)"></span> Undecided &mdash; 17%</span>
+      </div>
+    </div>
+
+    <div class="verdict-stats">
+      <div class="stat-card">
+        <div class="stat-value">127</div>
+        <div class="stat-label">Total Votes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">34</div>
+        <div class="stat-label">Arguments Posted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">8.4</div>
+        <div class="stat-label">Avg. Quality Score</div>
+      </div>
+    </div>
+
+    <div class="vote-form">
+      <h3>Cast Your Verdict</h3>
+      <div class="vote-options">
+        <button class="vote-option a" onclick="selectVote(this)">
+          <span class="vote-option-label">Side A</span>
+          <span class="vote-option-sub">Sola Scriptura</span>
+        </button>
+        <button class="vote-option b" onclick="selectVote(this)">
+          <span class="vote-option-label">Side B</span>
+          <span class="vote-option-sub">Scripture + Tradition</span>
+        </button>
+        <button class="vote-option n" onclick="selectVote(this)">
+          <span class="vote-option-label">Undecided</span>
+          <span class="vote-option-sub">Need more arguments</span>
+        </button>
+      </div>
+      <div class="vote-submit-row">
+        <button class="btn btn-primary">Submit Verdict</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Vote selection
+  function selectVote(el) {
+    document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Stance editor buttons
+  document.querySelectorAll('.editor-stance-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.editor-stance-btn').forEach(b => {
+        b.classList.remove('a-sel', 'b-sel');
+        b.style.borderColor = 'var(--border-card)';
+        b.style.color = 'var(--text-muted)';
+        b.style.background = 'transparent';
+      });
+      if (btn.textContent.includes('Side A')) {
+        btn.classList.add('a-sel');
+      } else if (btn.textContent.includes('Side B')) {
+        btn.classList.add('b-sel');
+      } else {
+        btn.style.borderColor = 'rgba(122,117,104,0.4)';
+        btn.style.color = '#9a9588';
+        btn.style.background = 'var(--neutral-bg)';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

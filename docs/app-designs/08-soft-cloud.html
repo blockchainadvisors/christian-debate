@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Debate - Soft Cloud Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f8f7ff;
+    --white: #ffffff;
+    --lavender: #c4b5fd;
+    --lavender-light: #ede9fe;
+    --lavender-faint: #f5f3ff;
+    --pink: #fda4af;
+    --pink-light: #ffe4e6;
+    --sky: #93c5fd;
+    --sky-light: #dbeafe;
+    --mint: #86efac;
+    --mint-light: #dcfce7;
+    --peach: #fed7aa;
+    --peach-light: #fff7ed;
+    --text: #3b3557;
+    --text-light: #6b6490;
+    --text-muted: #9590b0;
+    --side-a: #93c5fd;
+    --side-a-light: #dbeafe;
+    --side-a-bg: #eff6ff;
+    --side-b: #fda4af;
+    --side-b-light: #ffe4e6;
+    --side-b-bg: #fff1f2;
+    --neutral-badge: #e2e0ee;
+    --shadow: 0 8px 32px rgba(0,0,0,0.06);
+    --shadow-sm: 0 4px 16px rgba(0,0,0,0.04);
+    --radius: 16px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+  }
+
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  h1, h2, h3, h4, h5, h6 { font-family: 'Nunito', sans-serif; }
+
+  /* Floating blob decorations */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 400px; height: 400px; background: var(--lavender); top: -100px; right: -100px; }
+  .blob-2 { width: 300px; height: 300px; background: var(--pink); bottom: -50px; left: -80px; }
+  .blob-3 { width: 250px; height: 250px; background: var(--sky); bottom: 200px; right: -60px; }
+  .blob-4 { width: 200px; height: 200px; background: var(--mint); top: 400px; left: -50px; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--white) 0%, var(--lavender-faint) 100%);
+    border-bottom: 1px solid rgba(196,181,253,0.2);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--lavender), var(--sky));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 16px; font-weight: 800;
+  }
+  .nav { display: flex; align-items: center; gap: 8px; }
+  .nav-link {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  .nav-link:hover { background: var(--lavender-light); color: var(--text); transform: scale(1.02); }
+  .nav-link.active { background: var(--lavender-light); color: var(--text); }
+  .user-menu {
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    padding: 6px 14px 6px 6px;
+    border-radius: var(--radius-full);
+    transition: all 0.25s ease;
+    position: relative;
+  }
+  .user-menu:hover { background: var(--lavender-light); transform: scale(1.02); }
+  .user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--peach), var(--pink));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.85rem;
+  }
+  .user-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+  .user-caret { font-size: 0.7rem; color: var(--text-muted); }
+  .user-dropdown {
+    display: none;
+    position: absolute; top: 48px; right: 0;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(196,181,253,0.15);
+    min-width: 180px;
+    padding: 8px;
+    z-index: 200;
+  }
+  .user-dropdown.open { display: block; }
+  .user-dropdown a {
+    display: block; padding: 10px 16px;
+    font-size: 0.88rem; font-weight: 500;
+    color: var(--text-light); text-decoration: none;
+    border-radius: 10px; transition: background 0.2s;
+  }
+  .user-dropdown a:hover { background: var(--lavender-light); color: var(--text); }
+
+  /* Main */
+  .main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; position: relative; z-index: 1; }
+
+  /* Debate header card */
+  .debate-header {
+    background: linear-gradient(135deg, var(--white) 0%, var(--lavender-faint) 100%);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(196,181,253,0.12);
+  }
+  .debate-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .debate-sides {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .side-label {
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: 'Nunito', sans-serif;
+  }
+  .side-a-label { background: var(--side-a-light); color: #1e40af; }
+  .side-b-label { background: var(--side-b-light); color: #9f1239; }
+  .side-vs { font-weight: 700; color: var(--text-muted); font-size: 0.8rem; }
+  .debate-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .debate-meta-item { display: flex; align-items: center; gap: 5px; }
+  .meta-author { font-weight: 600; color: var(--text); }
+  .tag {
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    background: var(--lavender-light);
+    color: var(--text-light);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .status-badge {
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    background: var(--mint-light);
+    color: #166534;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* Stance bar */
+  .stance-bar-wrapper {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 20px 28px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(196,181,253,0.1);
+  }
+  .stance-bar-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    color: var(--text-light);
+  }
+  .stance-bar {
+    display: flex;
+    height: 36px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    background: var(--neutral-badge);
+  }
+  .stance-segment {
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.82rem;
+    transition: all 0.3s ease;
+  }
+  .stance-a { background: linear-gradient(90deg, var(--side-a-light), var(--side-a)); color: #1e40af; }
+  .stance-b { background: linear-gradient(90deg, var(--side-b), var(--side-b-light)); color: #9f1239; }
+  .stance-n { color: var(--text-muted); font-weight: 600; }
+  .stance-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  /* Tabs */
+  .tabs-wrapper {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    background: var(--white);
+    padding: 6px;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(196,181,253,0.1);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+  }
+  .tab-btn:hover { background: var(--lavender-faint); color: var(--text); transform: scale(1.02); }
+  .tab-btn.active { background: var(--lavender-light); color: var(--text); box-shadow: var(--shadow-sm); }
+
+  /* Tab panels */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: linear-gradient(160deg, var(--white) 0%, var(--lavender-faint) 100%);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(196,181,253,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover { transform: translateY(-1px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+
+  /* Stance declaration */
+  .stance-declaration {
+    background: linear-gradient(135deg, var(--lavender-faint), var(--peach-light));
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(196,181,253,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+  .stance-declaration-icon {
+    width: 36px; height: 36px;
+    background: var(--lavender);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1rem; flex-shrink: 0;
+  }
+
+  /* Comments */
+  .comment {
+    display: flex;
+    gap: 14px;
+    padding: 18px 0;
+  }
+  .comment + .comment { border-top: 1px solid rgba(196,181,253,0.1); }
+  .comment-depth {
+    display: flex;
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .depth-line {
+    width: 3px;
+    border-radius: 3px;
+    margin-right: 14px;
+    flex-shrink: 0;
+  }
+  .depth-1 { background: var(--lavender); }
+  .depth-2 { background: var(--sky); }
+  .depth-3 { background: var(--pink); }
+  .comment-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.82rem;
+    color: white; flex-shrink: 0;
+  }
+  .comment-body { flex: 1; min-width: 0; }
+  .comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .comment-author { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+  .stance-badge {
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .stance-badge-a { background: var(--side-a-light); color: #1e40af; }
+  .stance-badge-b { background: var(--side-b-light); color: #9f1239; }
+  .stance-badge-n { background: var(--neutral-badge); color: var(--text-muted); }
+  .trust-tier {
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: var(--mint-light);
+    color: #166534;
+  }
+  .trust-tier.silver { background: #f1f5f9; color: #475569; }
+  .trust-tier.gold { background: #fef9c3; color: #854d0e; }
+  .taxonomy-tag {
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: var(--peach-light);
+    color: #9a3412;
+  }
+  .comment-time { font-size: 0.78rem; color: var(--text-muted); }
+  .comment-text { font-size: 0.9rem; line-height: 1.65; color: var(--text); margin-bottom: 10px; }
+  .comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .vote-btn {
+    display: flex; align-items: center; gap: 4px;
+    padding: 5px 14px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: transparent;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .vote-btn:hover { transform: scale(1.05); }
+  .vote-btn.upvote:hover { background: var(--mint-light); color: #166534; }
+  .vote-btn.downvote:hover { background: var(--pink-light); color: #9f1239; }
+  .reply-btn {
+    padding: 5px 14px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: transparent;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .reply-btn:hover { background: var(--lavender-light); color: var(--text); transform: scale(1.05); }
+
+  /* Burden of proof notice */
+  .bop-notice {
+    background: linear-gradient(135deg, var(--peach-light), #fff7ed);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid rgba(254,215,170,0.4);
+  }
+  .bop-icon {
+    width: 28px; height: 28px;
+    background: var(--peach);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #9a3412; font-size: 0.85rem; font-weight: 800; flex-shrink: 0;
+  }
+  .bop-text { font-size: 0.84rem; color: #9a3412; font-weight: 600; line-height: 1.5; }
+
+  /* Comment editor */
+  .comment-editor {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 2px solid var(--lavender-light);
+    padding: 20px;
+    margin-top: 20px;
+    transition: border-color 0.2s;
+  }
+  .comment-editor:focus-within { border-color: var(--lavender); }
+  .editor-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .editor-toolbar {
+    display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap;
+  }
+  .toolbar-btn {
+    width: 34px; height: 34px;
+    border: none;
+    border-radius: 10px;
+    background: var(--lavender-faint);
+    color: var(--text-light);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .toolbar-btn:hover { background: var(--lavender-light); color: var(--text); transform: scale(1.05); }
+  .editor-textarea {
+    width: 100%;
+    min-height: 100px;
+    border: none;
+    outline: none;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    resize: vertical;
+    line-height: 1.6;
+    background: transparent;
+  }
+  .editor-textarea::placeholder { color: var(--text-muted); }
+  .editor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .stance-select {
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--lavender-light);
+    background: var(--white);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .stance-select:focus { border-color: var(--lavender); }
+  .submit-btn {
+    padding: 10px 28px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--lavender), var(--sky));
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(196,181,253,0.3);
+  }
+  .submit-btn:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(196,181,253,0.4); }
+
+  /* Sides view */
+  .sides-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .side-column h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    text-align: center;
+  }
+  .side-column.side-a h3 { background: var(--side-a-light); color: #1e40af; }
+  .side-column.side-b h3 { background: var(--side-b-light); color: #9f1239; }
+  .side-preview {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(196,181,253,0.1);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease;
+  }
+  .side-preview:hover { transform: scale(1.02); }
+  .side-preview-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  }
+  .side-preview-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; color: white;
+  }
+  .side-preview-author { font-weight: 700; font-size: 0.82rem; }
+  .side-preview-text { font-size: 0.84rem; color: var(--text-light); line-height: 1.55; }
+  .side-preview-votes {
+    display: flex; gap: 10px; margin-top: 10px;
+    font-size: 0.78rem; color: var(--text-muted); font-weight: 600;
+  }
+
+  /* Best exchanges */
+  .exchange-card {
+    background: linear-gradient(160deg, var(--white), var(--lavender-faint));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(196,181,253,0.1);
+    transition: transform 0.2s;
+  }
+  .exchange-card:hover { transform: translateY(-2px); }
+  .exchange-label {
+    padding: 8px 20px;
+    background: linear-gradient(90deg, var(--lavender-light), var(--pink-light));
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--text-light);
+  }
+  .exchange-pair { display: grid; grid-template-columns: 1fr 1fr; }
+  .exchange-side {
+    padding: 20px;
+  }
+  .exchange-side:first-child { border-right: 1px solid rgba(196,181,253,0.12); }
+  .exchange-side-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  }
+  .exchange-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700; color: white;
+  }
+  .exchange-author { font-weight: 700; font-size: 0.85rem; }
+  .exchange-text { font-size: 0.86rem; color: var(--text-light); line-height: 1.6; }
+  .exchange-votes {
+    margin-top: 12px;
+    font-size: 0.78rem; color: var(--text-muted); font-weight: 600;
+  }
+
+  /* Verdict view */
+  .verdict-section {
+    background: linear-gradient(160deg, var(--white), var(--lavender-faint));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(196,181,253,0.1);
+  }
+  .verdict-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .live-badge {
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(90deg, var(--mint-light), var(--mint));
+    color: #166534;
+    font-size: 0.72rem;
+    font-weight: 700;
+    animation: pulse-live 2s infinite;
+  }
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  .tally-bar {
+    display: flex;
+    height: 44px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 14px;
+    background: var(--neutral-badge);
+  }
+  .tally-segment {
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.88rem;
+  }
+  .tally-a { background: linear-gradient(90deg, var(--side-a-light), var(--side-a)); color: #1e40af; }
+  .tally-b { background: linear-gradient(90deg, var(--side-b), var(--side-b-light)); color: #9f1239; }
+  .tally-n { color: var(--text-muted); }
+  .tally-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.78rem; color: var(--text-muted); font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .verdict-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid rgba(196,181,253,0.1);
+  }
+  .stat-value {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--text);
+  }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+
+  /* Vote form */
+  .vote-form {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 2px solid var(--lavender-light);
+  }
+  .vote-form-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+  .vote-options { display: flex; gap: 10px; flex-wrap: wrap; }
+  .vote-option {
+    flex: 1; min-width: 120px;
+    padding: 12px 18px;
+    border: 2px solid var(--lavender-light);
+    border-radius: var(--radius-full);
+    background: var(--white);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--text-light);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.25s ease;
+  }
+  .vote-option:hover { transform: scale(1.03); }
+  .vote-option.opt-a:hover, .vote-option.opt-a.selected { background: var(--side-a-light); border-color: var(--side-a); color: #1e40af; }
+  .vote-option.opt-b:hover, .vote-option.opt-b.selected { background: var(--side-b-light); border-color: var(--side-b); color: #9f1239; }
+  .vote-option.opt-n:hover, .vote-option.opt-n.selected { background: var(--lavender-light); border-color: var(--lavender); color: var(--text); }
+  .vote-submit {
+    margin-top: 16px;
+    padding: 12px 32px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--lavender), var(--sky));
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(196,181,253,0.3);
+    width: 100%;
+  }
+  .vote-submit:hover { transform: scale(1.02); box-shadow: 0 6px 24px rgba(196,181,253,0.4); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header-inner { padding: 0 16px; }
+    .nav { display: none; }
+    .main { padding: 16px; }
+    .debate-header { padding: 20px; }
+    .debate-title { font-size: 1.25rem; }
+    .sides-grid { grid-template-columns: 1fr; }
+    .exchange-pair { grid-template-columns: 1fr; }
+    .exchange-side:first-child { border-right: none; border-bottom: 1px solid rgba(196,181,253,0.12); }
+    .tabs-wrapper { gap: 4px; }
+    .tab-btn { min-width: 70px; padding: 8px 12px; font-size: 0.8rem; }
+    .verdict-stats { grid-template-columns: 1fr 1fr; }
+    .vote-options { flex-direction: column; }
+    .comment { gap: 10px; }
+  }
+  @media (max-width: 480px) {
+    .debate-sides { flex-direction: column; align-items: flex-start; }
+    .stance-bar-wrapper { padding: 16px; }
+    .user-name { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">CD</div>
+      Christian Debate
+    </a>
+    <nav class="nav">
+      <a href="#" class="nav-link active">Debates</a>
+      <a href="#" class="nav-link">New Debate</a>
+    </nav>
+    <div class="user-menu" onclick="toggleDropdown()">
+      <div class="user-avatar">JD</div>
+      <span class="user-name">John D.</span>
+      <span class="user-caret">&#9662;</span>
+      <div class="user-dropdown" id="userDropdown">
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">My Debates</a>
+        <a href="#">Sign Out</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Debate Header -->
+  <div class="debate-header">
+    <h1 class="debate-title">Is Sola Scriptura a Valid Doctrine?</h1>
+    <div class="debate-sides">
+      <span class="side-label side-a-label">Side A: Sola Scriptura</span>
+      <span class="side-vs">vs</span>
+      <span class="side-label side-b-label">Side B: Scripture + Tradition</span>
+    </div>
+    <div class="debate-meta">
+      <span class="debate-meta-item">By <span class="meta-author">TheologianMark</span></span>
+      <span class="debate-meta-item">3 days ago</span>
+      <span class="tag">Theology</span>
+      <span class="tag">Reformation</span>
+      <span class="status-badge">Open</span>
+    </div>
+  </div>
+
+  <!-- Stance Bar -->
+  <div class="stance-bar-wrapper">
+    <div class="stance-bar-label">Community Stance Distribution</div>
+    <div class="stance-bar">
+      <div class="stance-segment stance-a" style="width:42%">42%</div>
+      <div class="stance-segment stance-n" style="width:20%">20%</div>
+      <div class="stance-segment stance-b" style="width:38%">38%</div>
+    </div>
+    <div class="stance-labels">
+      <span>Sola Scriptura</span>
+      <span>Neutral</span>
+      <span>Scripture + Tradition</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-wrapper">
+    <button class="tab-btn active" data-tab="thread" onclick="switchTab('thread')">Thread</button>
+    <button class="tab-btn" data-tab="sides" onclick="switchTab('sides')">Sides</button>
+    <button class="tab-btn" data-tab="exchanges" onclick="switchTab('exchanges')">Best Exchanges</button>
+    <button class="tab-btn" data-tab="verdict" onclick="switchTab('verdict')">Verdict</button>
+  </div>
+
+  <!-- THREAD VIEW -->
+  <div class="tab-panel active" id="panel-thread">
+
+    <div class="stance-declaration">
+      <div class="stance-declaration-icon">&#9998;</div>
+      <span>You are participating as <strong>Side A (Sola Scriptura)</strong>. You can change your stance at any time.</span>
+    </div>
+
+    <div class="card">
+      <!-- Comment 1 (root) -->
+      <div class="comment">
+        <div class="comment-avatar" style="background:linear-gradient(135deg,#93c5fd,#60a5fa)">TM</div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">TheologianMark</span>
+            <span class="stance-badge stance-badge-a">Side A</span>
+            <span class="trust-tier gold">Gold</span>
+            <span class="taxonomy-tag">Historical Argument</span>
+            <span class="comment-time">3 days ago</span>
+          </div>
+          <p class="comment-text">Scripture itself claims sufficiency for doctrine and practice. 2 Timothy 3:16-17 states that all Scripture is God-breathed and is useful for teaching, rebuking, correcting, and training in righteousness, so that the servant of God may be thoroughly equipped for every good work. The phrase "thoroughly equipped" suggests no additional source of authority is necessary.</p>
+          <div class="comment-actions">
+            <button class="vote-btn upvote" onclick="vote(this,1)">&#9650; 24</button>
+            <button class="vote-btn downvote" onclick="vote(this,-1)">&#9660; 3</button>
+            <button class="reply-btn">Reply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comment 2 (reply, depth 1) -->
+      <div class="comment">
+        <div class="comment-depth">
+          <div class="depth-line depth-1"></div>
+        </div>
+        <div class="comment-avatar" style="background:linear-gradient(135deg,#fda4af,#fb7185)">SR</div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">SisterRachel</span>
+            <span class="stance-badge stance-badge-b">Side B</span>
+            <span class="trust-tier silver">Silver</span>
+            <span class="taxonomy-tag">Scriptural Rebuttal</span>
+            <span class="comment-time">2 days ago</span>
+          </div>
+          <p class="comment-text">But 2 Timothy 3:16-17 doesn't say Scripture is the <em>only</em> authority -- it says it's useful. Paul also writes in 2 Thessalonians 2:15, "hold to the traditions which you were taught by us, either by word of mouth or by letter." This clearly acknowledges oral tradition as authoritative alongside written Scripture.</p>
+          <div class="comment-actions">
+            <button class="vote-btn upvote" onclick="vote(this,1)">&#9650; 31</button>
+            <button class="vote-btn downvote" onclick="vote(this,-1)">&#9660; 5</button>
+            <button class="reply-btn">Reply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comment 3 (reply, depth 2) -->
+      <div class="comment">
+        <div class="comment-depth">
+          <div class="depth-line depth-1"></div>
+          <div class="depth-line depth-2"></div>
+        </div>
+        <div class="comment-avatar" style="background:linear-gradient(135deg,#86efac,#4ade80)">PJ</div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">PastorJames</span>
+            <span class="stance-badge stance-badge-a">Side A</span>
+            <span class="trust-tier gold">Gold</span>
+            <span class="taxonomy-tag">Counter-Argument</span>
+            <span class="comment-time">1 day ago</span>
+          </div>
+          <p class="comment-text">The "traditions" Paul refers to in 2 Thessalonians 2:15 were the apostolic teachings that later <em>became</em> Scripture. There's no evidence of a separate, ongoing oral tradition that contradicts or supplements what was eventually written down. The canon was the fulfillment of those traditions.</p>
+          <div class="comment-actions">
+            <button class="vote-btn upvote" onclick="vote(this,1)">&#9650; 18</button>
+            <button class="vote-btn downvote" onclick="vote(this,-1)">&#9660; 7</button>
+            <button class="reply-btn">Reply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comment 4 (depth 1, neutral) -->
+      <div class="comment">
+        <div class="comment-depth">
+          <div class="depth-line depth-1"></div>
+        </div>
+        <div class="comment-avatar" style="background:linear-gradient(135deg,#c4b5fd,#a78bfa)">DL</div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <span class="comment-author">DeaconLuke</span>
+            <span class="stance-badge stance-badge-n">Neutral</span>
+            <span class="trust-tier">Bronze</span>
+            <span class="taxonomy-tag">Clarifying Question</span>
+            <span class="comment-time">12 hours ago</span>
+          </div>
+          <p class="comment-text">I find both arguments compelling. Could either side clarify how the early church fathers (pre-canon) determined doctrine? If they relied on oral tradition, does that invalidate Sola Scriptura, or was that a transitional period before the canon was finalized?</p>
+          <div class="comment-actions">
+            <button class="vote-btn upvote" onclick="vote(this,1)">&#9650; 12</button>
+            <button class="vote-btn downvote" onclick="vote(this,-1)">&#9660; 0</button>
+            <button class="reply-btn">Reply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Burden of proof notice -->
+      <div class="bop-notice">
+        <div class="bop-icon">!</div>
+        <div class="bop-text">
+          <strong>Burden of Proof Notice:</strong> Side A (Sola Scriptura) holds the affirmative position. Contributors on Side A are expected to provide scriptural evidence for sufficiency. Side B should provide evidence of authoritative tradition alongside Scripture.
+        </div>
+      </div>
+    </div>
+
+    <!-- Comment Editor -->
+    <div class="comment-editor">
+      <div class="editor-label">Add your response</div>
+      <div class="editor-toolbar">
+        <button class="toolbar-btn" title="Bold"><strong>B</strong></button>
+        <button class="toolbar-btn" title="Italic"><em>I</em></button>
+        <button class="toolbar-btn" title="Scripture Reference">S</button>
+        <button class="toolbar-btn" title="Quote">&#8220;</button>
+        <button class="toolbar-btn" title="Link">&#128279;</button>
+      </div>
+      <textarea class="editor-textarea" placeholder="Share your thoughts on this debate..."></textarea>
+      <div class="editor-footer">
+        <select class="stance-select">
+          <option>Select your stance...</option>
+          <option>Side A: Sola Scriptura</option>
+          <option>Side B: Scripture + Tradition</option>
+          <option>Neutral</option>
+        </select>
+        <button class="submit-btn">Post Comment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDES VIEW -->
+  <div class="tab-panel" id="panel-sides">
+    <div class="sides-grid">
+      <div class="side-column side-a">
+        <h3>Side A: Sola Scriptura</h3>
+
+        <div class="side-preview">
+          <div class="side-preview-header">
+            <div class="side-preview-avatar" style="background:linear-gradient(135deg,#93c5fd,#60a5fa)">TM</div>
+            <span class="side-preview-author">TheologianMark</span>
+            <span class="trust-tier gold">Gold</span>
+          </div>
+          <p class="side-preview-text">Scripture itself claims sufficiency for doctrine and practice. 2 Timothy 3:16-17 states that all Scripture is God-breathed and thoroughly equips the servant of God...</p>
+          <div class="side-preview-votes">
+            <span>&#9650; 24</span>
+            <span>&#9660; 3</span>
+          </div>
+        </div>
+
+        <div class="side-preview">
+          <div class="side-preview-header">
+            <div class="side-preview-avatar" style="background:linear-gradient(135deg,#86efac,#4ade80)">PJ</div>
+            <span class="side-preview-author">PastorJames</span>
+            <span class="trust-tier gold">Gold</span>
+          </div>
+          <p class="side-preview-text">The "traditions" Paul refers to were the apostolic teachings that later became Scripture. There's no evidence of a separate, ongoing oral tradition...</p>
+          <div class="side-preview-votes">
+            <span>&#9650; 18</span>
+            <span>&#9660; 7</span>
+          </div>
+        </div>
+
+        <div class="side-preview">
+          <div class="side-preview-header">
+            <div class="side-preview-avatar" style="background:linear-gradient(135deg,#93c5fd,#3b82f6)">BT</div>
+            <span class="side-preview-author">BereanTim</span>
+            <span class="trust-tier silver">Silver</span>
+          </div>
+          <p class="side-preview-text">Acts 17:11 praises the Bereans for examining the Scriptures daily to verify Paul's teaching. This demonstrates that Scripture was the ultimate standard even for apostolic claims.</p>
+          <div class="side-preview-votes">
+            <span>&#9650; 15</span>
+            <span>&#9660; 2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-column side-b">
+        <h3>Side B: Scripture + Tradition</h3>
+
+        <div class="side-preview">
+          <div class="side-preview-header">
+            <div class="side-preview-avatar" style="background:linear-gradient(135deg,#fda4af,#fb7185)">SR</div>
+            <span class="side-preview-author">SisterRachel</span>
+            <span class="trust-tier silver">Silver</span>
+          </div>
+          <p class="side-preview-text">Paul writes in 2 Thessalonians 2:15, "hold to the traditions which you were taught by us, either by word of mouth or by letter." This clearly acknowledges oral tradition...</p>
+          <div class="side-preview-votes">
+            <span>&#9650; 31</span>
+            <span>&#9660; 5</span>
+          </div>
+        </div>
+
+        <div class="side-preview">
+          <div class="side-preview-header">
+            <div class="side-preview-avatar" style="background:linear-gradient(135deg,#fda4af,#e11d48)">FA</div>
+            <span class="side-preview-author">FatherAntony</span>
+            <span class="trust-tier gold">Gold</span>
+          </div>
+          <p class="side-preview-text">The canon of Scripture itself was determined by church councils guided by tradition. Without the authority of the Church, we wouldn't know which books belong in the Bible...</p>
+          <div class="side-preview-votes">
+            <span>&#9650; 27</span>
+            <span>&#9660; 4</span>
+          </div>
+        </div>
+
+        <div class="side-preview">
+          <div class="side-preview-header">
+            <div class="side-preview-avatar" style="background:linear-gradient(135deg,#fed7aa,#f97316)">MC</div>
+            <span class="side-preview-author">MariaCath</span>
+            <span class="trust-tier">Bronze</span>
+          </div>
+          <p class="side-preview-text">John 21:25 says Jesus did many other things not written in Scripture. If not everything was recorded, then the oral tradition that preserved those teachings holds weight alongside the text.</p>
+          <div class="side-preview-votes">
+            <span>&#9650; 14</span>
+            <span>&#9660; 6</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEST EXCHANGES VIEW -->
+  <div class="tab-panel" id="panel-exchanges">
+
+    <div class="exchange-card">
+      <div class="exchange-label">Exchange #1 -- Sufficiency of Scripture</div>
+      <div class="exchange-pair">
+        <div class="exchange-side">
+          <div class="exchange-side-header">
+            <div class="exchange-avatar" style="background:linear-gradient(135deg,#93c5fd,#60a5fa)">TM</div>
+            <span class="exchange-author">TheologianMark</span>
+            <span class="stance-badge stance-badge-a">Side A</span>
+          </div>
+          <p class="exchange-text">2 Timothy 3:16-17 declares Scripture is sufficient so that the servant of God may be "thoroughly equipped for every good work." The word "thoroughly" (artios) means complete, leaving no gap that tradition must fill.</p>
+          <div class="exchange-votes">&#9650; 24 &middot; &#9660; 3 &middot; Rated: High Quality</div>
+        </div>
+        <div class="exchange-side">
+          <div class="exchange-side-header">
+            <div class="exchange-avatar" style="background:linear-gradient(135deg,#fda4af,#fb7185)">SR</div>
+            <span class="exchange-author">SisterRachel</span>
+            <span class="stance-badge stance-badge-b">Side B</span>
+          </div>
+          <p class="exchange-text">"Useful" (ophelimos) is not the same as "exclusive." Paul also commands holding to oral traditions in 2 Thessalonians 2:15. If Scripture were the sole authority, why would Paul command adherence to unwritten teaching?</p>
+          <div class="exchange-votes">&#9650; 31 &middot; &#9660; 5 &middot; Rated: High Quality</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exchange-card">
+      <div class="exchange-label">Exchange #2 -- The Canon Question</div>
+      <div class="exchange-pair">
+        <div class="exchange-side">
+          <div class="exchange-side-header">
+            <div class="exchange-avatar" style="background:linear-gradient(135deg,#86efac,#4ade80)">PJ</div>
+            <span class="exchange-author">PastorJames</span>
+            <span class="stance-badge stance-badge-a">Side A</span>
+          </div>
+          <p class="exchange-text">The church councils did not create the canon; they recognized what was already authoritative. The books were self-authenticating through apostolic authorship and doctrinal consistency. The councils merely formalized the consensus.</p>
+          <div class="exchange-votes">&#9650; 18 &middot; &#9660; 7 &middot; Rated: Strong Argument</div>
+        </div>
+        <div class="exchange-side">
+          <div class="exchange-side-header">
+            <div class="exchange-avatar" style="background:linear-gradient(135deg,#fda4af,#e11d48)">FA</div>
+            <span class="exchange-author">FatherAntony</span>
+            <span class="stance-badge stance-badge-b">Side B</span>
+          </div>
+          <p class="exchange-text">If the books were "self-authenticating," why did it take centuries of debate to settle the canon? The Shepherd of Hermas and the Didache were widely read as Scripture. It was the Church's tradition and authority that resolved these disputes.</p>
+          <div class="exchange-votes">&#9650; 27 &middot; &#9660; 4 &middot; Rated: Strong Argument</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT VIEW -->
+  <div class="tab-panel" id="panel-verdict">
+
+    <div class="verdict-section">
+      <div class="verdict-title">
+        Community Verdict
+        <span class="live-badge">LIVE</span>
+      </div>
+
+      <div class="tally-bar">
+        <div class="tally-segment tally-a" style="width:44%">44%</div>
+        <div class="tally-segment tally-n" style="width:18%">18%</div>
+        <div class="tally-segment tally-b" style="width:38%">38%</div>
+      </div>
+      <div class="tally-labels">
+        <span>Sola Scriptura</span>
+        <span>Undecided</span>
+        <span>Scripture + Tradition</span>
+      </div>
+
+      <div class="verdict-stats">
+        <div class="stat-card">
+          <div class="stat-value">156</div>
+          <div class="stat-label">Total Votes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">42</div>
+          <div class="stat-label">Comments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">18</div>
+          <div class="stat-label">Participants</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">8.4</div>
+          <div class="stat-label">Avg. Quality</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict-section">
+      <div class="vote-form">
+        <div class="vote-form-title">Cast Your Verdict</div>
+        <div class="vote-options">
+          <button class="vote-option opt-a" onclick="selectVerdict(this)">Side A Wins</button>
+          <button class="vote-option opt-b" onclick="selectVerdict(this)">Side B Wins</button>
+          <button class="vote-option opt-n" onclick="selectVerdict(this)">Undecided</button>
+        </div>
+        <button class="vote-submit">Submit Verdict</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Tab switching
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+    document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+    document.getElementById(`panel-${tabId}`).classList.add('active');
+  }
+
+  // User dropdown
+  function toggleDropdown() {
+    document.getElementById('userDropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.user-menu')) {
+      document.getElementById('userDropdown').classList.remove('open');
+    }
+  });
+
+  // Vote buttons
+  function vote(btn, dir) {
+    const text = btn.textContent.trim();
+    const match = text.match(/(\d+)/);
+    if (match) {
+      const current = parseInt(match[1]);
+      if (btn.classList.contains('voted')) {
+        btn.classList.remove('voted');
+        btn.innerHTML = (dir > 0 ? '&#9650; ' : '&#9660; ') + current;
+        btn.style.fontWeight = '600';
+      } else {
+        btn.classList.add('voted');
+        btn.innerHTML = (dir > 0 ? '&#9650; ' : '&#9660; ') + (current + 1);
+        btn.style.fontWeight = '800';
+        if (dir > 0) { btn.style.color = '#166534'; btn.style.background = '#dcfce7'; }
+        else { btn.style.color = '#9f1239'; btn.style.background = '#ffe4e6'; }
+      }
+    }
+  }
+
+  // Verdict vote
+  function selectVerdict(btn) {
+    document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+</script>
+</body>
+</html>

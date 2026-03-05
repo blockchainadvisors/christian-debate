@@ -1,0 +1,12 @@
+node_modules/
+.next/
+dist/
+.env.local
+.env*.local
+*.pdf
+.turbo/
+
+# Test artifacts
+e2e/screenshots/
+e2e/test-results/
+playwright-report/

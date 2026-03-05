@@ -1,0 +1,20 @@
+{
+  "name": "christian-debate",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "db:generate": "turbo run db:generate --filter=@christian-debate/site",
+    "db:migrate": "turbo run db:migrate --filter=@christian-debate/site",
+    "db:seed": "turbo run db:seed --filter=@christian-debate/site"
+  },
+  "devDependencies": {
+    "turbo": "^2",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.30.3",
+  "engines": {
+    "node": ">=20"
+  }
+}

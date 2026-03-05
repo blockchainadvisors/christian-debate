@@ -1,0 +1,1504 @@
+## Human
+
+I need to make a discussion/debate website that can switch between different "views" on the debated topic. One view would separate all comments based on which side they are in support of on the topic of debate, with most upvoted comments towards the top.
+Of course the default view would be the usual discussion and replies being in usual order.
+You can propose other views as well.
+
+The idea is that site visitors should be able to see the most interesting and powerful arguments for either side of debate and then be able to click to view them in context and sequence/order of discussion. But this way they don't have to "dig" for the best things said.
+
+My question is, is there already a system that I can build upon to do this, whether a wordpress plugin, or some other open source discussion platform that I can modify, or should we create something from scratch?
+
+My problem with stackoverflow and similar sites and even reddit is that you have to dig to find worthwhile comments, and then reddit is annoying that sometimes on deep threads you lose the context of the surrounding discussion since it forces a new page to open that shows only the last reply etc. I'd like to be able to view the overall picture visible as much as possible when viewing the original sequenced/ordered replies, so people can take screenshots that show the relevant context of the surrounding comments etc.
+
+Users should also have a tally of how many times their comments/replies are upvoted or downvoted, as well I think there should be reasons available such as if downvoted due to unrelated/spam/etc, or downvoted for being "weak response/comment" or "untrue" etc. Likewise for upvotes, to have better metrics like that for the reason for the upvotes.
+
+Users should be able to list in order the "top comments" ie top upvoted comments, in a mixed view, showing them mixed from both sides of topic/debate, or to filter and show top comments of only those one one side of topic/debate or those on the other side. So because of this there should be option where user can specify which side of the debate they are on.
+
+Because of this one of the downvotes can be that comment is made in favor of one side of topic but user had claimed he was on the other side of topic. Or downvote for "dishonest", such that user claimed he was neutral but in reality his comments demonstrate he's very much on one side and was hiding that fact.
+
+Now that you know the gist of what I'm trying to accomplish you can recommend other features and metrics that might be helpful so that my discussion and "debate" platform will be very powerful and provide meaningful metrics and analytics because when we then have surveys given to the users, we can correlate and see/say that for example users who were on this side of this debate, answered this in their survey/vote on who they'd vote for in what political party. The system can use way users sit on a controversial or debated topic to put future surveys into certain "context" that can provide valuable insights and "correlations".
+
+So make suggestions that might be useful towards that, and toward making a very easily navigable site that can quickly show visitors the best comments and the best "back and forth" between whatever users in their debate on a topic. And crucially these topics should have tallies votes of who users think is winning the debate, and this should be given along with the statistics showing how many of the votes are from people claiming to be on one side or the other side and how many claim to be neutral, since of course the most interesting is those who claim to be neutral on topic, to see which side "they" think is winning the debate at a certain point, and so that they can flag and pin comments that they attribute to that winning.
+
+Anyway, you know the overall intent, make specific details suggestions how to improve anything and if this should be a ground up project or a modification of an existing open source project, and if so give suggestions as to what existing platform to build upon.
+
+When I asked this of another Ai, when I asked Google's Gemini Ai, it recommended:
+"
+
+So please analyze my question, and also Gemini Ai's recommendations and evaluate everything and give your own best suggestions and recommendations and improvements for this discussion and debate platform project.
+
+
+Gemini said
+This is a highly ambitious project that tackles the exact structural flaws inherent in platforms like Reddit or Stack Overflow. The primary issue with current threaded discussions is the loss of evidentiary context—once you drill down into a sub-thread, you lose sight of the overarching argument, making it difficult to assess the full picture.
+
+I. The Verdict: Modify vs. Build from Scratch
+You should build this from scratch using a modern framework (like React or Vue for the frontend, paired with a robust relational database backend like PostgreSQL).
+
+Attempting to heavily modify existing open-source platforms (like WordPress plugins, Discourse, or Reddit-clones like Lemmy) presents a massive technical liability. These platforms are structurally hardcoded for linear or simply-nested chronological trees. Your requirement for a multi-dimensional database—where a single comment is tied to a parent thread, a user's declared stance, a categorized "reason" for a vote, and future survey correlations—fundamentally breaks the standard schemas of existing forum software.
+
+While dedicated debate platforms like Kialo exist, they are closed-source. Building from the ground up is the only way to ensure you own the analytics pipeline without constantly fighting another platform's technical debt.
+
+II. Recommended Architecture & UI (Solving the Context Problem)
+To solve the "digging" and "lost context" issues, the interface requires a structural departure from standard forums.
+
+The Split-Pane Interface: Implement a dual-pane UI for desktop (and a seamless swipe-over drawer for mobile).
+
+The Discovery Pane (Left): This acts as the "Executive Summary." Users can filter this pane to show Top Pro, Top Con, or Mixed arguments sorted by upvotes.
+
+The Context Pane (Right): When a user clicks a powerful argument on the left, the right pane instantly loads the full, chronologically ordered thread, automatically scrolling to and highlighting that specific comment. This allows users to discover the best arguments while immediately verifying the surrounding evidentiary context without opening new tabs or losing their place.
+
+Persistent Stance Badges: A user's declared stance (Pro, Con, Neutral) must be visually anchored to their avatar on every comment within that specific debate, ensuring total transparency regarding their bias.
+
+III. The "Reasoned Voting" System & Risk Mitigation
+Standard up/downvotes provide terrible analytics because they conflate "I disagree" with "This is factually incorrect." Your proposal for reason-based voting is the strongest asset of this platform.
+
+Categorized Upvotes: Persuasive, Factual/Sourced, Strong Counter-Point.
+
+Categorized Downvotes: Off-topic, Ad Hominem, Factually Untrue, Bad Faith/Dishonest Stance.
+
+Risk Assessment on "Dishonest Stance": You rightly identified that users might claim "Neutral" to appear objective while exclusively arguing one side. Allowing a downvote for "Dishonest Stance" is smart, but it carries a high risk of being weaponized by opposing factions to silence critics.
+
+Mitigation: Do not let a high volume of "Dishonest" downvotes automatically bury a comment. Instead, treat these flags as an "objection." If a user accumulates enough of these flags relative to their total engagement, their stance badge could be flagged as "Disputed," or the system could prompt an automated community review to reclassify their stance.
+
+IV. Strategic Analytics & Metrics (The Correlation Engine)
+Since the ultimate goal is correlating debate behavior with future survey data, the platform must track shifts in sentiment and objective influence, not just static opinions.
+
+The "Delta" Metric (Stance Shifting): Allow users who declared a stance to formally change it (e.g., from "Pro" to "Con" or "Neutral"). Track which specific comment prompted that change. Users who successfully change minds gain a high "Persuasiveness" rating, which is a highly valuable metric for your analytics.
+
+The Neutrality Index: As you noted, the "Neutral" cohort is the ultimate jury. Create a distinct, highly visible metric at the top of the debate titled: "The Verdict." Display a live tally showing strictly how the Neutral users are voting on the Pro vs. Con arguments. This filters out the inherent bias of the Pro/Con echo chambers and shows who is actually winning the room.
+
+Confidence Scoring: When generating correlations for surveys, weigh the data. A user who engaged in 50 comments and received high "Factual" upvotes provides much higher-fidelity correlation data than a user who dropped one comment and left.
+
+
+# LLM
+This is a rich concept. Let me work through your requirements and Gemini's response systematically.
+
+## On Build vs. Modify
+
+Gemini is right that you should build from scratch, but I'd refine the reasoning. The core issue isn't that existing platforms have the wrong database schema (schemas can be extended), it's that their **rendering and query layers** are deeply coupled to a single view model. Discourse, Lemmy, Reddit clones — they all assume one canonical ordering of comments. Your platform's entire premise is that the *same data* gets re-projected through multiple lenses. That's not a tweak to an existing system; it's a fundamentally different read path.
+
+That said, you don't need to build *everything* from scratch. You can lean on existing primitives: use a proven auth library, a rich-text editor like TipTap or Lexical, and a well-supported framework. What you're building custom is the **data model, the view engine, and the analytics pipeline** — not login forms.
+
+**Stack recommendation:** React (or Next.js for SSR and SEO, which matters for a public debate site), PostgreSQL with good indexing for the multi-dimensional queries you'll need, and something like Redis for caching the computed rankings so your "top comments" views don't hammer the database on every page load.
+
+## The View System — Your Core Innovation
+
+This is where I'd push beyond what Gemini proposed. Gemini described a split-pane layout, which is a fine UI pattern, but it's really just one view with a detail panel. You described something more ambitious: genuinely distinct **modes of seeing the same conversation**. Here's how I'd structure it.
+
+**View 1 — Thread View (Default).** The chronological discussion as it happened, standard nested replies. But with one critical difference from Reddit: when a thread runs deep, instead of paginating to a new page, use a **compressed ancestor trail** — a slim, always-visible stack at the top showing the chain of parent comments (truncated to first line each) so context is never lost. Users can click any ancestor to expand it in place. This directly solves your screenshot/context problem.
+
+**View 2 — Sides View.** Two columns (or tabs on mobile): Pro and Con. Each column shows top-rated comments for that stance, sorted by vote score. Clicking any comment opens it *in-context* — meaning you see the thread around it, with the selected comment highlighted. This is close to Gemini's split-pane idea but cleaner: the sides view is a discovery surface, and context-viewing is a drill-down action, not a permanent second pane eating screen space.
+
+**View 3 — Best Exchanges.** This is one Gemini didn't mention and I think it's your most compelling differentiator. Automatically surface the highest-rated **back-and-forth sequences** — a Pro comment followed by a Con reply (or vice versa) where both received high engagement. Display these as paired cards. This directly serves your goal of showing visitors the best arguments *in dialogue*, not in isolation. Algorithmically, you'd score a pair by the sum of both comments' upvotes, weighted toward pairs where both sides got strong ratings rather than one-sided blowouts.
+
+**View 4 — Neutral Verdict.** Show only how self-declared Neutral users are voting and what they're highlighting. This is what Gemini called "The Verdict" metric, but I'd make it a full view — Neutrals' top-rated comments, Neutrals' flagged/pinned highlights, and the live tally of which side Neutrals think is winning. This becomes your platform's most credible signal.
+
+**View 5 — My Feed / Personalized.** Show the user comments that replied to them, comments from users whose stance shifted (the "delta" events Gemini mentioned), and new high-scoring content in debates they follow.
+
+## On the Reasoned Voting System
+
+Gemini's categorization is solid. I'd make a few adjustments.
+
+For upvote reasons, I'd use: **Well-Reasoned**, **Well-Sourced**, **Changed My Mind** (this is the most valuable signal in your entire system — make it prominent), and **Entertaining/Well-Written** (this captures the "interesting to read" dimension separately from logical strength).
+
+For downvote reasons: **Off-Topic**, **Uncivil/Ad Hominem**, **Misleading/Unsourced**, and **Misrepresented Stance** (your "dishonest" category, but with softer language that's less likely to be weaponized).
+
+On Gemini's concern about the "Dishonest Stance" downvote being weaponized — their mitigation (flagging as "Disputed") is decent but I'd go further. Rather than relying on other users to police stance honesty, **let the system surface the evidence automatically**. If someone declares Neutral but 95% of their comments and votes align with one side, show a small indicator like "Leans Pro based on activity" next to their badge. Make it algorithmic and transparent rather than a social punishment mechanism. This removes the adversarial dynamic entirely.
+
+## On Analytics and the Correlation Engine
+
+Gemini's suggestions here (Delta metric, Confidence Scoring) are good. I'd add a few things specifically for your survey-correlation goal.
+
+**Engagement Fingerprinting.** For each user, build a profile vector: which topics they engaged with, which stances they took, how their voting patterns cluster, how often they change their mind, and their ratio of emotional vs. factual upvotes received. When you later run surveys, this fingerprint becomes your independent variable. You're not just correlating "Pro on topic X = votes for party Y" — you're correlating *patterns of reasoning and engagement style* with survey responses, which is far more interesting research.
+
+**Argument Taxonomy Tags.** Let the community (or moderators, or an LLM layer) tag arguments by *type*: economic, moral/ethical, empirical, anecdotal, procedural, etc. This lets you correlate at a deeper level — for instance, "users who primarily respond to economic arguments in debates tend to prioritize X in surveys."
+
+**Cohort Snapshots.** Periodically snapshot the state of each debate (who's winning according to Neutrals, what the top arguments are, how stances have shifted). This gives you time-series data so you can study how opinion formation develops, not just where it lands.
+
+## Where I Disagree with Gemini
+
+A few points of friction.
+
+The **persistent split-pane** UI Gemini recommended is, in my opinion, a mistake for your use case. Split panes work for reference apps (documentation, email) but for a debate platform where comments can be long and context-rich, you want maximum reading width. Use full-width views with drill-down navigation instead of cramming two panes side by side.
+
+Gemini didn't address **mobile** meaningfully (just "swipe-over drawer"). Given that the majority of web traffic is mobile, your view-switching system needs to be a first-class mobile experience. I'd use a tab bar or swipeable tabs for view switching, with smooth transitions. Design mobile-first, then expand for desktop.
+
+Gemini also didn't discuss **moderation**, which will make or break a debate platform. You need robust moderation tooling from day one: mod queue, automated spam detection, and critically, clear rules about what constitutes a legitimate argument versus trolling. Debate platforms attract adversarial users disproportionately.
+
+## Implementation Phasing
+
+Don't try to build all of this at once. I'd phase it as:
+
+**Phase 1** — Thread View with the compressed ancestor trail, basic Pro/Con stance declaration, simple upvote/downvote (no reasons yet), and the Sides View. This gives you a functional debate platform that already solves the "digging" problem.
+
+**Phase 2** — Reasoned voting categories, the Best Exchanges view, Neutral Verdict view, and stance-shift tracking. This is where the platform becomes analytically interesting.
+
+**Phase 3** — The survey/correlation engine, engagement fingerprinting, argument taxonomy, and the full analytics dashboard. This is where the research value emerges.
+
+Each phase is independently useful, which means you can launch early, gather real user behavior data, and refine the later phases based on what you learn.
+
+Want me to start building a working prototype of the core interface — say, the Thread View with stance badges and the Sides View with clickable context?
+
+## Human
+
+I asked someone to review your analysis and I am please to see there is consensus your feedback and suggestions are good, the reviewer said of your analsysis:
+"
+Therefore, review, re-read and begin drafting a spec, perhaps a spec that can be used with Claude Code CLI in order to create this debate and discussion platform.
+
+Decide whether this should be done in a cross-platform framework like flutter or other, or if it should be web only for now, and decide if it should use svelte and or golang or Next.js or if other typescript/javascript, and build the SPEC so that we can begin coding work on this project.
+
+This is an exceptionally strong critique from the other expert. Their architectural recommendations and UI pivots effectively address the practical realities of building a platform designed to adjudicate complex arguments.
+
+Their feedback correctly identifies that user-generated debate naturally invites bad-faith participation, and platform mechanics must be designed to mitigate that risk systematically rather than relying on the community to police itself.
+
+Here is an analysis of their feedback, alongside structural expansions to elevate this platform into a rigorous engine for tracking public sentiment and argumentative merit.
+
+I. The UI Architecture & View System
+The expert is entirely correct to overrule the split-pane approach in favor of a mobile-first, full-width design with a "compressed ancestor trail." In heavily contested debates, arguments require screen real estate.
+
+The Ancestor Trail (Chain of Custody): This is a brilliant solution to the "lost context" problem. By keeping a sticky, collapsible "breadcrumb" trail of parent comments at the top of the screen, you maintain a clear chain of custody for the conversation. Users can screenshot an isolated argument while the interface inherently proves what that argument was responding to.
+
+The "Best Exchanges" View (Cross-Examination): The expert's suggestion to pair high-scoring Pro and Con interactions is the most commercially viable feature of this project. However, to execute this, the algorithm cannot simply look for two highly upvoted comments. It must look for high retention. If a Pro argument gets 1,000 upvotes, and the Con rebuttal gets 800 upvotes from people who read the Pro argument first, that is a material exchange. You are highlighting the strongest cross-examinations on the platform.
+
+II. Evidentiary Standards: The Voting System
+The expert correctly identified the massive liability in allowing users to downvote someone for a "Dishonest Stance." Allowing users to punish each other for perceived dishonesty invites mob rule and weaponized flagging.
+
+The Objective Record (Algorithmic Stance): The expert's pivot to an algorithmic "Leans Pro" indicator is the right procedural move. If a user declares "Neutral" but their voting and commenting history is 95% aligned with the "Pro" side, the system simply presents this discrepancy as a matter of objective record next to their username. The data speaks for itself, removing the adversarial sting of a user-driven "Dishonest" downvote.
+
+Refining the "Misleading/Unsourced" Downvote: When a user flags a comment as "Unsourced," it shouldn't just lower the score. It should trigger a "Burden of Proof" mechanic. If a comment receives a critical mass of "Unsourced" flags, the system should automatically pin a request for a citation to the bottom of the comment. If the author provides a link that gets upvoted as "Well-Sourced," the penalty is reversed.
+
+III. Moderation & Risk Management
+The expert accurately pointed out the omission of moderation. Debate platforms are magnets for adversarial behavior, defamation, and targeted harassment. You need procedural safeguards from day one to protect the integrity of your data.
+
+Quarantine Mechanics: Instead of outright deleting borderline comments (which sparks outrage and claims of censorship), implement a "Shadow Docket" or quarantine. Comments that trigger high automated flags for incivility or ad hominem attacks are collapsed by default with a warning label. Users must affirmatively click to read them. This preserves the record while protecting the reading experience.
+
+Stakes-Based Engagement: To prevent botting and bad-faith spam from muddying your analytics, institute a minimum engagement threshold before a user's votes count toward the "Verdict" or "Best Exchanges" algorithms. A user must demonstrate a history of good-faith participation before their votes carry material weight in your correlation engine.
+
+IV. Expanding the Analytics & Correlation Engine
+The expert's "Engagement Fingerprinting" is exactly how you monetize or extract research value from this platform. To make those fingerprints even more precise, you must categorize the nature of the arguments.
+
+Argument Taxonomy (The "Theory of the Case"): When users submit a top-level argument, prompt them to tag its primary angle: Empirical/Data-Driven, Moral/Ethical, Economic, or Procedural. When you correlate this with survey data later, you aren't just saying "Pro-tax users vote for Candidate Y." You can prove that "Users who are swayed by Economic arguments in the tax debate overwhelmingly vote for Candidate Y, whereas those swayed by Moral arguments vote for Candidate Z."
+
+The "Concession" Metric: The expert highlighted "Changed My Mind" as the most valuable signal. Build on this. If a user explicitly awards a "Changed My Mind" point to an opponent, that opponent's "Persuasion Rating" should skyrocket. This incentivizes users to craft compelling, evidence-based arguments rather than just preaching to their own choir.
+
+## LLM
+
+I'll draft a comprehensive spec document. Let me start by reading the relevant skill files, then build this out.I'll create this as a detailed markdown spec optimized for use with Claude Code CLI. Let me think through the technology decisions first, then build the full document.
+
+**Key technology decisions and rationale:**
+
+- **Web-first, not Flutter.** This is a content-heavy platform where SEO matters enormously (you want debate content indexed and discoverable). Flutter web has poor SEO, larger bundle sizes, and accessibility gaps. Native mobile apps can come in a later phase; a responsive PWA covers mobile adequately for launch.
+- **Next.js (App Router) + TypeScript.** SSR for SEO, React ecosystem for rich-text editing and complex UI, built-in API routes, and TypeScript gives type safety across the complex data model.
+- **PostgreSQL + Redis.** Postgres handles the relational complexity (comment trees, stance relationships, vote reason breakdowns). Redis caches the computed rankings so the various "views" don't crush the database.
+
+Here's the full spec:
+
+---
+
+# Agora — Debate & Discussion Platform
+
+## Technical Specification v1.0
+
+---
+
+### 1. Project Overview
+
+**Agora** is a structured debate platform that solves the core problem of existing discussion systems: users must dig through noise to find the strongest arguments, and deep threads lose conversational context. Agora provides multiple "views" of the same discussion data, surfacing the most compelling arguments and exchanges while preserving full contextual traceability.
+
+The platform also serves as an analytics engine, building rich engagement profiles that can later be correlated with survey data to extract insights about how argumentative patterns relate to broader beliefs and behaviors.
+
+---
+
+### 2. Technology Stack
+
+| Layer | Technology | Rationale |
+|---|---|---|
+| Framework | Next.js 14+ (App Router) | SSR/SSG for SEO, React ecosystem, API routes |
+| Language | TypeScript (strict mode) | Type safety across complex data model |
+| Database | PostgreSQL 16+ | Relational integrity for comment trees, stances, vote reasons |
+| ORM | Drizzle ORM | Lightweight, type-safe, good migration tooling |
+| Cache | Redis 7+ | Computed rankings, verdict tallies, session data |
+| Auth | Auth.js (NextAuth v5) | OAuth providers + credentials, session management |
+| Rich Text | TipTap (ProseMirror) | Extensible editor, citation/source embedding |
+| Styling | Tailwind CSS + shadcn/ui | Utility-first, accessible component primitives |
+| Search | Meilisearch | Full-text search across debates and comments |
+| Real-time | Server-Sent Events (SSE) | Live vote tallies, verdict updates |
+| Deployment | Docker Compose → VPS or Vercel + managed Postgres | Self-hostable, scalable |
+| Testing | Vitest + Playwright | Unit and E2E |
+
+---
+
+### 3. Data Model
+
+#### 3.1 Core Entities
+
+```
+User
+├── id: uuid (PK)
+├── username: string (unique)
+├── displayName: string
+├── email: string (unique)
+├── avatarUrl: string?
+├── createdAt: timestamp
+├── reputationScore: computed
+├── persuasionRating: computed
+├── engagementFingerprint: jsonb (computed async)
+└── trustTier: enum [new, established, trusted, moderator, admin]
+
+Debate
+├── id: uuid (PK)
+├── title: string
+├── slug: string (unique)
+├── description: text (rich text)
+├── createdBy: uuid → User
+├── sideALabel: string (e.g., "Pro", "For Legalization")
+├── sideBLabel: string (e.g., "Con", "Against Legalization")
+├── status: enum [open, locked, archived]
+├── createdAt: timestamp
+├── updatedAt: timestamp
+└── tags: string[]
+
+DebateStance
+├── id: uuid (PK)
+├── debateId: uuid → Debate
+├── userId: uuid → User
+├── declaredStance: enum [side_a, side_b, neutral]
+├── algorithmicLean: enum [side_a, side_b, neutral, mixed] (computed)
+├── leanConfidence: float (0-1, computed)
+├── declaredAt: timestamp
+├── changedAt: timestamp?
+├── previousStance: enum? (tracks shifts)
+└── UNIQUE(debateId, userId)
+
+Comment
+├── id: uuid (PK)
+├── debateId: uuid → Debate
+├── authorId: uuid → User
+├── parentId: uuid? → Comment (null = top-level)
+├── rootId: uuid → Comment (top-level ancestor, for thread grouping)
+├── depth: int (0 = top-level)
+├── content: text (rich text / markdown)
+├── stanceSide: enum [side_a, side_b, neutral, meta]
+│   (meta = procedural comments about the debate itself)
+├── createdAt: timestamp
+├── editedAt: timestamp?
+├── isQuarantined: boolean (default false)
+├── quarantineReason: string?
+├── score: computed (aggregate of vote reasons)
+├── ancestorPath: uuid[] (materialized path for fast ancestor lookups)
+└── status: enum [active, edited, deleted_by_author, removed_by_mod]
+
+Vote
+├── id: uuid (PK)
+├── commentId: uuid → Comment
+├── userId: uuid → User
+├── direction: enum [up, down]
+├── reason: enum [see 3.2 below]
+├── createdAt: timestamp
+├── weight: float (computed from user trustTier)
+└── UNIQUE(commentId, userId)
+│   (one vote per user per comment; re-voting replaces previous)
+
+StanceShift (the "Delta" events)
+├── id: uuid (PK)
+├── debateId: uuid → Debate
+├── userId: uuid → User
+├── fromStance: enum
+├── toStance: enum
+├── triggeredByCommentId: uuid? → Comment
+├── shiftedAt: timestamp
+└── note: text? (optional user explanation)
+
+VerdictVote
+├── id: uuid (PK)
+├── debateId: uuid → Debate
+├── oderId: uuid → User
+├── winningSide: enum [side_a, side_b, draw]
+├── voterStance: enum (snapshot of their stance at vote time)
+├── pinnedCommentId: uuid? → Comment (the comment they attribute to winning)
+├── createdAt: timestamp
+└── UNIQUE(debateId, oderId)
+
+ArgumentTag
+├── id: uuid (PK)
+├── commentId: uuid → Comment
+├── taxonomy: enum [empirical, moral_ethical, economic,
+│   procedural, anecdotal, legal, historical]
+├── taggedBy: uuid → User
+└── createdAt: timestamp
+
+BurdenOfProofRequest
+├── id: uuid (PK)
+├── commentId: uuid → Comment
+├── flagCount: int
+├── status: enum [pending, citation_provided, upheld, dismissed]
+├── citationUrl: string?
+├── citationUpvotes: int (default 0)
+├── resolvedAt: timestamp?
+└── createdAt: timestamp
+```
+
+#### 3.2 Vote Reason Enums
+
+**Upvote Reasons:**
+- `well_reasoned` — Logically structured, compelling argument
+- `well_sourced` — Backed by credible evidence or citations
+- `changed_my_mind` — This comment shifted my thinking (highest-value signal)
+- `strong_counterpoint` — Effectively challenges the opposing argument
+- `well_written` — Clearly and engagingly expressed
+
+**Downvote Reasons:**
+- `off_topic` — Not relevant to the debate
+- `uncivil` — Ad hominem, hostile, or harassing
+- `misleading_unsourced` — Makes factual claims without support (triggers Burden of Proof at threshold)
+- `misrepresented_stance` — User's comment contradicts their declared stance
+- `low_effort` — Does not contribute meaningfully
+
+---
+
+### 4. The View System
+
+The view system is the core product differentiator. All views render the **same underlying comment data** through different query and presentation layers.
+
+#### 4.1 Thread View (Default)
+
+**Purpose:** Chronological discussion as it happened, with context preservation.
+
+**Implementation:**
+- Standard nested comment tree, indented by depth
+- **Compressed Ancestor Trail**: A sticky bar at the top of the viewport showing the chain of parent comments when the user has scrolled deep into a thread. Each ancestor displays: author name, stance badge, first ~80 characters of content, and is clickable to scroll/expand in place.
+- Ancestor trail renders from `Comment.ancestorPath` (materialized path array)
+- Collapse/expand controls per subtree
+- Comments beyond depth 6 flatten visually (no further indentation) but maintain logical nesting
+- No pagination to new pages — infinite scroll with virtual windowing (`react-window` or `tanstack-virtual`) for performance
+
+**Key query:**
+```sql
+SELECT c.*, u.username, u.avatarUrl, ds.declaredStance, ds.algorithmicLean
+FROM comments c
+JOIN users u ON c.authorId = u.id
+LEFT JOIN debate_stances ds ON ds.debateId = c.debateId AND ds.userId = c.authorId
+WHERE c.debateId = :debateId
+ORDER BY c.createdAt ASC
+```
+
+#### 4.2 Sides View
+
+**Purpose:** Discovery surface — see the strongest arguments for each side without digging.
+
+**Layout:**
+- Desktop: Two columns, Side A (left) and Side B (right), with a toggleable "Neutral" column or inline section
+- Mobile: Tab bar with three tabs [Side A | Side B | Neutral]
+- Each column shows comments filtered by `stanceSide`, sorted by computed score (weighted vote aggregate)
+- Each comment card shows: author, stance badge, truncated content (~200 chars), vote breakdown by reason, and a "View in Context" button
+- "View in Context" navigates to Thread View, scrolls to the comment, and highlights it with the ancestor trail visible
+
+**Key query:**
+```sql
+SELECT c.*, 
+  COUNT(v.id) FILTER (WHERE v.direction = 'up') as upvotes,
+  COUNT(v.id) FILTER (WHERE v.direction = 'down') as downvotes,
+  -- Weighted score: changed_my_mind votes count 3x, well_sourced 2x, etc.
+  SUM(CASE 
+    WHEN v.direction = 'up' AND v.reason = 'changed_my_mind' THEN 3 * v.weight
+    WHEN v.direction = 'up' AND v.reason = 'well_sourced' THEN 2 * v.weight
+    WHEN v.direction = 'up' THEN 1 * v.weight
+    WHEN v.direction = 'down' THEN -1 * v.weight
+    ELSE 0
+  END) as weighted_score
+FROM comments c
+LEFT JOIN votes v ON v.commentId = c.id
+WHERE c.debateId = :debateId AND c.stanceSide = :side
+GROUP BY c.id
+ORDER BY weighted_score DESC
+LIMIT :pageSize OFFSET :offset
+```
+
+*This query result is cached in Redis with a TTL of ~60 seconds, invalidated on new votes.*
+
+#### 4.3 Best Exchanges View
+
+**Purpose:** Surface the strongest back-and-forth dialogues — cross-examinations where both sides performed well.
+
+**Algorithm:**
+1. Find all comment pairs where:
+   - Comment B is a direct reply to Comment A
+   - A and B have opposing `stanceSide` values
+   - Both have a `weighted_score` above a minimum threshold (e.g., 75th percentile for the debate)
+2. Score each pair: `pair_score = min(A.score, B.score) * 2 + max(A.score, B.score)` — this formula favors balanced exchanges over one-sided blowouts
+3. Extend to chains: if B's reply C also scores well and opposes B, present as a 3-part exchange
+4. Future enhancement: track read-through rate (did users who saw comment A also read comment B?) to weight by retention as Gemini's reviewer suggested
+
+**Layout:**
+- Cards showing paired/chained comments side by side (desktop) or stacked with visual connectors (mobile)
+- Each card links to full thread context
+- Sortable by: pair score, recency, number of stance shifts triggered
+
+#### 4.4 Neutral Verdict View
+
+**Purpose:** What do the self-declared neutral observers think? The platform's most credible signal.
+
+**Layout:**
+- Hero section: large tally bar showing Neutral users' verdict votes (Side A winning / Side B winning / Draw), updated via SSE
+- Below: comments that Neutral users pinned as decisive, sorted by pin count
+- Stats panel: total neutral voters, percentage of neutrals whose algorithmic lean matches their declared neutral stance (credibility indicator), stance shift history among neutrals
+- Filter: "Verified Neutrals only" — users whose `algorithmicLean` is `neutral` or `mixed` with `leanConfidence < 0.3`
+
+#### 4.5 Analytics View (Phase 3)
+
+**Purpose:** Dashboard for debate-level and platform-level metrics.
+
+**Metrics displayed:**
+- Stance distribution over time (line chart)
+- Vote reason breakdown (what types of arguments are landing?)
+- Persuasion leaderboard (users with highest `changed_my_mind` received)
+- Argument taxonomy distribution (are economic or moral arguments dominating?)
+- Cohort snapshots (periodic snapshots of debate state for time-series analysis)
+- Engagement depth histogram (how deep do threads go before engagement drops?)
+
+---
+
+### 5. Computed Systems (Background Jobs)
+
+These run asynchronously, not on the request path.
+
+#### 5.1 Algorithmic Stance Detection
+
+**Trigger:** Runs every N minutes per active debate, or on significant vote/comment events.
+
+**Logic:**
+```
+For each user in debate:
+  comments_side_a = count of their comments with stanceSide = side_a
+  comments_side_b = count of their comments with stanceSide = side_b
+  votes_for_a = count of upvotes they gave to side_a comments
+  votes_for_b = count of upvotes they gave to side_b comments
+  
+  total = comments_side_a + comments_side_b + votes_for_a + votes_for_b
+  if total < 5: algorithmicLean = 'mixed', confidence = 0
+  else:
+    lean_score = (a_signals - b_signals) / total  // -1 to +1
+    if lean_score > 0.4: algorithmicLean = 'side_a'
+    elif lean_score < -0.4: algorithmicLean = 'side_b'
+    else: algorithmicLean = 'mixed'
+    confidence = abs(lean_score)
+```
+
+Display rule: Only show "Leans [Side]" badge when `declaredStance` is `neutral` AND `confidence > 0.5`. This avoids noisy indicators.
+
+#### 5.2 Score Computation
+
+Precompute and cache in Redis:
+- Per-comment weighted scores (for Sides View sorting)
+- Per-pair exchange scores (for Best Exchanges View)
+- Per-debate verdict tallies segmented by voter stance
+- Per-user reputation and persuasion scores
+
+#### 5.3 Engagement Fingerprinting (Phase 3)
+
+For each user, compute a profile vector stored as JSONB:
+```json
+{
+  "debatesEngaged": 12,
+  "avgStance": 0.3,           // -1 to 1 across all debates
+  "stanceConsistency": 0.7,   // how often same-leaning across topics
+  "mindChangeRate": 0.15,     // proportion of debates where stance shifted
+  "argumentStyleWeights": {
+    "empirical": 0.4,
+    "moral": 0.2,
+    "economic": 0.3,
+    "anecdotal": 0.1
+  },
+  "engagementDepth": "deep",  // shallow/moderate/deep
+  "persuasionScore": 42,
+  "upvoteReasonProfile": {
+    "well_reasoned": 0.5,
+    "well_sourced": 0.3,
+    "changed_my_mind": 0.1,
+    "well_written": 0.1
+  }
+}
+```
+
+---
+
+### 6. Moderation System
+
+#### 6.1 Automated Quarantine
+
+Comments are auto-quarantined (collapsed with warning label, not deleted) when:
+- Toxicity score exceeds threshold (use Perspective API or similar)
+- Rapid accumulation of `uncivil` downvotes (e.g., 5+ in first 10 minutes)
+- Account is in `new` trust tier and comment matches spam patterns
+
+Quarantined comments display: "This comment has been collapsed due to community flags. [Click to read] [Appeal]"
+
+The comment's votes are excluded from computed rankings while quarantined but the content is preserved for transparency.
+
+#### 6.2 Trust Tiers
+
+| Tier | Threshold | Privileges |
+|---|---|---|
+| `new` | Account < 7 days or < 5 comments | Votes don't count toward Verdict; rate-limited posting |
+| `established` | 7+ days AND 10+ comments with net positive score | Full voting weight; can tag argument taxonomy |
+| `trusted` | 30+ days AND high reputation score AND low quarantine rate | Can vote on moderation appeals; 1.5x vote weight in analytics |
+| `moderator` | Appointed | Can resolve quarantine appeals, lock threads, edit debate metadata |
+| `admin` | Platform owner | Full access |
+
+#### 6.3 Burden of Proof Mechanic
+
+When a comment accumulates 3+ `misleading_unsourced` downvotes:
+1. System pins a "Citation Requested" notice to the comment
+2. Author is notified and can add a source URL/citation
+3. If citation is provided and receives 3+ `well_sourced` upvotes from other users, the `misleading_unsourced` downvotes are neutralized
+4. If no citation after 72 hours, the `misleading_unsourced` downvotes remain at full weight and the comment is labeled "Unsupported Claim"
+
+---
+
+### 7. API Routes Structure
+
+```
+/api/
+├── auth/                    # Auth.js handlers
+├── debates/
+│   ├── GET    /             # List debates (paginated, filterable)
+│   ├── POST   /             # Create debate
+│   ├── GET    /[slug]       # Get debate with metadata
+│   ├── PATCH  /[slug]       # Update debate (mod/admin)
+│   ├── GET    /[slug]/comments
+│   │   ?view=thread         # Thread view (default)
+│   │   ?view=sides&side=a   # Sides view
+│   │   ?view=exchanges      # Best exchanges
+│   │   ?sort=score|recent|controversial
+│   │   ?page=1&limit=50
+│   ├── POST   /[slug]/comments      # Post comment
+│   ├── GET    /[slug]/verdict        # Verdict tallies
+│   ├── POST   /[slug]/verdict        # Cast verdict vote
+│   ├── GET    /[slug]/stances        # Stance distribution
+│   ├── POST   /[slug]/stances        # Declare/change stance
+│   └── GET    /[slug]/analytics      # Debate analytics (Phase 3)
+├── comments/
+│   ├── GET    /[id]                  # Single comment with ancestors
+│   ├── PATCH  /[id]                  # Edit comment
+│   ├── DELETE /[id]                  # Soft delete
+│   ├── POST   /[id]/vote            # Vote with reason
+│   ├── GET    /[id]/context          # Comment + ancestor chain + siblings
+│   ├── POST   /[id]/tag             # Add argument taxonomy tag
+│   └── POST   /[id]/burden-of-proof # Respond to citation request
+├── users/
+│   ├── GET    /[username]            # Public profile
+│   ├── GET    /[username]/stats      # Engagement stats
+│   └── GET    /me                    # Authenticated user profile
+└── moderation/
+    ├── GET    /queue                 # Quarantined comments
+    ├── POST   /[commentId]/resolve  # Resolve quarantine
+    └── POST   /[commentId]/appeal   # User appeal
+```
+
+---
+
+### 8. Frontend Page Structure
+
+```
+/                           # Landing: featured debates, trending
+/debates                    # Browse/search all debates
+/debates/new                # Create debate form
+/d/[slug]                   # Debate page (main experience)
+  ?view=thread              # Default thread view
+  ?view=sides               # Sides view
+  ?view=exchanges           # Best exchanges
+  ?view=verdict             # Neutral verdict view
+  ?view=analytics           # Analytics dashboard (Phase 3)
+/d/[slug]/comment/[id]      # Deep-link to specific comment in context
+/u/[username]               # User profile, stats, debate history
+/moderation                 # Mod dashboard
+/settings                   # User settings, notification prefs
+```
+
+---
+
+### 9. Key UI Components
+
+```
+components/
+├── debate/
+│   ├── DebatePage.tsx              # Main container, view switcher
+│   ├── ViewSwitcher.tsx            # Tab bar for switching views
+│   ├── StanceDeclaration.tsx       # Modal/inline for choosing side
+│   └── VerdictBar.tsx              # Live tally hero component
+├── comments/
+│   ├── CommentTree.tsx             # Recursive nested thread renderer
+│   ├── CommentCard.tsx             # Single comment display
+│   ├── AncestorTrail.tsx           # Sticky breadcrumb of parent chain
+│   ├── CompactCommentPreview.tsx   # Truncated card for Sides view
+│   └── ExchangePair.tsx            # Paired Pro/Con card for Exchanges view
+├── voting/
+│   ├── VoteButton.tsx              # Up/down with reason selector
+│   ├── ReasonPicker.tsx            # Dropdown/popover for vote reasons
+│   ├── VoteBreakdown.tsx           # Visual breakdown of vote reasons
+│   └── BurdenOfProof.tsx           # Citation request notice
+├── user/
+│   ├── StanceBadge.tsx             # Pro/Con/Neutral badge with lean indicator
+│   ├── TrustBadge.tsx              # Trust tier indicator
+│   └── UserProfileCard.tsx         # Hover card with stats
+├── editor/
+│   ├── CommentEditor.tsx           # TipTap-based rich text editor
+│   ├── CitationEmbed.tsx           # Inline source/link embedding
+│   └── StancePicker.tsx            # Which side is this comment arguing for?
+└── analytics/
+    ├── StanceTimeline.tsx          # Line chart of stance shifts over time
+    ├── VoteReasonChart.tsx         # Breakdown by reason type
+    ├── PersuasionLeaderboard.tsx   # Top persuaders
+    └── TaxonomyBreakdown.tsx       # Argument type distribution
+```
+
+---
+
+### 10. Implementation Phases
+
+#### Phase 1 — Core Platform (MVP)
+
+**Goal:** Functional debate platform that already solves the "digging" problem.
+
+**Deliverables:**
+- User auth (OAuth: Google, GitHub; plus email/password)
+- Debate CRUD (create, list, browse, search)
+- Comment system with nested threading
+- Stance declaration (Pro / Con / Neutral)
+- Stance badges on all comments
+- Basic upvote/downvote (no reasons yet — just directional)
+- **Thread View** with compressed ancestor trail
+- **Sides View** with score-sorted comments and "View in Context"
+- Basic user profiles with vote tallies
+- Responsive mobile-first design
+- Essential moderation: report button, admin panel for content removal
+
+**Estimated scope:** ~4-6 weeks for a solo developer, ~2-3 weeks for a small team.
+
+#### Phase 2 — Reasoned Voting & Advanced Views
+
+**Goal:** The platform becomes analytically interesting and uniquely valuable.
+
+**Deliverables:**
+- Reasoned voting system (all upvote/downvote reason categories)
+- Vote reason breakdown display on comments
+- **Best Exchanges View** with pairing algorithm
+- **Neutral Verdict View** with live tallies
+- Algorithmic stance detection ("Leans Pro" indicators)
+- Stance shift tracking with delta events
+- Burden of Proof mechanic
+- Quarantine system for moderation
+- Trust tiers with graduated privileges
+- SSE for live verdict updates
+- Argument taxonomy tagging
+
+**Estimated scope:** ~4-6 weeks after Phase 1.
+
+#### Phase 3 — Analytics & Correlation Engine
+
+**Goal:** Research-grade analytics and survey integration.
+
+**Deliverables:**
+- Analytics View dashboard per debate
+- Engagement fingerprinting (background computation)
+- Persuasion leaderboard
+- Cohort snapshots (periodic state captures)
+- Survey integration API (create surveys, link to debates, run correlations)
+- Export API for research data (anonymized)
+- Advanced metrics: argument taxonomy correlations, cross-debate stance consistency
+- Admin analytics dashboard (platform-wide)
+
+**Estimated scope:** ~6-8 weeks after Phase 2.
+
+---
+
+### 11. Database Indexes (Critical for Performance)
+
+```sql
+-- Thread view: fetch all comments for a debate in order
+CREATE INDEX idx_comments_debate_created ON comments(debateId, createdAt);
+
+-- Sides view: filter by debate + stance, sort by score
+CREATE INDEX idx_comments_debate_stance ON comments(debateId, stanceSide);
+
+-- Vote aggregation
+CREATE INDEX idx_votes_comment ON votes(commentId);
+CREATE INDEX idx_votes_user_comment ON votes(userId, commentId) UNIQUE;
+
+-- Ancestor trail: fast lookup of parent chain
+CREATE INDEX idx_comments_parent ON comments(parentId);
+CREATE INDEX idx_comments_ancestor_path ON comments USING GIN(ancestorPath);
+
+-- Stance lookups
+CREATE INDEX idx_stances_debate_user ON debate_stances(debateId, userId) UNIQUE;
+CREATE INDEX idx_stances_debate_declared ON debate_stances(debateId, declaredStance);
+
+-- Verdict tallies
+CREATE INDEX idx_verdict_debate ON verdict_votes(debateId);
+
+-- User profile queries
+CREATE INDEX idx_comments_author ON comments(authorId);
+CREATE INDEX idx_stance_shifts_debate ON stance_shifts(debateId, shiftedAt);
+```
+
+---
+
+### 12. Environment & Configuration
+
+```env
+# .env.local
+DATABASE_URL=postgresql://user:pass@localhost:5432/agora
+REDIS_URL=redis://localhost:6379
+NEXTAUTH_SECRET=<generated-secret>
+NEXTAUTH_URL=http://localhost:3000
+
+# OAuth Providers
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+
+# Moderation
+PERSPECTIVE_API_KEY=          # Google Perspective API for toxicity scoring
+QUARANTINE_TOXICITY_THRESHOLD=0.85
+
+# Feature Flags
+ENABLE_TAXONOMY_TAGGING=false  # Phase 2
+ENABLE_ANALYTICS_VIEW=false    # Phase 3
+ENABLE_SURVEY_ENGINE=false     # Phase 3
+```
+
+---
+
+### 13. Claude Code CLI Usage Notes
+
+When working with Claude Code on this project:
+
+1. **Start with Phase 1 only.** Tell Claude Code to scaffold the Next.js project, set up the database schema for Phase 1 entities, and build the Thread View and Sides View.
+
+2. **Provide this spec as context.** Place this file at the project root as `SPEC.md` and reference it: `claude "Read SPEC.md and scaffold the Phase 1 database schema using Drizzle ORM"`
+
+3. **Work feature-by-feature.** Good task decomposition for Phase 1:
+   - Task 1: Project scaffold + auth + database schema
+   - Task 2: Debate CRUD pages
+   - Task 3: Comment tree with nested threading + ancestor trail
+   - Task 4: Stance declaration + badges
+   - Task 5: Basic voting system
+   - Task 6: Sides View
+   - Task 7: Mobile responsiveness pass
+   - Task 8: Moderation basics
+
+4. **Seed data matters.** Create a seed script early that generates a realistic debate with 50+ comments at various depths, multiple stances, and varied vote patterns. This is essential for testing the view system.
+
+---
+
+This spec is designed to be dropped into a project root and used as the single source of truth for iterative development with Claude Code or any other development workflow. Each phase builds cleanly on the last, and each view is independently testable against the same data set.
+
+## Human
+
+There is something else, another feature I need to make you aware of that I had wanted to "budget" for in terms of architectural flexibility, since I foresee that this platform may be initially installed on a domain for a certain niche and will have many "debates"/discussion topics within that niche, which I assume is all fine and the users will be participating on various topics of debate on the particular website. 
+
+But I like the idea of this platform being used on many different websites and different niches and users to be able to link their profiles between the sites or even use a single sign-on. Ideally there should be a way of doing this without having to host "everything" in one central location. I'm not sure how DISCORD handles it, since it seems if user allows you can see a user's comments across all websites that he commented on using the DISCORD platform. in the same way, I'd like to give website admins ability to link multiple sites together, or allow "users" to themselves create "profile links" if they wish, so that their "standing" can be even higher when considering their overall ratings across various websites they'd like to include/link their profile to, and so even allow other users that like a user's comments on one website, to see the users comments on other websites, if that user allows for those permissions. 
+
+Because I think part of the reason for the growth of the related stackoverflow sites and Discord is that they had different websites with same login and profiles that linked together and so their footprint became bigger on the internet and word of mouth was exponential.
+
+## LLM
+
+This is a critical architectural decision that needs to be baked in early — retrofitting multi-site identity is painful. Let me think through the models and then write the spec addendum.
+The two reference points you mentioned are instructive but very different:
+Stack Exchange uses a fully centralized model — one company runs all sites, one database holds all users, and "linking" is automatic because there's a single identity system (stackexchange.com/users). This is simple but requires central control.
+Discord is also centralized — one company, one user database, servers are just logical partitions. Users see cross-server profiles because it's all one system.
+What you're describing is harder than both of those because you want independently operated sites (different admins, different hosting) that can optionally mesh together. That's closer to the Fediverse model (Mastodon/ActivityPub), but you don't need the full complexity of an open federation protocol. You need something in between.
+Here's what I'd recommend: a Hub and Spoke model — a lightweight central Identity Hub that handles auth and reputation aggregation, while each niche site (a "Spoke") runs independently with its own content database. Sites opt into the network, users opt into profile linking. Let me write this up properly.Synthesized multi-platform architecture with federated identity conceptsSynthesized multi-platform architecture with federated identity conceptsHere's the federation addendum spec. The key architectural decisions:
+Hub and Spoke, not full federation. You don't need ActivityPub-level complexity. A lightweight central Hub handles identity (SSO) and reputation indexing, while each site keeps all its content in its own database. This gives you the Stack Exchange / Discord network effect without the infrastructure nightmare of peer-to-peer federation.
+Content never leaves the site. The Hub only stores identity, profile links, and numerical reputation snapshots — never comments or votes. This keeps each site operator in full control of their data and makes GDPR compliance straightforward.
+Three tiers of user opt-in: Public (visible everywhere), Mutual (visible only on sites where you also participate), and Private (SSO works but profile isn't cross-listed). Defaulting to Private means users aren't surprised by cross-site exposure.
+Diminishing returns on reputation prevents gaming — you can't inflate your global score by farming easy reputation on low-activity sites. Your strongest community contribution carries the most weight.
+Graceful degradation everywhere. Hub goes down? Sites keep working, they just show stale cross-site reputation (or nothing). Site never joins a network? It's a fully functional standalone platform. This means Phase 1 development proceeds identically whether you plan to federate later or not — you're just adding one empty database table as a placeholder.
+The monorepo structure at the end of the doc shows how Hub, Site, and shared code coexist in one codebase, deployable as independent services.
+
+Spec federation document
+# Agora — Federation & Multi-Site Architecture
+
+## Spec Addendum v1.0
+
+---
+
+## 1. Problem Statement
+
+Agora is designed to be deployed as independent instances across different niches (e.g., `climate.agora.example`, `policy.agora.example`, `tech-ethics.agora.example`). Each instance is operated by a different admin, potentially on different infrastructure. However, users and admins should be able to **optionally** link these instances together, creating a network effect similar to Stack Exchange or Discord — but without requiring a single centralized operator to control all sites.
+
+### Design Goals
+
+1. **Each site works fully standalone.** No site depends on the Hub or any other site to function. If the Hub goes down, individual sites keep running — they just lose cross-site features.
+2. **Users opt into linking.** Cross-site profile visibility is always user-controlled. A user can participate on `climate.agora.example` without anyone on `tech-ethics.agora.example` knowing they exist — unless they choose otherwise.
+3. **Admins opt into networking.** Site admins decide which other sites (if any) their instance connects to. A site can exist in multiple networks or none.
+4. **Reputation is portable but contextual.** A user's cross-site reputation provides social proof, but each site's local reputation remains the primary signal. You don't get to dominate a new community just because you're well-known elsewhere.
+5. **No single point of failure.** The architecture should degrade gracefully. Cross-site features are enhancements, not dependencies.
+
+---
+
+## 2. Architecture: Hub and Spoke
+
+```
+                    ┌─────────────────────┐
+                    │    Agora Hub         │
+                    │  (Identity + Index)  │
+                    │                      │
+                    │  - User identity     │
+                    │  - SSO tokens        │
+                    │  - Profile links     │
+                    │  - Reputation index  │
+                    │  - Site registry     │
+                    └──────┬──────────────┘
+                           │
+              ┌────────────┼────────────┐
+              │            │            │
+        ┌─────▼──┐   ┌────▼───┐   ┌───▼─────┐
+        │ Site A  │   │ Site B │   │ Site C  │
+        │climate  │   │policy  │   │tech     │
+        │         │   │        │   │ethics   │
+        │Own DB   │   │Own DB  │   │Own DB   │
+        │Own admin│   │Own admin│  │Own admin│
+        └─────────┘   └────────┘   └─────────┘
+```
+
+### 2.1 The Hub
+
+The Hub is a lightweight service with a narrow, focused responsibility: **identity and cross-site indexing**. It does NOT store debate content, comments, or votes. It stores:
+
+- **Global User Identities** — a universal account that can be linked to site-local accounts
+- **Profile Link Registry** — which site-local accounts belong to the same person (user-controlled)
+- **Aggregated Reputation Snapshots** — periodically synced summaries from each site (not raw data)
+- **Site Registry** — metadata about participating sites (name, URL, niche, admin contact, trust status)
+- **SSO Token Issuance** — OpenID Connect provider for single sign-on across sites
+
+### 2.2 The Spoke (Each Site Instance)
+
+Each Agora site instance is the full platform as described in the main SPEC.md. It adds:
+
+- An **SSO client** that can authenticate against the Hub (in addition to local auth)
+- A **Federation API** for receiving/sending reputation snapshots and profile lookups
+- **Local-first storage** — all content lives on the site's own database; nothing depends on the Hub
+
+---
+
+## 3. Data Model Additions
+
+### 3.1 Hub Database
+
+```
+HubUser (on Hub)
+├── id: uuid (PK) — the "Global ID"
+├── email: string (unique)
+├── displayName: string
+├── avatarUrl: string?
+├── createdAt: timestamp
+├── globalReputationScore: float (computed from linked sites)
+└── profileVisibility: enum [public, linked_sites_only, private]
+
+SiteRegistration (on Hub)
+├── id: uuid (PK)
+├── name: string (e.g., "Agora Climate")
+├── slug: string (unique, e.g., "climate")
+├── baseUrl: string (e.g., "https://climate.agora.example")
+├── adminEmail: string
+├── apiKey: string (hashed, for site→Hub auth)
+├── trustStatus: enum [pending, verified, suspended]
+├── niche: string
+├── description: text
+├── registeredAt: timestamp
+└── lastSyncAt: timestamp
+
+ProfileLink (on Hub)
+├── id: uuid (PK)
+├── hubUserId: uuid → HubUser
+├── siteId: uuid → SiteRegistration
+├── siteLocalUserId: string (the user's ID on that specific site)
+├── siteUsername: string
+├── linkedAt: timestamp
+├── visibility: enum [public, mutual_only, private]
+│   (public = anyone can see; mutual_only = only visible on
+│    other sites where this user also has a linked profile;
+│    private = link exists for SSO but profile not cross-listed)
+└── UNIQUE(hubUserId, siteId)
+
+ReputationSnapshot (on Hub)
+├── id: uuid (PK)
+├── hubUserId: uuid → HubUser
+├── siteId: uuid → SiteRegistration
+├── snapshotAt: timestamp
+├── localReputationScore: float
+├── debatesParticipated: int
+├── persuasionRating: float
+├── trustTier: string
+├── topArgumentTaxonomies: jsonb
+│   (e.g., {"empirical": 0.4, "moral": 0.3, ...})
+├── stanceShiftCount: int
+└── changedMindsCount: int
+```
+
+### 3.2 Additions to Each Site's Database
+
+```
+FederatedIdentity (on each Site)
+├── id: uuid (PK)
+├── localUserId: uuid → User (the site's own user table)
+├── hubUserId: uuid (the global ID from the Hub)
+├── linkedAt: timestamp
+├── syncedAt: timestamp (last reputation sync)
+└── UNIQUE(localUserId)
+
+CrossSiteReputation (on each Site, cached from Hub)
+├── id: uuid (PK)
+├── hubUserId: uuid
+├── aggregateScore: float
+├── siteCount: int (how many sites they're active on)
+├── totalDebates: int
+├── totalChangedMinds: int
+├── topSiteNames: string[] (names of sites where they're most active)
+├── cachedAt: timestamp
+└── UNIQUE(hubUserId)
+```
+
+---
+
+## 4. Authentication Flow
+
+### 4.1 Single Sign-On (SSO)
+
+The Hub acts as an **OpenID Connect (OIDC) Provider**. Each site is an OIDC client.
+
+**First visit to a new site (user already has Hub account):**
+
+```
+User visits Site B → clicks "Sign in with Agora" →
+  Redirected to Hub OIDC authorize endpoint →
+    Hub checks session (or asks user to log in) →
+      Hub returns authorization code →
+        Site B exchanges code for ID token + access token →
+          Site B creates local account, links to Hub ID via FederatedIdentity →
+            User is logged in on Site B
+```
+
+**First visit ever (no Hub account):**
+
+```
+User visits Site A → creates a local account (email/password or OAuth) →
+  Optionally: "Link to Agora Network" button in settings →
+    Redirected to Hub → creates Hub account (or links to existing) →
+      Returns to Site A with link established
+```
+
+**Key principle:** Users can always create a purely local account. Hub linking is opt-in, prompted but never forced.
+
+### 4.2 Hub OIDC Configuration
+
+```
+Hub OIDC Endpoints:
+  /.well-known/openid-configuration
+  /oauth/authorize
+  /oauth/token
+  /oauth/userinfo
+  /oauth/jwks
+
+Claims returned in ID token:
+  sub:          Hub user UUID
+  email:        verified email
+  name:         display name
+  picture:      avatar URL
+  agora_sites:  [list of site slugs where user has linked profiles]
+                (only included if user's profileVisibility allows)
+```
+
+### 4.3 Site Registration with Hub
+
+```
+Site admin → Hub admin panel → "Register New Site"
+  Provides: site name, URL, admin email, niche description
+  Receives: client_id, client_secret (for OIDC), api_key (for Federation API)
+  Status: pending → verified (after Hub admin review or automated domain verification)
+```
+
+---
+
+## 5. Federation API
+
+### 5.1 Hub API (called by Sites)
+
+```
+# Site → Hub communication
+# All requests authenticated with site API key
+
+POST   /federation/sync-reputation
+  Body: { userId: hubUserId, snapshot: ReputationSnapshot }
+  Purpose: Site pushes updated reputation data for a user
+
+GET    /federation/user/:hubUserId/cross-site-reputation
+  Returns: Aggregated reputation from all linked sites
+  Respects: User's profileVisibility settings
+
+GET    /federation/user/:hubUserId/activity
+  Params: ?sites=climate,policy (filter by site slugs)
+  Returns: List of public debate participations across sites
+  Respects: User's per-site visibility settings
+
+GET    /federation/sites
+  Returns: Registry of all verified sites in the network
+
+POST   /federation/verify-link
+  Body: { hubUserId, siteLocalUserId }
+  Purpose: Confirm a profile link is valid (called during SSO)
+```
+
+### 5.2 Site API (called by Hub or other Sites)
+
+```
+# Hub → Site communication (or Site → Site for direct federation)
+# Authenticated with mutual API keys
+
+GET    /api/federation/user/:localUserId/reputation
+  Returns: This site's reputation snapshot for the user
+
+GET    /api/federation/user/:localUserId/highlights
+  Returns: Top 5 comments by this user on this site
+  (truncated to 200 chars each, with debate title and link)
+  Purpose: Enables "See their best arguments on [Site Name]" feature
+
+GET    /api/federation/stats
+  Returns: Site-level stats (total users, total debates,
+           active debates, avg engagement)
+  Purpose: Hub displays network-wide statistics
+```
+
+### 5.3 Sync Protocol
+
+Reputation syncing is **eventually consistent** and **site-initiated**:
+
+1. Each site runs a background job (e.g., every 6 hours) that computes reputation snapshots for all users with a `FederatedIdentity`
+2. Site pushes snapshots to Hub via `POST /federation/sync-reputation`
+3. Hub aggregates across all sites and updates `HubUser.globalReputationScore`
+4. When a site needs to display cross-site reputation (e.g., on a user's profile card), it calls `GET /federation/user/:id/cross-site-reputation` and caches the result locally in `CrossSiteReputation` with a TTL of 1 hour
+5. If the Hub is unreachable, the site displays the last cached value (or nothing, for new users)
+
+**This means no real-time cross-site dependency.** Reputation data is always hours old at most, which is acceptable for a trust signal.
+
+---
+
+## 6. User Experience
+
+### 6.1 Profile Linking Flow
+
+```
+User Settings Page → "Agora Network" section:
+
+┌─────────────────────────────────────────────────┐
+│  🌐 Agora Network                                │
+│                                                   │
+│  Link your profile across Agora sites to build   │
+│  a unified reputation and let others discover     │
+│  your contributions.                              │
+│                                                   │
+│  [Link to Agora Network]                          │
+│                                                   │
+│  ── Linked Sites ──────────────────────────       │
+│  ✓ Agora Climate    @username    [Public ▾]       │
+│  ✓ Agora Policy     @username    [Mutual ▾]      │
+│                                                   │
+│  Visibility options:                              │
+│  • Public  — anyone on any Agora site can see     │
+│  • Mutual  — only visible on sites where you      │
+│              also have a linked profile            │
+│  • Private — link exists for login only,           │
+│              profile not cross-listed              │
+│                                                   │
+│  [Unlink from Network]                            │
+└─────────────────────────────────────────────────┘
+```
+
+### 6.2 Cross-Site Profile Card
+
+When a user has linked profiles, other users see an enhanced profile card:
+
+```
+┌─────────────────────────────────────────┐
+│  👤 username                             │
+│  Stance: Pro  │  Trust: Established      │
+│                                          │
+│  On this site:                           │
+│  ⭐ Reputation: 342                      │
+│  💬 47 comments  │  🔄 2 stance shifts   │
+│  🧠 8 minds changed                      │
+│                                          │
+│  ── Across Agora Network ──────────      │
+│  🌐 Active on 3 sites                    │
+│  ⭐ Global reputation: 891               │
+│  🧠 23 total minds changed               │
+│                                          │
+│  Top contributions:                      │
+│  📌 "On the economics of carbon         │
+│      pricing..." — Agora Climate         │
+│  📌 "The procedural argument for..."     │
+│      — Agora Policy                      │
+│                                          │
+│  [View full network profile →]           │
+└─────────────────────────────────────────┘
+```
+
+### 6.3 Cross-Site Discovery
+
+On the Hub (or on any site that opts in), users can browse:
+
+- **Network-wide leaderboards** — most persuasive users across all sites
+- **Cross-site argument trails** — if a user made related arguments on climate policy (Site A) and economic policy (Site B), and both are public, visitors can follow the intellectual thread across sites
+- **Network search** — search for debates across all linked sites from one place
+
+---
+
+## 7. Admin Controls
+
+### 7.1 Site Admin Panel — Federation Settings
+
+```
+Federation Settings:
+
+Network Status: [Connected to Agora Hub ✓]
+
+Linked Networks:
+  ✓ Main Agora Network (hub.agora.example)
+    └─ 12 sites │ 45,000 users │ Connected since 2026-01-15
+
+Cross-Site Features:
+  ☑ Allow users to link profiles via Hub SSO
+  ☑ Display cross-site reputation on profile cards
+  ☐ Show cross-site comment highlights (disabled)
+  ☑ Participate in network-wide search index
+  ☑ Sync reputation snapshots to Hub
+
+Trust Settings:
+  Cross-site reputation weight: [0.3] (0-1 scale)
+    → Controls how much global reputation influences
+      local trust tier calculations
+  
+  Minimum Hub trust to fast-track local trust: [500]
+    → Users above this global score skip "new" tier
+      and start as "established" on this site
+
+Blocked Sites:
+  + [Add site to block list]
+    → Users linked to blocked sites still work locally
+      but their cross-site data from those sites is hidden
+```
+
+### 7.2 Hub Admin Panel
+
+```
+Hub Admin Dashboard:
+
+Registered Sites: 14 (12 verified, 2 pending)
+Total Linked Users: 23,456
+Total Profile Links: 41,892
+
+Site Management:
+  [Verify pending sites]
+  [Suspend site]  — removes from network, preserves data
+  [Revoke API key] — emergency disconnect
+
+Network Health:
+  Last sync from each site: [table with timestamps]
+  Sites with stale data (>24hr): [warnings]
+
+User Disputes:
+  [Review cross-site abuse reports]
+  [Merge duplicate Hub accounts]
+  [Process account deletion requests (GDPR)]
+```
+
+---
+
+## 8. Reputation Aggregation Algorithm
+
+The global reputation score is not a simple sum. It uses a **diminishing returns** model to prevent any single site from dominating, and weights by site credibility.
+
+```python
+def compute_global_reputation(snapshots: list[ReputationSnapshot]) -> float:
+    """
+    snapshots: one per linked site, sorted by localReputationScore DESC
+    """
+    global_score = 0
+    
+    for i, snap in enumerate(snapshots):
+        # Diminishing weight: first site counts most,
+        # each additional site adds less
+        # Site 1: weight 1.0, Site 2: 0.6, Site 3: 0.4, Site 4: 0.3 ...
+        position_weight = 1.0 / (1 + 0.5 * i)
+        
+        # Site trust multiplier (verified sites count more)
+        site_trust = {
+            'verified': 1.0,
+            'pending': 0.5,
+            'suspended': 0.0
+        }[snap.site.trustStatus]
+        
+        # Engagement depth multiplier
+        # (a user with 100 comments on a site is more credible
+        #  than one with 2 comments)
+        depth = min(snap.debatesParticipated / 10, 1.0)  # caps at 10 debates
+        
+        weighted = snap.localReputationScore * position_weight * site_trust * depth
+        global_score += weighted
+    
+    return round(global_score, 1)
+```
+
+**Why diminishing returns:** Without this, a user could inflate their global score by creating accounts on many low-activity sites and earning easy reputation. The diminishing model means your strongest community contribution matters most.
+
+---
+
+## 9. Privacy & Data Controls
+
+### 9.1 User Controls
+
+| Setting | Options | Default |
+|---|---|---|
+| Profile link visibility | Public / Mutual / Private | Private |
+| Show cross-site reputation | Yes / No | Yes (if linked) |
+| Show cross-site comment highlights | Yes / No | No |
+| Allow network search to index my debates | Yes / No | Yes |
+| Share engagement fingerprint across sites | Yes / No | No |
+
+### 9.2 Data Residency Rules
+
+- **Comment content, votes, and debate data NEVER leave the originating site's database.** The Hub only receives computed reputation snapshots (numbers and categories, not content).
+- **Comment highlights** (truncated text shown on cross-site profiles) are only sent to the Hub if the user explicitly enables "Show cross-site comment highlights." Even then, only the first 200 characters of their top 5 comments are transmitted.
+- **Engagement fingerprints** are never shared by default. If a user opts in, only the category weights (not raw data) are shared — e.g., `{"empirical": 0.4, "moral": 0.3}`, not the comments themselves.
+- **Account deletion** propagates: deleting a Hub account triggers deletion requests to all linked sites via the Federation API. Each site removes the `FederatedIdentity` record. Local accounts can optionally be preserved (de-linked) or deleted, per the user's choice.
+
+### 9.3 GDPR / Privacy Compliance
+
+- Hub maintains a data processing agreement template for site admins
+- All cross-site data transfers use the Federation API (auditable, rate-limited)
+- Users can export all Hub data (profile links, reputation history) via a self-service portal
+- Right to erasure: Hub deletion cascades to all linked sites within 72 hours
+
+---
+
+## 10. Deployment Topology
+
+### 10.1 Minimal Setup (Single Operator)
+
+For someone running multiple niche sites themselves:
+
+```
+┌──────────────────────────────────────────┐
+│  Single VPS / Cloud Instance              │
+│                                           │
+│  ┌─────────┐  ┌─────────┐  ┌──────────┐ │
+│  │ Hub      │  │ Site A  │  │ Site B   │ │
+│  │ :3000    │  │ :3001   │  │ :3002    │ │
+│  └────┬─────┘  └────┬────┘  └────┬─────┘ │
+│       │              │            │       │
+│  ┌────▼──────────────▼────────────▼────┐ │
+│  │         PostgreSQL (shared)          │ │
+│  │  hub_db  │  site_a_db  │  site_b_db │ │
+│  └──────────────────────────────────────┘ │
+│  ┌──────────────────────────────────────┐ │
+│  │         Redis (shared)               │ │
+│  └──────────────────────────────────────┘ │
+│                                           │
+│  Nginx reverse proxy:                     │
+│    hub.agora.example    → :3000           │
+│    climate.agora.example → :3001          │
+│    policy.agora.example  → :3002          │
+└──────────────────────────────────────────┘
+```
+
+All managed via a single Docker Compose file. Each site is an independent Next.js process with its own database, but they share infrastructure.
+
+### 10.2 Distributed Setup (Multiple Operators)
+
+For independent operators running their own sites:
+
+```
+Operator A (AWS)              Operator B (Hetzner)
+┌─────────────────┐          ┌─────────────────┐
+│ Site: Climate    │          │ Site: Policy     │
+│ Own Postgres     │   HTTPS  │ Own Postgres     │
+│ Own Redis        │◄────────►│ Own Redis        │
+└────────┬────────┘          └────────┬────────┘
+         │                            │
+         │   HTTPS                    │  HTTPS
+         └──────────┐    ┌───────────┘
+                    ▼    ▼
+              ┌─────────────────┐
+              │    Agora Hub     │
+              │ (DigitalOcean)   │
+              │ Operated by:     │
+              │ network founder  │
+              │ or collective    │
+              └─────────────────┘
+```
+
+Sites communicate with the Hub over HTTPS. Sites never talk directly to each other — all cross-site data flows through the Hub to maintain a single trust boundary.
+
+### 10.3 No-Hub Setup (Fully Independent)
+
+A site can run with no Hub connection at all. It's just a standalone Agora instance. All federation features are disabled. This is useful for:
+
+- Private organizations running internal debate platforms
+- Sites that want to evaluate the platform before joining a network
+- Sites in jurisdictions with data residency requirements
+
+---
+
+## 11. Implementation Phasing (Federation-Specific)
+
+Federation features map onto the existing phase structure:
+
+### Phase 1 Addition: Foundation
+
+- Add `FederatedIdentity` table to the site schema (empty, ready for linking)
+- Add environment variable `AGORA_HUB_URL` (defaults to empty = no federation)
+- Auth system supports both local auth AND OIDC (even if Hub isn't configured yet)
+- **No Hub deployment needed yet.** Just ensure the site schema can accommodate federation later.
+
+### Phase 2 Addition: Hub MVP
+
+- Build and deploy the Hub as a separate, lightweight Next.js service
+- Implement OIDC provider on Hub
+- Implement SSO client on sites
+- Profile linking flow in user settings
+- Basic cross-site reputation display (score + site count only)
+- Site registration and admin panel on Hub
+- Reputation sync background job
+
+### Phase 3 Addition: Full Federation
+
+- Cross-site comment highlights
+- Network-wide search
+- Cross-site leaderboards
+- Engagement fingerprint sharing (opt-in)
+- Advanced admin controls (site blocking, trust weighting)
+- GDPR tooling (export, cascading deletion)
+- Survey correlation across sites (the ultimate analytics play — correlating a user's stances across climate AND policy debates with their survey responses)
+
+---
+
+## 12. Hub Technology Stack
+
+The Hub is intentionally minimal:
+
+| Layer | Technology | Rationale |
+|---|---|---|
+| Framework | Next.js (same as sites) | Code sharing, familiar stack |
+| Database | PostgreSQL | Same as sites, smaller schema |
+| Auth | Custom OIDC provider (using `oidc-provider` npm package) | Standards-compliant SSO |
+| Cache | Redis | Session storage, rate limiting |
+| API Auth | API key + HMAC signatures | Site-to-Hub authentication |
+| Deployment | Single Docker container | Lightweight, easy to operate |
+
+The Hub is deliberately kept small. It should be deployable on a $10/month VPS for a network of up to ~50 sites. It does not store content, only identity and reputation metadata.
+
+---
+
+## 13. Security Considerations
+
+### 13.1 Site-to-Hub Authentication
+
+Every Federation API call from a site includes:
+- `X-Agora-Site-Id` header (the site's registered UUID)
+- `X-Agora-Signature` header (HMAC-SHA256 of request body using the site's API key)
+- `X-Agora-Timestamp` header (request timestamp; reject if >5 minutes old to prevent replay attacks)
+
+### 13.2 User Impersonation Prevention
+
+When a site pushes a reputation snapshot for a user, the Hub verifies:
+1. The `hubUserId` in the snapshot has an active `ProfileLink` to the requesting site
+2. The `siteLocalUserId` in the `ProfileLink` matches what the site is reporting
+3. Reputation values are within plausible bounds (rate limiting prevents a site from suddenly granting a user 999,999 reputation)
+
+### 13.3 Rogue Site Mitigation
+
+If a site is compromised or acting in bad faith:
+- Hub admin can **suspend** the site, immediately excluding its data from all cross-site aggregations
+- All `ReputationSnapshot` records from that site are quarantined (not deleted, in case of false alarm)
+- Users with profiles linked to the suspended site see a notice: "One of your linked sites has been suspended. Your global reputation has been recalculated."
+
+---
+
+## 14. Claude Code CLI Task Decomposition (Federation)
+
+For developing the federation layer with Claude Code:
+
+```
+Phase 1 tasks (add to existing Phase 1 list):
+  Task 9:  Add FederatedIdentity table + migration
+  Task 10: Configure Auth.js to support both local + OIDC provider
+
+Phase 2 tasks (new):
+  Task F1: Scaffold Hub service (separate Next.js project in monorepo)
+  Task F2: Implement OIDC provider on Hub (oidc-provider package)
+  Task F3: Implement site registration + API key management
+  Task F4: Build profile linking flow (user settings → Hub redirect → link confirm)
+  Task F5: Implement reputation sync job (site→Hub push, hourly cron)
+  Task F6: Build cross-site reputation cache + display on profile cards
+  Task F7: Hub admin dashboard (site management, network health)
+
+Phase 3 tasks (new):
+  Task F8:  Cross-site comment highlights API + display
+  Task F9:  Network-wide search (Hub indexes debate metadata from all sites)
+  Task F10: Cross-site leaderboards
+  Task F11: GDPR tooling (export, cascading deletion)
+  Task F12: Cross-site survey correlation engine
+```
+
+---
+
+## 15. Monorepo Structure
+
+With the Hub added, the project should use a monorepo:
+
+```
+agora/
+├── packages/
+│   ├── hub/                    # Hub service (Next.js)
+│   │   ├── src/
+│   │   │   ├── app/            # Hub pages (admin, OIDC endpoints)
+│   │   │   ├── lib/
+│   │   │   │   ├── oidc/       # OIDC provider configuration
+│   │   │   │   ├── federation/ # Federation API handlers
+│   │   │   │   └── reputation/ # Aggregation algorithms
+│   │   │   └── db/
+│   │   │       ├── schema.ts   # Hub-specific schema
+│   │   │       └── migrations/
+│   │   ├── Dockerfile
+│   │   └── package.json
+│   │
+│   ├── site/                   # Site instance (Next.js) — main platform
+│   │   ├── src/
+│   │   │   ├── app/            # All site pages (debates, comments, views)
+│   │   │   ├── components/     # UI components (as listed in main spec)
+│   │   │   ├── lib/
+│   │   │   │   ├── federation/ # Federation client (calls Hub API)
+│   │   │   │   ├── auth/       # Auth.js + OIDC client config
+│   │   │   │   ├── votes/      # Vote computation logic
+│   │   │   │   └── views/      # View query builders (thread, sides, etc.)
+│   │   │   └── db/
+│   │   │       ├── schema.ts   # Site schema (all tables from main spec)
+│   │   │       └── migrations/
+│   │   ├── Dockerfile
+│   │   └── package.json
+│   │
+│   └── shared/                 # Shared code between Hub and Site
+│       ├── types/              # TypeScript types (user, reputation, etc.)
+│       ├── federation-protocol/# API contracts, HMAC signing, validation
+│       ├── reputation/         # Shared scoring algorithms
+│       └── package.json
+│
+├── docker-compose.yml          # Local dev: Hub + 2 Site instances + Postgres + Redis
+├── docker-compose.prod.yml     # Production single-operator setup
+├── SPEC.md                     # Main platform spec
+├── SPEC-FEDERATION.md          # This document
+├── turbo.json                  # Turborepo config
+└── package.json                # Workspace root
+```

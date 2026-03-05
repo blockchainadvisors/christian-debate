@@ -1,0 +1,78 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: agora
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agora"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/var/lib/redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  site:
+    build:
+      context: .
+      dockerfile: packages/site/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://agora:${POSTGRES_PASSWORD}@postgres:5432/christian_debate
+      REDIS_URL: redis://redis:6379
+      AUTH_SECRET: ${AUTH_SECRET}
+      AGORA_HUB_URL: http://hub:4000
+      AGORA_SITE_CLIENT_ID: ${AGORA_SITE_CLIENT_ID:-}
+      AGORA_SITE_CLIENT_SECRET: ${AGORA_SITE_CLIENT_SECRET:-}
+      SITE_PUBLIC_URL: ${SITE_PUBLIC_URL:-http://localhost:3000}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  hub:
+    build:
+      context: .
+      dockerfile: packages/hub/Dockerfile
+    environment:
+      HUB_DATABASE_URL: postgresql://agora:${POSTGRES_PASSWORD}@postgres:5432/christian_debate_hub
+      HUB_URL: ${HUB_PUBLIC_URL:-http://localhost:4000}
+      HUB_ADMIN_EMAIL: ${HUB_ADMIN_EMAIL:-}
+      HUB_ADMIN_PASSWORD: ${HUB_ADMIN_PASSWORD:-}
+      HUB_ADMIN_TOKEN: ${HUB_ADMIN_TOKEN:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # Uncomment to mount TLS certificates
+      # - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - site
+      - hub
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christian Debate — A Cathedral of Discourse</title>
+  <meta name="description" content="Structured debate platform for meaningful Christian-focused discussions. Multiple views, reasoned voting, and intelligent argument analysis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       RESET & BASE
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black-deep: #0a0a0a;
+      --charcoal: #141414;
+      --charcoal-light: #1c1c1c;
+      --charcoal-mid: #252525;
+      --stone: #2a2a2a;
+      --stone-light: #3a3a3a;
+      --ash: #888;
+      --parchment: #d4c9a8;
+      --parchment-light: #e8e0cc;
+      --ruby: #8b1a1a;
+      --ruby-glow: #b22a2a;
+      --sapphire: #1a3a8b;
+      --sapphire-glow: #2a4eaf;
+      --emerald: #1a6b3a;
+      --emerald-glow: #23914e;
+      --amber: #c4941a;
+      --amber-glow: #daa520;
+      --gold: #c9a84c;
+      --gold-bright: #e0c068;
+      --gold-dim: #9a7e3a;
+      --white-soft: #f0ece4;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Crimson Pro', Georgia, serif;
+      background-color: var(--black-deep);
+      color: var(--parchment);
+      line-height: 1.7;
+      font-size: 18px;
+      overflow-x: hidden;
+    }
+
+    /* ========================================
+       GOTHIC BACKGROUND TEXTURE
+       ======================================== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.04;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 40px,
+          rgba(201, 168, 76, 0.3) 40px,
+          rgba(201, 168, 76, 0.3) 41px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 40px,
+          rgba(201, 168, 76, 0.3) 40px,
+          rgba(201, 168, 76, 0.3) 41px
+        );
+    }
+
+    /* ========================================
+       ANIMATIONS
+       ======================================== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes roseWindowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .animate-on-scroll.delay-1 { transition-delay: 0.1s; }
+    .animate-on-scroll.delay-2 { transition-delay: 0.2s; }
+    .animate-on-scroll.delay-3 { transition-delay: 0.3s; }
+    .animate-on-scroll.delay-4 { transition-delay: 0.4s; }
+    .animate-on-scroll.delay-5 { transition-delay: 0.5s; }
+
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Cinzel', 'Times New Roman', serif;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--white-soft);
+    }
+
+    /* ========================================
+       GOTHIC ARCH DIVIDER
+       ======================================== */
+    .arch-divider {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1rem 0;
+    }
+
+    .arch-divider::before {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 50px;
+      border: 2px solid var(--gold-dim);
+      border-bottom: none;
+      border-radius: 50% 50% 0 0 / 80% 80% 0 0;
+      opacity: 0.5;
+    }
+
+    /* ========================================
+       GOTHIC TRACERY BORDER
+       ======================================== */
+    .tracery-border {
+      position: relative;
+      border: 1px solid var(--stone-light);
+    }
+
+    .tracery-border::before,
+    .tracery-border::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gold-dim);
+    }
+
+    .tracery-border::before {
+      top: -2px;
+      left: -2px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .tracery-border::after {
+      bottom: -2px;
+      right: -2px;
+      border-left: none;
+      border-top: none;
+    }
+
+    /* ========================================
+       NAVIGATION
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.7) 100%);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+      transition: background 0.3s ease;
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-logo span {
+      color: var(--white-soft);
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ash);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-cta {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.5rem;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold);
+      color: var(--black-deep);
+      box-shadow: 0 0 20px rgba(201, 168, 76, 0.3);
+    }
+
+    /* ========================================
+       HERO SECTION
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Rose window background ornament */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, transparent 30%, rgba(139, 26, 26, 0.03) 31%, transparent 32%),
+        radial-gradient(circle at center, transparent 45%, rgba(26, 58, 139, 0.03) 46%, transparent 47%),
+        radial-gradient(circle at center, transparent 60%, rgba(201, 168, 76, 0.04) 61%, transparent 62%),
+        conic-gradient(
+          from 0deg,
+          rgba(139, 26, 26, 0.04) 0deg,
+          transparent 15deg,
+          rgba(26, 58, 139, 0.04) 30deg,
+          transparent 45deg,
+          rgba(26, 107, 58, 0.04) 60deg,
+          transparent 75deg,
+          rgba(196, 148, 26, 0.04) 90deg,
+          transparent 105deg,
+          rgba(139, 26, 26, 0.04) 120deg,
+          transparent 135deg,
+          rgba(26, 58, 139, 0.04) 150deg,
+          transparent 165deg,
+          rgba(26, 107, 58, 0.04) 180deg,
+          transparent 195deg,
+          rgba(196, 148, 26, 0.04) 210deg,
+          transparent 225deg,
+          rgba(139, 26, 26, 0.04) 240deg,
+          transparent 255deg,
+          rgba(26, 58, 139, 0.04) 270deg,
+          transparent 285deg,
+          rgba(26, 107, 58, 0.04) 300deg,
+          transparent 315deg,
+          rgba(196, 148, 26, 0.04) 330deg,
+          transparent 345deg,
+          rgba(139, 26, 26, 0.04) 360deg
+        );
+      animation: roseWindowSpin 120s linear infinite;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    /* Vertical light beam */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(201, 168, 76, 0.15) 20%,
+        rgba(201, 168, 76, 0.05) 50%,
+        transparent 80%
+      );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fadeInUp 1.2s ease forwards;
+    }
+
+    .hero-cross {
+      font-size: 2rem;
+      color: var(--gold-dim);
+      margin-bottom: 2rem;
+      opacity: 0.6;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 50%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.9rem, 2vw, 1.15rem);
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-bottom: 2rem;
+    }
+
+    .hero-desc {
+      font-size: 1.2rem;
+      color: var(--parchment);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+      line-height: 1.9;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold) 50%, var(--gold-dim) 100%);
+      color: var(--black-deep);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      position: relative;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(201, 168, 76, 0.4), 0 0 60px rgba(201, 168, 76, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(201, 168, 76, 0.1);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: fadeIn 2s ease 1.5s forwards;
+      opacity: 0;
+    }
+
+    .hero-scroll-hint span {
+      display: block;
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(180deg, var(--gold-dim), transparent);
+      margin: 0 auto;
+    }
+
+    /* ========================================
+       SECTION LAYOUT
+       ======================================== */
+    section {
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--ash);
+      max-width: 600px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    /* ========================================
+       STAINED GLASS DIVIDER BETWEEN SECTIONS
+       ======================================== */
+    .stained-glass-divider {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      padding: 1rem 0;
+    }
+
+    .stained-glass-divider span {
+      display: block;
+      width: 6px;
+      height: 6px;
+      transform: rotate(45deg);
+      opacity: 0.5;
+    }
+
+    .stained-glass-divider span:nth-child(1) { background: var(--ruby); }
+    .stained-glass-divider span:nth-child(2) { background: var(--sapphire); }
+    .stained-glass-divider span:nth-child(3) { background: var(--gold); }
+    .stained-glass-divider span:nth-child(4) { background: var(--emerald); }
+    .stained-glass-divider span:nth-child(5) { background: var(--amber); }
+
+    /* ========================================
+       FEATURES / FIVE VIEWS
+       ======================================== */
+    .features-section {
+      background: linear-gradient(180deg, var(--black-deep) 0%, var(--charcoal) 50%, var(--black-deep) 100%);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: linear-gradient(165deg, var(--charcoal-light) 0%, var(--charcoal) 100%);
+      border: 1px solid var(--stone);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--stone-light);
+      transform: translateY(-4px);
+    }
+
+    .feature-card:hover .feature-glow {
+      opacity: 1;
+    }
+
+    .feature-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .feature-card:nth-child(1) .feature-glow { background: linear-gradient(90deg, transparent, var(--ruby), transparent); }
+    .feature-card:nth-child(2) .feature-glow { background: linear-gradient(90deg, transparent, var(--sapphire), transparent); }
+    .feature-card:nth-child(3) .feature-glow { background: linear-gradient(90deg, transparent, var(--emerald), transparent); }
+    .feature-card:nth-child(4) .feature-glow { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+    .feature-card:nth-child(5) .feature-glow { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .feature-card:nth-child(1) .feature-icon { color: var(--ruby-glow); }
+    .feature-card:nth-child(2) .feature-icon { color: var(--sapphire-glow); }
+    .feature-card:nth-child(3) .feature-icon { color: var(--emerald-glow); }
+    .feature-card:nth-child(4) .feature-icon { color: var(--amber-glow); }
+    .feature-card:nth-child(5) .feature-icon { color: var(--gold-bright); }
+
+    .feature-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--white-soft);
+    }
+
+    .feature-desc {
+      font-size: 1rem;
+      color: var(--ash);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* Pointed arch clip on the last card spanning full width */
+    .feature-card-wide {
+      grid-column: 1 / -1;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ========================================
+       HOW IT WORKS
+       ======================================== */
+    .how-section {
+      background: var(--black-deep);
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Vertical connecting line */
+    .steps::before {
+      content: '';
+      position: absolute;
+      left: 29px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--gold-dim), var(--gold-dim), transparent);
+    }
+
+    .step {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      padding: 2rem 0;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--black-deep);
+      border: 1px solid var(--gold-dim);
+      border-radius: 50% 50% 0 50%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-content h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+      color: var(--ash);
+      font-weight: 300;
+      font-size: 1rem;
+    }
+
+    /* ========================================
+       VOTING SYSTEM
+       ======================================== */
+    .voting-section {
+      background: linear-gradient(180deg, var(--black-deep) 0%, var(--charcoal) 50%, var(--black-deep) 100%);
+    }
+
+    .voting-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .voting-column h3 {
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--stone);
+    }
+
+    .voting-column:first-child h3 {
+      color: var(--emerald-glow);
+      border-color: var(--emerald);
+    }
+
+    .voting-column:last-child h3 {
+      color: var(--ruby-glow);
+      border-color: var(--ruby);
+    }
+
+    .vote-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.75rem;
+      background: var(--charcoal-light);
+      border-left: 3px solid;
+      transition: all 0.3s ease;
+    }
+
+    .vote-tag:hover {
+      background: var(--charcoal-mid);
+      transform: translateX(4px);
+    }
+
+    .voting-column:first-child .vote-tag {
+      border-color: var(--emerald);
+    }
+
+    .voting-column:last-child .vote-tag {
+      border-color: var(--ruby);
+    }
+
+    .vote-tag-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .vote-tag-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--parchment-light);
+    }
+
+    .voting-note {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 1rem;
+      color: var(--ash);
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* ========================================
+       STANCE & ANALYTICS
+       ======================================== */
+    .stance-section {
+      background: var(--black-deep);
+    }
+
+    .stance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .stance-card {
+      background: var(--charcoal);
+      border: 1px solid var(--stone);
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .stance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .stance-card:first-child::before {
+      background: linear-gradient(90deg, var(--sapphire), var(--emerald));
+    }
+
+    .stance-card:last-child::before {
+      background: linear-gradient(90deg, var(--amber), var(--ruby));
+    }
+
+    .stance-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .stance-card p {
+      color: var(--ash);
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .stance-badges {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stance-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border: 1px solid;
+      opacity: 0.8;
+    }
+
+    .badge-pro { color: var(--emerald-glow); border-color: var(--emerald); }
+    .badge-con { color: var(--ruby-glow); border-color: var(--ruby); }
+    .badge-neutral { color: var(--sapphire-glow); border-color: var(--sapphire); }
+
+    /* ========================================
+       TESTIMONIALS
+       ======================================== */
+    .testimonials-section {
+      background: linear-gradient(180deg, var(--black-deep) 0%, var(--charcoal) 50%, var(--black-deep) 100%);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--charcoal-light);
+      border: 1px solid var(--stone);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '\201C';
+      font-family: 'Cinzel', serif;
+      font-size: 4rem;
+      color: var(--gold-dim);
+      opacity: 0.3;
+      position: absolute;
+      top: 0.5rem;
+      left: 1rem;
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--parchment);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+      padding-top: 1rem;
+      line-height: 1.8;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--black-deep);
+      flex-shrink: 0;
+    }
+
+    .testimonial-card:nth-child(1) .testimonial-avatar { background: var(--ruby); }
+    .testimonial-card:nth-child(2) .testimonial-avatar { background: var(--sapphire); }
+    .testimonial-card:nth-child(3) .testimonial-avatar { background: var(--emerald); }
+
+    .testimonial-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white-soft);
+    }
+
+    .testimonial-role {
+      font-size: 0.85rem;
+      color: var(--ash);
+      font-weight: 300;
+    }
+
+    /* ========================================
+       FINAL CTA
+       ======================================== */
+    .cta-section {
+      background: var(--black-deep);
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.06);
+      pointer-events: none;
+    }
+
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.04);
+      pointer-events: none;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-section .section-title {
+      margin-bottom: 1rem;
+    }
+
+    .cta-section .section-desc {
+      margin-bottom: 3rem;
+    }
+
+    .cta-section .btn-primary {
+      padding: 1.2rem 3rem;
+      font-size: 0.9rem;
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: var(--charcoal);
+      border-top: 1px solid var(--stone);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gold-dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .footer-text {
+      font-size: 0.85rem;
+      color: var(--stone-light);
+      font-weight: 300;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--ash);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 8rem 1.5rem 4rem;
+      }
+
+      .hero-desc {
+        font-size: 1.05rem;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card-wide {
+        max-width: 100%;
+      }
+
+      .voting-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .stance-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-cta-group {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .steps::before {
+        left: 19px;
+      }
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+      }
+
+      .step {
+        gap: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 16px;
+      }
+
+      .nav {
+        padding: 0.75rem 1rem;
+      }
+
+      .nav-logo {
+        font-size: 1.05rem;
+      }
+
+      .nav-cta {
+        font-size: 0.65rem;
+        padding: 0.5rem 1rem;
+      }
+
+      .section-header {
+        margin-bottom: 3rem;
+      }
+
+      .feature-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 0.85rem 2rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================
+       NAVIGATION
+       ================================ -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">Christian <span>Debate</span></a>
+    <ul class="nav-links">
+      <li><a href="#features">Views</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#voting">Voting</a></li>
+      <li><a href="#testimonials">Community</a></li>
+    </ul>
+    <a href="#join" class="nav-cta">Join the Discussion</a>
+  </nav>
+
+  <!-- ================================
+       HERO SECTION
+       ================================ -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-cross">&#10013;</div>
+      <h1 class="hero-title">Christian Debate</h1>
+      <p class="hero-subtitle">A Cathedral of Discourse</p>
+      <p class="hero-desc">
+        Where faith meets reason. Engage in structured, meaningful debates
+        on the questions that shape Christian thought &mdash; with tools designed
+        to elevate discourse, not diminish it.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#join" class="btn-primary">Enter the Discussion</a>
+        <a href="#features" class="btn-secondary">Explore the Platform</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span></span>
+    </div>
+  </section>
+
+  <div class="stained-glass-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ================================
+       FEATURES: FIVE VIEWS
+       ================================ -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label">Five Windows into Every Debate</span>
+        <h2 class="section-title">Multiple Views, Deeper Understanding</h2>
+        <p class="section-desc">
+          Every debate is illuminated from five distinct angles, each revealing
+          a different facet of the conversation.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card tracery-border animate-on-scroll delay-1">
+          <div class="feature-glow"></div>
+          <span class="feature-icon">&#9960;</span>
+          <h3 class="feature-name">Thread View</h3>
+          <p class="feature-desc">
+            The full conversation as it unfolds. Follow every reply, every rebuttal,
+            every moment of insight in its natural chronological order.
+          </p>
+        </div>
+
+        <div class="feature-card tracery-border animate-on-scroll delay-2">
+          <div class="feature-glow"></div>
+          <span class="feature-icon">&#9878;</span>
+          <h3 class="feature-name">Sides View</h3>
+          <p class="feature-desc">
+            Arguments split into Pro and Con columns. See the strongest case
+            for each position laid out with architectural clarity.
+          </p>
+        </div>
+
+        <div class="feature-card tracery-border animate-on-scroll delay-3">
+          <div class="feature-glow"></div>
+          <span class="feature-icon">&#10070;</span>
+          <h3 class="feature-name">Best Exchanges</h3>
+          <p class="feature-desc">
+            The finest back-and-forth moments surfaced automatically. Point
+            and counterpoint, paired together for maximum illumination.
+          </p>
+        </div>
+
+        <div class="feature-card tracery-border animate-on-scroll delay-4">
+          <div class="feature-glow"></div>
+          <span class="feature-icon">&#9883;</span>
+          <h3 class="feature-name">Neutral Verdict</h3>
+          <p class="feature-desc">
+            How do the undecided weigh in? See how neutral observers vote,
+            free from the bias of entrenched positions.
+          </p>
+        </div>
+
+        <div class="feature-card feature-card-wide tracery-border animate-on-scroll delay-5">
+          <div class="feature-glow"></div>
+          <span class="feature-icon">&#9670;</span>
+          <h3 class="feature-name">Analytics Engine</h3>
+          <p class="feature-desc">
+            Deep correlation analysis reveals patterns: which arguments persuade,
+            how stances shift over time, and where consensus emerges from discord.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stained-glass-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ================================
+       HOW IT WORKS
+       ================================ -->
+  <section class="how-section" id="how">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label">The Order of Discourse</span>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-desc">
+          Structured debate that rewards substance over volume.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step animate-on-scroll delay-1">
+          <div class="step-number">I</div>
+          <div class="step-content">
+            <h3>Declare Your Stance</h3>
+            <p>
+              Enter each debate as Pro, Con, or Neutral. Your position is visible,
+              fostering honesty and accountability in every argument you make.
+            </p>
+          </div>
+        </div>
+
+        <div class="step animate-on-scroll delay-2">
+          <div class="step-number">II</div>
+          <div class="step-content">
+            <h3>Present Your Case</h3>
+            <p>
+              Compose arguments with a rich text editor. Cite scripture, reference
+              scholarship, and build your reasoning with care and precision.
+            </p>
+          </div>
+        </div>
+
+        <div class="step animate-on-scroll delay-3">
+          <div class="step-number">III</div>
+          <div class="step-content">
+            <h3>Vote with Reason</h3>
+            <p>
+              Every vote requires a category. Mark arguments as Persuasive, Factual,
+              or a Strong Counter-Point &mdash; or flag them as Off-Topic or Ad Hominem.
+              No silent drive-by voting.
+            </p>
+          </div>
+        </div>
+
+        <div class="step animate-on-scroll delay-4">
+          <div class="step-number">IV</div>
+          <div class="step-content">
+            <h3>Watch Understanding Emerge</h3>
+            <p>
+              The platform surfaces the best exchanges, tracks stance shifts, and reveals
+              where genuine persuasion occurs. Truth rises; noise recedes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stained-glass-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ================================
+       REASONED VOTING
+       ================================ -->
+  <section class="voting-section" id="voting">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label">Beyond the Binary</span>
+        <h2 class="section-title">Reasoned Voting</h2>
+        <p class="section-desc">
+          Every vote carries weight because every vote carries meaning.
+          Declare not just agreement, but why.
+        </p>
+      </div>
+
+      <div class="voting-grid animate-on-scroll delay-1">
+        <div class="voting-column">
+          <h3>Affirmation</h3>
+          <div class="vote-tag">
+            <span class="vote-tag-icon">&#10003;</span>
+            <span class="vote-tag-label">Persuasive</span>
+          </div>
+          <div class="vote-tag">
+            <span class="vote-tag-icon">&#9670;</span>
+            <span class="vote-tag-label">Factual</span>
+          </div>
+          <div class="vote-tag">
+            <span class="vote-tag-icon">&#9876;</span>
+            <span class="vote-tag-label">Strong Counter-Point</span>
+          </div>
+        </div>
+
+        <div class="voting-column">
+          <h3>Objection</h3>
+          <div class="vote-tag">
+            <span class="vote-tag-icon">&#10007;</span>
+            <span class="vote-tag-label">Off-Topic</span>
+          </div>
+          <div class="vote-tag">
+            <span class="vote-tag-icon">&#9888;</span>
+            <span class="vote-tag-label">Ad Hominem</span>
+          </div>
+          <div class="vote-tag">
+            <span class="vote-tag-icon">&#10008;</span>
+            <span class="vote-tag-label">Factually Untrue</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="voting-note animate-on-scroll delay-2">
+        &ldquo;Let your yes be yes, and your no be no&rdquo; &mdash; but let both be reasoned.
+      </p>
+    </div>
+  </section>
+
+  <div class="stained-glass-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ================================
+       STANCE & ANALYTICS
+       ================================ -->
+  <section class="stance-section">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label">Transparency in Thought</span>
+        <h2 class="section-title">Stance Declaration & Analytics</h2>
+        <p class="section-desc">
+          Intellectual honesty, measured and visible.
+        </p>
+      </div>
+
+      <div class="stance-grid">
+        <div class="stance-card animate-on-scroll delay-1">
+          <h3>Declare & Shift</h3>
+          <p>
+            Every participant declares their stance: Pro, Con, or Neutral. Changed
+            your mind? The platform tracks it. Stance shifts are not weakness &mdash;
+            they are the hallmark of genuine discourse.
+          </p>
+          <div class="stance-badges">
+            <span class="stance-badge badge-pro">Pro</span>
+            <span class="stance-badge badge-con">Con</span>
+            <span class="stance-badge badge-neutral">Neutral</span>
+          </div>
+        </div>
+
+        <div class="stance-card animate-on-scroll delay-2">
+          <h3>Correlation Engine</h3>
+          <p>
+            Which arguments actually change minds? The analytics engine correlates
+            vote patterns with stance shifts, revealing the arguments that
+            genuinely persuade &mdash; not merely those that rally the already convinced.
+          </p>
+          <div class="stance-badges">
+            <span class="stance-badge" style="color: var(--amber-glow); border-color: var(--amber);">Patterns</span>
+            <span class="stance-badge" style="color: var(--gold); border-color: var(--gold-dim);">Insights</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stained-glass-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ================================
+       TESTIMONIALS
+       ================================ -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label">Voices from the Congregation</span>
+        <h2 class="section-title">What Our Community Says</h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card tracery-border animate-on-scroll delay-1">
+          <p class="testimonial-text">
+            I have never encountered a platform that so faithfully encourages
+            honest theological exchange. The Sides View alone transformed how
+            I understand opposing positions on eschatology.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">M</div>
+            <div>
+              <div class="testimonial-name">Dr. Michael Torres</div>
+              <div class="testimonial-role">Seminary Professor</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card tracery-border animate-on-scroll delay-2">
+          <p class="testimonial-text">
+            Reasoned voting changed everything. When you have to explain why
+            you agree or disagree, the entire conversation elevates. Our youth
+            group uses it for weekly discussions now.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">S</div>
+            <div>
+              <div class="testimonial-name">Sarah Kim</div>
+              <div class="testimonial-role">Youth Ministry Leader</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card tracery-border animate-on-scroll delay-3">
+          <p class="testimonial-text">
+            The Best Exchanges view is extraordinary. It surfaces the moments where
+            iron truly sharpens iron. I have shifted my stance twice on predestination
+            debates &mdash; and I am grateful for it.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">J</div>
+            <div>
+              <div class="testimonial-name">James Okafor</div>
+              <div class="testimonial-role">Theology Student</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stained-glass-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ================================
+       FINAL CTA
+       ================================ -->
+  <section class="cta-section" id="join">
+    <div class="cta-content">
+      <div class="arch-divider"></div>
+      <span class="section-label animate-on-scroll">The Door Is Open</span>
+      <h2 class="section-title animate-on-scroll delay-1">Enter the Cathedral</h2>
+      <p class="section-desc animate-on-scroll delay-2" style="margin: 0 auto 3rem;">
+        Join a community where debate is an act of devotion, where every argument
+        is weighed, and where truth emerges from the meeting of faithful minds.
+      </p>
+      <a href="#" class="btn-primary animate-on-scroll delay-3">Begin Your First Debate</a>
+      <div class="arch-divider" style="margin-top: 3rem;"></div>
+    </div>
+  </section>
+
+  <!-- ================================
+       FOOTER
+       ================================ -->
+  <footer class="footer">
+    <div class="footer-logo">Christian Debate</div>
+    <p class="footer-text">&ldquo;Come now, let us reason together.&rdquo; &mdash; Isaiah 1:18</p>
+    <ul class="footer-links">
+      <li><a href="#">About</a></li>
+      <li><a href="#">Guidelines</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </footer>
+
+  <!-- ================================
+       SCROLL ANIMATION SCRIPT
+       ================================ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var elements = document.querySelectorAll('.animate-on-scroll');
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      elements.forEach(function (el) {
+        observer.observe(el);
+      });
+    });
+  </script>
+
+</body>
+</html>

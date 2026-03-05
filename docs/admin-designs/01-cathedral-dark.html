@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Debate — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --sidebar-bg: #111111;
+  --card-bg: #1a1a1a;
+  --card-hover: #222222;
+  --text: #e8e4d9;
+  --text-muted: #9e9a8f;
+  --text-dim: #6b6760;
+  --ruby: #9b2335;
+  --sapphire: #1e3a6e;
+  --emerald: #1a5e3a;
+  --amber: #b8860b;
+  --gold: #c9a84c;
+  --gold-dim: #7a6a30;
+  --border: #2a2825;
+  --border-light: #3a3730;
+  --danger: #c0392b;
+  --success: #27ae60;
+  --sidebar-w: 260px;
+  --topbar-h: 60px;
+}
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 { font-family: 'Cinzel', serif; font-weight: 600; }
+
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo h2 {
+  font-size: 18px;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+.sidebar-logo span {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  display: block;
+  margin-top: 2px;
+}
+
+.sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  font-size: 15px;
+  position: relative;
+  user-select: none;
+}
+
+.nav-item:hover {
+  color: var(--text);
+  background: rgba(201, 168, 76, 0.05);
+}
+
+.nav-item.active {
+  color: var(--gold);
+  border-left-color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.nav-item .icon { width: 20px; text-align: center; font-size: 16px; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--ruby);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-family: 'Crimson Pro', serif;
+}
+
+.sidebar-user {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+
+.sidebar-user-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--sapphire);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 600; font-size: 14px;
+}
+
+.sidebar-user-info { flex: 1; }
+.sidebar-user-info .name { font-size: 14px; color: var(--text); }
+.sidebar-user-info .role {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--ruby);
+  font-weight: 600;
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger {
+  display: none;
+  position: fixed; top: 14px; left: 14px;
+  z-index: 200;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  width: 40px; height: 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 20px;
+  align-items: center; justify-content: center;
+}
+
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  height: var(--topbar-h);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 28px;
+  gap: 16px;
+  background: var(--sidebar-bg);
+  position: sticky; top: 0;
+  z-index: 50;
+}
+
+.topbar-search {
+  flex: 1; max-width: 500px;
+  position: relative;
+}
+
+.topbar-search input {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px 8px 36px;
+  border-radius: 6px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.topbar-search input::placeholder { color: var(--text-dim); }
+.topbar-search input:focus { border-color: var(--gold-dim); }
+
+.topbar-search::before {
+  content: "\1F50D";
+  position: absolute; left: 12px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+
+.topbar-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 38px; height: 38px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+
+.topbar-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+.topbar-btn .badge {
+  position: absolute; top: -4px; right: -4px;
+  background: var(--ruby);
+  color: #fff;
+  font-size: 10px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600;
+}
+
+.quick-actions-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.quick-actions-btn:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* ===== CONTENT AREA ===== */
+.content { padding: 28px; }
+
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== SECTION HEADERS (Gothic arch) ===== */
+.section-header {
+  position: relative;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+}
+
+.section-header h2 {
+  font-size: 22px;
+  color: var(--text);
+  position: relative;
+  display: inline-block;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-dim), transparent);
+}
+
+/* Gothic arch decoration */
+.section-header h2::before {
+  content: '';
+  position: absolute;
+  top: -6px; left: -16px;
+  width: 8px; height: 20px;
+  border-top: 2px solid var(--gold-dim);
+  border-left: 2px solid var(--gold-dim);
+  border-top-left-radius: 8px 12px;
+}
+
+.section-header h2::after {
+  content: '';
+  position: absolute;
+  top: -6px; right: -16px;
+  width: 8px; height: 20px;
+  border-top: 2px solid var(--gold-dim);
+  border-right: 2px solid var(--gold-dim);
+  border-top-right-radius: 8px 12px;
+}
+
+/* ===== STATS ROW ===== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.stat-card:nth-child(1)::before { background: var(--sapphire); }
+.stat-card:nth-child(2)::before { background: var(--emerald); }
+.stat-card:nth-child(3)::before { background: var(--ruby); }
+.stat-card:nth-child(4)::before { background: var(--amber); }
+
+.stat-card:hover {
+  border-color: var(--border-light);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+.stat-card .label {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.stat-card .value {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.stat-card .change {
+  font-size: 13px;
+  margin-top: 6px;
+  display: flex; align-items: center; gap: 4px;
+}
+
+.stat-card .change.up { color: var(--success); }
+.stat-card .change.down { color: var(--danger); }
+.stat-card .change.warn { color: var(--amber); }
+
+.stat-card.highlight {
+  border-color: var(--amber);
+  box-shadow: 0 0 15px rgba(184, 134, 11, 0.15);
+}
+
+/* ===== GRID LAYOUTS ===== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.card-header h3 {
+  font-size: 15px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.card-body { padding: 20px; }
+
+/* ===== BAR CHART ===== */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 180px;
+  padding-top: 10px;
+}
+
+.bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.bar-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  gap: 2px;
+}
+
+.bar {
+  width: 70%;
+  border-radius: 3px 3px 0 0;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 2px;
+}
+
+.bar.approved { background: var(--emerald); }
+.bar.removed { background: var(--ruby); }
+
+.bar:hover { opacity: 0.8; filter: brightness(1.3); }
+
+.bar-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+.chart-legend {
+  display: flex; gap: 20px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.chart-legend span {
+  display: flex; align-items: center; gap: 6px;
+}
+
+.chart-legend .dot {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* ===== ACTIVITY FEED ===== */
+.activity-feed { list-style: none; }
+
+.activity-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.activity-item:last-child { border-bottom: none; }
+
+.activity-item strong { color: var(--text); font-weight: 500; }
+
+.activity-time {
+  display: block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* ===== DONUT CHART ===== */
+.donut-container {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.donut {
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  /* conic gradient for pie chart */
+  background: conic-gradient(
+    #6b6760 0deg 154.8deg,
+    var(--sapphire) 154.8deg 266.4deg,
+    var(--emerald) 266.4deg 338.4deg,
+    #7b3f8d 338.4deg 355deg,
+    var(--ruby) 355deg 360deg
+  );
+}
+
+.donut-hole {
+  position: absolute;
+  top: 30px; left: 30px; right: 30px; bottom: 30px;
+  background: var(--card-bg);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+}
+
+.donut-hole .total {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.donut-hole .total-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.donut-legend { list-style: none; font-size: 14px; }
+
+.donut-legend li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 0;
+  color: var(--text-muted);
+}
+
+.donut-legend .swatch {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.donut-legend .count {
+  margin-left: auto;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+/* ===== BADGES ===== */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.badge-new { background: rgba(107,103,96,0.3); color: #9e9a8f; }
+.badge-established { background: rgba(30,58,110,0.3); color: #5b8bd4; }
+.badge-trusted { background: rgba(26,94,58,0.3); color: #3dbb78; }
+.badge-moderator { background: rgba(123,63,141,0.3); color: #b57fd4; }
+.badge-admin { background: rgba(155,35,53,0.3); color: #d4636f; }
+
+.badge-open { background: rgba(39,174,96,0.2); color: var(--success); }
+.badge-locked { background: rgba(184,134,11,0.2); color: var(--amber); }
+.badge-archived { background: rgba(107,103,96,0.2); color: var(--text-dim); }
+
+.badge-reason {
+  background: rgba(155,35,53,0.15);
+  color: #d4636f;
+  border: 1px solid rgba(155,35,53,0.25);
+}
+
+/* ===== TABLES ===== */
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  vertical-align: middle;
+}
+
+tr:hover td { background: rgba(201,168,76,0.03); }
+
+.user-cell {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.user-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 600;
+  flex-shrink: 0;
+}
+
+.user-cell .uname { color: var(--text); font-weight: 500; }
+.user-cell .dname { font-size: 12px; color: var(--text-dim); }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.btn-approve { background: rgba(26,94,58,0.25); color: #3dbb78; border-color: rgba(26,94,58,0.4); }
+.btn-approve:hover { background: rgba(26,94,58,0.45); box-shadow: 0 0 10px rgba(26,94,58,0.3); }
+
+.btn-remove { background: rgba(155,35,53,0.2); color: #d4636f; border-color: rgba(155,35,53,0.35); }
+.btn-remove:hover { background: rgba(155,35,53,0.4); box-shadow: 0 0 10px rgba(155,35,53,0.3); }
+
+.btn-neutral { background: rgba(107,103,96,0.15); color: var(--text-muted); border-color: var(--border); }
+.btn-neutral:hover { background: rgba(107,103,96,0.3); color: var(--text); }
+
+.btn-gold { background: rgba(201,168,76,0.15); color: var(--gold); border-color: rgba(201,168,76,0.3); }
+.btn-gold:hover { background: rgba(201,168,76,0.3); box-shadow: 0 0 10px rgba(201,168,76,0.15); }
+
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+
+.action-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.action-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0; top: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 0;
+  min-width: 140px;
+  z-index: 30;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.action-dropdown:hover .dropdown-menu { display: block; }
+
+.dropdown-menu button {
+  display: block; width: 100%;
+  background: none; border: none;
+  color: var(--text-muted);
+  padding: 8px 16px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+
+.dropdown-menu button:hover {
+  background: rgba(201,168,76,0.08);
+  color: var(--text);
+}
+
+.dropdown-menu button.danger:hover {
+  background: rgba(155,35,53,0.15);
+  color: #d4636f;
+}
+
+/* ===== QUARANTINE CARDS ===== */
+.q-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--amber);
+  transition: all 0.2s;
+}
+
+.q-card:hover {
+  border-color: var(--border-light);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.q-card-top {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.q-card-top .user-cell { flex: 1; min-width: 200px; }
+
+.q-card-meta {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.q-card-content {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.q-card-actions {
+  display: flex; gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===== REPORT CARDS ===== */
+.report-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--ruby);
+}
+
+.report-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.report-info { font-size: 14px; color: var(--text-muted); }
+.report-info strong { color: var(--text); }
+
+.report-reason {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-bar input, .filter-bar select {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-bar input { flex: 1; min-width: 200px; }
+.filter-bar input::placeholder { color: var(--text-dim); }
+.filter-bar input:focus, .filter-bar select:focus { border-color: var(--gold-dim); }
+
+.filter-bar select { cursor: pointer; }
+.filter-bar select option { background: var(--card-bg); }
+
+/* ===== ANALYTICS ===== */
+.analytics-metric {
+  text-align: center;
+  padding: 20px;
+}
+
+.analytics-metric .value {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.analytics-metric .label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.ranked-list { list-style: none; }
+
+.ranked-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.ranked-item:last-child { border-bottom: none; }
+
+.ranked-item .rank {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold);
+  width: 24px;
+  text-align: center;
+}
+
+.ranked-item .info { flex: 1; }
+.ranked-item .info .title { color: var(--text); font-weight: 500; font-size: 14px; }
+.ranked-item .info .sub { color: var(--text-dim); font-size: 12px; }
+
+.ranked-item .bar-indicator {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--sapphire);
+  flex: 1;
+  max-width: 200px;
+}
+
+.h-stacked-bar {
+  display: flex;
+  height: 28px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.h-stacked-bar > div {
+  transition: width 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.taxonomy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.taxonomy-cell {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  text-align: center;
+}
+
+.taxonomy-cell .t-count {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.taxonomy-cell .t-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; }
+  .donut-container { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .hamburger { display: flex; }
+  .overlay.open { display: block; }
+  .main { margin-left: 0; }
+  .topbar { padding-left: 60px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .content { padding: 20px 16px; }
+}
+
+@media (max-width: 480px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .bar-chart { gap: 6px; }
+}
+
+/* ===== TRACERY / DECORATIVE ===== */
+.card::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+}
+
+/* Glow on card hover */
+.card:hover {
+  box-shadow: 0 0 20px rgba(201,168,76,0.05);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* Weekly chart labels */
+.weekly-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  height: 150px;
+}
+
+.weekly-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.weekly-bar .bar-fill {
+  width: 80%;
+  border-radius: 3px 3px 0 0;
+  transition: all 0.3s;
+  min-height: 2px;
+}
+
+.weekly-bar .bar-fill:hover { filter: brightness(1.3); }
+
+.weekly-bar .bar-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<!-- Hamburger -->
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</button>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <h2>Christian Debate</h2>
+    <span>Admin Panel</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard', this)">
+      <span class="icon">&#9670;</span> Dashboard
+    </div>
+    <div class="nav-item" data-page="quarantine" onclick="switchPage('quarantine', this)">
+      <span class="icon">&#9888;</span> Quarantine Queue
+      <span class="nav-badge">12</span>
+    </div>
+    <div class="nav-item" data-page="reports" onclick="switchPage('reports', this)">
+      <span class="icon">&#9873;</span> Reports
+      <span class="nav-badge">5</span>
+    </div>
+    <div class="nav-item" data-page="users" onclick="switchPage('users', this)">
+      <span class="icon">&#9823;</span> Users
+    </div>
+    <div class="nav-item" data-page="debates" onclick="switchPage('debates', this)">
+      <span class="icon">&#9879;</span> Debates
+    </div>
+    <div class="nav-item" data-page="analytics" onclick="switchPage('analytics', this)">
+      <span class="icon">&#9733;</span> Analytics
+    </div>
+    <div class="nav-item" data-page="settings" onclick="switchPage('settings', this)">
+      <span class="icon">&#9881;</span> Settings
+    </div>
+  </nav>
+  <div class="sidebar-user">
+    <div class="sidebar-user-avatar">SM</div>
+    <div class="sidebar-user-info">
+      <div class="name">Sarah M.</div>
+      <div class="role">Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-search">
+      <input type="text" placeholder="Search users, debates, comments...">
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" title="Notifications">
+        &#128276;
+        <span class="badge">3</span>
+      </button>
+      <div class="action-dropdown">
+        <button class="quick-actions-btn">Quick Actions &#9662;</button>
+        <div class="dropdown-menu">
+          <button>Create Debate</button>
+          <button>Add User</button>
+          <button>Send Announcement</button>
+          <button>Export Data</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <div class="page active" id="page-dashboard">
+      <div class="section-header">
+        <h2>Dashboard Overview</h2>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="label">Total Users</div>
+          <div class="value">2,847</div>
+          <div class="change up">&#9650; +124 this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Active Debates</div>
+          <div class="value">156</div>
+          <div class="change up">&#9650; +8 this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Comments Today</div>
+          <div class="value">423</div>
+          <div class="change down">&#9660; -12% vs yesterday</div>
+        </div>
+        <div class="stat-card highlight">
+          <div class="label">Quarantined</div>
+          <div class="value">12</div>
+          <div class="change warn">&#9679; Needs attention</div>
+        </div>
+      </div>
+
+      <!-- Chart + Activity -->
+      <div class="two-col">
+        <!-- Moderation Activity Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Moderation Activity (Last 7 Days)</h3>
+          </div>
+          <div class="card-body">
+            <div class="bar-chart">
+              <!-- Mon -->
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <div class="bar approved" style="height: 38%" title="Approved: 10"></div>
+                  <div class="bar removed" style="height: 16%" title="Removed: 5"></div>
+                </div>
+                <div class="bar-label">Mon</div>
+              </div>
+              <!-- Tue -->
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <div class="bar approved" style="height: 48%" title="Approved: 15"></div>
+                  <div class="bar removed" style="height: 23%" title="Removed: 7"></div>
+                </div>
+                <div class="bar-label">Tue</div>
+              </div>
+              <!-- Wed -->
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <div class="bar approved" style="height: 39%" title="Approved: 12"></div>
+                  <div class="bar removed" style="height: 19%" title="Removed: 6"></div>
+                </div>
+                <div class="bar-label">Wed</div>
+              </div>
+              <!-- Thu -->
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <div class="bar approved" style="height: 65%" title="Approved: 21"></div>
+                  <div class="bar removed" style="height: 32%" title="Removed: 10"></div>
+                </div>
+                <div class="bar-label">Thu</div>
+              </div>
+              <!-- Fri -->
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <div class="bar approved" style="height: 55%" title="Approved: 18"></div>
+                  <div class="bar removed" style="height: 23%" title="Removed: 7"></div>
+                </div>
+                <div class="bar-label">Fri</div>
+              </div>
+              <!-- Sat -->
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <div class="bar approved" style="height: 29%" title="Approved: 9"></div>
+                  <div class="bar removed" style="height: 10%" title="Removed: 3"></div>
+                </div>
+                <div class="bar-label">Sat</div>
+              </div>
+              <!-- Sun -->
+              <div class="bar-group">
+                <div class="bar-stack">
+                  <div class="bar approved" style="height: 19%" title="Approved: 6"></div>
+                  <div class="bar removed" style="height: 6%" title="Removed: 2"></div>
+                </div>
+                <div class="bar-label">Sun</div>
+              </div>
+            </div>
+            <div class="chart-legend">
+              <span><span class="dot" style="background:var(--emerald)"></span> Approved</span>
+              <span><span class="dot" style="background:var(--ruby)"></span> Removed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Activity</h3>
+          </div>
+          <div class="card-body">
+            <ul class="activity-feed">
+              <li class="activity-item">
+                <strong>ReformedPastor</strong>'s comment was auto-quarantined &mdash; flagged for "uncivil"
+                <span class="activity-time">2 min ago</span>
+              </li>
+              <li class="activity-item">
+                <strong>CatholicScholar</strong> reported a comment in <a href="#">"Sola Scriptura"</a> debate
+                <span class="activity-time">15 min ago</span>
+              </li>
+              <li class="activity-item">
+                <strong>HistoryBuff</strong> was promoted to <span class="badge badge-established">Established</span> trust tier
+                <span class="activity-time">1 hour ago</span>
+              </li>
+              <li class="activity-item">
+                Debate <a href="#">"Predestination vs Free Will"</a> was locked by <strong>ModeratorJane</strong>
+                <span class="activity-time">3 hours ago</span>
+              </li>
+              <li class="activity-item">
+                <strong>NewUser42</strong>'s comment was approved from quarantine
+                <span class="activity-time">5 hours ago</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Tier Distribution -->
+      <div class="card" style="max-width: 600px;">
+        <div class="card-header">
+          <h3>Trust Tier Distribution</h3>
+        </div>
+        <div class="card-body">
+          <div class="donut-container">
+            <div class="donut">
+              <div class="donut-hole">
+                <span class="total">2,727</span>
+                <span class="total-label">Total</span>
+              </div>
+            </div>
+            <ul class="donut-legend">
+              <li><span class="swatch" style="background:#6b6760"></span> New (43%) <span class="count">1,240</span></li>
+              <li><span class="swatch" style="background:var(--sapphire)"></span> Established (31%) <span class="count">890</span></li>
+              <li><span class="swatch" style="background:var(--emerald)"></span> Trusted (20%) <span class="count">580</span></li>
+              <li><span class="swatch" style="background:#7b3f8d"></span> Moderator (0.4%) <span class="count">12</span></li>
+              <li><span class="swatch" style="background:var(--ruby)"></span> Admin (0.2%) <span class="count">5</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== QUARANTINE QUEUE ==================== -->
+    <div class="page" id="page-quarantine">
+      <div class="section-header">
+        <h2>Quarantine Queue</h2>
+      </div>
+
+      <!-- Card 1 -->
+      <div class="q-card">
+        <div class="q-card-top">
+          <div class="user-cell">
+            <div class="user-avatar" style="background:var(--sapphire)">RP</div>
+            <div>
+              <div class="uname">ReformedPastor <span style="color:var(--text-dim);font-size:12px">@reformedpastor</span></div>
+              <span class="badge badge-established">Established</span>
+            </div>
+          </div>
+        </div>
+        <div class="q-card-meta">
+          <span>In: <a href="#">"Sola Scriptura vs Tradition"</a></span>
+          <span class="badge badge-reason">auto: uncivil</span>
+          <span>2 min ago</span>
+        </div>
+        <div class="q-card-content">
+          Your argument is intellectually dishonest and anyone who has actually read the Church Fathers would know that. Stop spreading your ignorant take on this topic...
+        </div>
+        <div class="q-card-actions">
+          <button class="btn btn-approve">&#10003; Approve</button>
+          <button class="btn btn-remove">&#10005; Remove</button>
+          <button class="btn btn-neutral">&#128274; Lock Thread</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="q-card">
+        <div class="q-card-top">
+          <div class="user-cell">
+            <div class="user-avatar" style="background:#6b6760">SB</div>
+            <div>
+              <div class="uname">SpamBot99 <span style="color:var(--text-dim);font-size:12px">@spambot99</span></div>
+              <span class="badge badge-new">New</span>
+            </div>
+          </div>
+        </div>
+        <div class="q-card-meta">
+          <span>In: <a href="#">"The Role of Women in Ministry"</a></span>
+          <span class="badge badge-reason">auto: spam</span>
+          <span>18 min ago</span>
+        </div>
+        <div class="q-card-content">
+          Check out this amazing offer! Get free Bible study materials at www.totallylegit-not-spam.com. Click now for exclusive deals...
+        </div>
+        <div class="q-card-actions">
+          <button class="btn btn-approve">&#10003; Approve</button>
+          <button class="btn btn-remove">&#10005; Remove</button>
+          <button class="btn btn-neutral">&#128274; Lock Thread</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="q-card">
+        <div class="q-card-top">
+          <div class="user-cell">
+            <div class="user-avatar" style="background:var(--emerald)">AT</div>
+            <div>
+              <div class="uname">ApologeticsTeacher <span style="color:var(--text-dim);font-size:12px">@apologeticsteacher</span></div>
+              <span class="badge badge-trusted">Trusted</span>
+            </div>
+          </div>
+        </div>
+        <div class="q-card-meta">
+          <span>In: <a href="#">"Young Earth vs Old Earth Creationism"</a></span>
+          <span class="badge badge-reason">flagged: misleading</span>
+          <span>45 min ago</span>
+        </div>
+        <div class="q-card-content">
+          Studies have consistently shown that radiometric dating is fundamentally flawed. The scientific consensus is actually shifting toward young earth models, as demonstrated by several recent peer-reviewed papers...
+        </div>
+        <div class="q-card-actions">
+          <button class="btn btn-approve">&#10003; Approve</button>
+          <button class="btn btn-remove">&#10005; Remove</button>
+          <button class="btn btn-neutral">&#128274; Lock Thread</button>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="q-card">
+        <div class="q-card-top">
+          <div class="user-cell">
+            <div class="user-avatar" style="background:var(--ruby)">NU</div>
+            <div>
+              <div class="uname">NewUser88 <span style="color:var(--text-dim);font-size:12px">@newuser88</span></div>
+              <span class="badge badge-new">New</span>
+            </div>
+          </div>
+        </div>
+        <div class="q-card-meta">
+          <span>In: <a href="#">"Predestination vs Free Will"</a></span>
+          <span class="badge badge-reason">auto: uncivil</span>
+          <span>1 hour ago</span>
+        </div>
+        <div class="q-card-content">
+          If you believe in predestination, then you basically don't believe God is good. Your theology makes God into a monster and I can't believe anyone takes this seriously...
+        </div>
+        <div class="q-card-actions">
+          <button class="btn btn-approve">&#10003; Approve</button>
+          <button class="btn btn-remove">&#10005; Remove</button>
+          <button class="btn btn-neutral">&#128274; Lock Thread</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== REPORTS ==================== -->
+    <div class="page" id="page-reports">
+      <div class="section-header">
+        <h2>Reports</h2>
+      </div>
+
+      <!-- Report 1 -->
+      <div class="report-card">
+        <div class="report-header">
+          <div class="report-info">
+            <strong>CatholicScholar</strong> reported a comment by <strong>ReformedPastor</strong>
+            <br><span style="font-size:12px;color:var(--text-dim)">In: <a href="#">"Sola Scriptura vs Tradition"</a> &middot; 15 min ago</span>
+          </div>
+          <span class="badge badge-reason">Personal attack</span>
+        </div>
+        <div class="report-reason">Reason: "This user is directly attacking my character instead of engaging with my argument."</div>
+        <div class="q-card-content">
+          Maybe if you spent less time parroting papal encyclicals and more time reading Scripture, you'd understand the Reformers' position. Your so-called "tradition" is just human invention.
+        </div>
+        <div class="q-card-actions">
+          <button class="btn btn-neutral">Dismiss</button>
+          <button class="btn btn-gold">Quarantine</button>
+          <button class="btn btn-remove">Remove</button>
+          <button class="btn btn-remove">Ban User</button>
+        </div>
+      </div>
+
+      <!-- Report 2 -->
+      <div class="report-card">
+        <div class="report-header">
+          <div class="report-info">
+            <strong>PastorDave</strong> reported a comment by <strong>SkepticalSeeker</strong>
+            <br><span style="font-size:12px;color:var(--text-dim)">In: <a href="#">"Is the Bible Inerrant?"</a> &middot; 2 hours ago</span>
+          </div>
+          <span class="badge badge-reason">Off-topic / trolling</span>
+        </div>
+        <div class="report-reason">Reason: "This user is not engaging in good faith. Every comment is dismissive one-liners designed to provoke."</div>
+        <div class="q-card-content">
+          LOL imagine believing a book written 2000 years ago by goat herders has anything useful to say. Wake up people.
+        </div>
+        <div class="q-card-actions">
+          <button class="btn btn-neutral">Dismiss</button>
+          <button class="btn btn-gold">Quarantine</button>
+          <button class="btn btn-remove">Remove</button>
+          <button class="btn btn-remove">Ban User</button>
+        </div>
+      </div>
+
+      <!-- Report 3 -->
+      <div class="report-card">
+        <div class="report-header">
+          <div class="report-info">
+            <strong>EvangelicalMom</strong> reported a comment by <strong>LiberalTheologian</strong>
+            <br><span style="font-size:12px;color:var(--text-dim)">In: <a href="#">"Same-Sex Marriage: What Does the Bible Say?"</a> &middot; 5 hours ago</span>
+          </div>
+          <span class="badge badge-reason">Misinformation</span>
+        </div>
+        <div class="report-reason">Reason: "Misrepresents the original Greek text and cites scholars out of context to support a revisionist interpretation."</div>
+        <div class="q-card-content">
+          The word "arsenokoitai" in 1 Corinthians 6:9 has nothing to do with modern homosexuality. Every reputable Greek scholar agrees it refers only to exploitative pederasty, not consensual same-sex relationships...
+        </div>
+        <div class="q-card-actions">
+          <button class="btn btn-neutral">Dismiss</button>
+          <button class="btn btn-gold">Quarantine</button>
+          <button class="btn btn-remove">Remove</button>
+          <button class="btn btn-remove">Ban User</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== USERS ==================== -->
+    <div class="page" id="page-users">
+      <div class="section-header">
+        <h2>User Management</h2>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" placeholder="Search users by name or email...">
+        <select>
+          <option value="">All Tiers</option>
+          <option>New</option>
+          <option>Established</option>
+          <option>Trusted</option>
+          <option>Moderator</option>
+          <option>Admin</option>
+        </select>
+        <select>
+          <option value="">Sort by: Joined</option>
+          <option>Reputation</option>
+          <option>Comments</option>
+          <option>Name A-Z</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Trust Tier</th>
+                <th>Reputation</th>
+                <th>Comments</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:var(--sapphire)">RP</div>
+                    <div><div class="uname">ReformedPastor</div><div class="dname">James Wilson</div></div>
+                  </div>
+                </td>
+                <td>j.wilson@email.com</td>
+                <td><span class="badge badge-established">Established</span></td>
+                <td>1,247</td>
+                <td>342</td>
+                <td>Jan 15, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Promote</button>
+                      <button>Demote</button>
+                      <button class="danger">Ban</button>
+                      <button>View Profile</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:var(--emerald)">CS</div>
+                    <div><div class="uname">CatholicScholar</div><div class="dname">Maria Santos</div></div>
+                  </div>
+                </td>
+                <td>m.santos@uni.edu</td>
+                <td><span class="badge badge-trusted">Trusted</span></td>
+                <td>2,891</td>
+                <td>567</td>
+                <td>Mar 3, 2024</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Promote</button>
+                      <button>Demote</button>
+                      <button class="danger">Ban</button>
+                      <button>View Profile</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#7b3f8d">MJ</div>
+                    <div><div class="uname">ModeratorJane</div><div class="dname">Jane Abernathy</div></div>
+                  </div>
+                </td>
+                <td>jane.a@church.org</td>
+                <td><span class="badge badge-moderator">Moderator</span></td>
+                <td>4,102</td>
+                <td>1,203</td>
+                <td>Nov 12, 2023</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Promote</button>
+                      <button>Demote</button>
+                      <button class="danger">Ban</button>
+                      <button>View Profile</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#6b6760">HB</div>
+                    <div><div class="uname">HistoryBuff</div><div class="dname">David Chen</div></div>
+                  </div>
+                </td>
+                <td>d.chen@gmail.com</td>
+                <td><span class="badge badge-established">Established</span></td>
+                <td>756</td>
+                <td>189</td>
+                <td>Jun 20, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Promote</button>
+                      <button>Demote</button>
+                      <button class="danger">Ban</button>
+                      <button>View Profile</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:var(--ruby)">SM</div>
+                    <div><div class="uname">SarahAdmin</div><div class="dname">Sarah Mitchell</div></div>
+                  </div>
+                </td>
+                <td>sarah@christiandebate.org</td>
+                <td><span class="badge badge-admin">Admin</span></td>
+                <td>5,320</td>
+                <td>2,045</td>
+                <td>Aug 1, 2023</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Promote</button>
+                      <button>Demote</button>
+                      <button class="danger">Ban</button>
+                      <button>View Profile</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#6b6760">NU</div>
+                    <div><div class="uname">NewUser42</div><div class="dname">Alex Thompson</div></div>
+                  </div>
+                </td>
+                <td>a.thompson@email.com</td>
+                <td><span class="badge badge-new">New</span></td>
+                <td>23</td>
+                <td>7</td>
+                <td>Feb 28, 2026</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Promote</button>
+                      <button>Demote</button>
+                      <button class="danger">Ban</button>
+                      <button>View Profile</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== DEBATES ==================== -->
+    <div class="page" id="page-debates">
+      <div class="section-header">
+        <h2>Debates Management</h2>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" placeholder="Search debates...">
+        <select>
+          <option value="">All Status</option>
+          <option>Open</option>
+          <option>Locked</option>
+          <option>Archived</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Creator</th>
+                <th>Sides</th>
+                <th>Comments</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="#">Sola Scriptura vs Sacred Tradition</a></td>
+                <td><span class="badge badge-open">Open</span></td>
+                <td>ReformedPastor</td>
+                <td><span style="color:var(--sapphire)">Scripture Alone</span> vs <span style="color:var(--ruby)">Scripture + Tradition</span></td>
+                <td>234</td>
+                <td>Dec 1, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Lock</button>
+                      <button>Archive</button>
+                      <button class="danger">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="#">Predestination vs Free Will</a></td>
+                <td><span class="badge badge-locked">Locked</span></td>
+                <td>CalvinistKid</td>
+                <td><span style="color:var(--sapphire)">Predestination</span> vs <span style="color:var(--ruby)">Free Will</span></td>
+                <td>567</td>
+                <td>Oct 15, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Unlock</button>
+                      <button>Archive</button>
+                      <button class="danger">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="#">Young Earth vs Old Earth Creationism</a></td>
+                <td><span class="badge badge-open">Open</span></td>
+                <td>ScienceFaithGuy</td>
+                <td><span style="color:var(--sapphire)">Young Earth</span> vs <span style="color:var(--ruby)">Old Earth</span></td>
+                <td>189</td>
+                <td>Jan 5, 2026</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Lock</button>
+                      <button>Archive</button>
+                      <button class="danger">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="#">The Role of Women in Ministry</a></td>
+                <td><span class="badge badge-open">Open</span></td>
+                <td>EvangelicalMom</td>
+                <td><span style="color:var(--sapphire)">Complementarian</span> vs <span style="color:var(--ruby)">Egalitarian</span></td>
+                <td>412</td>
+                <td>Nov 20, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Lock</button>
+                      <button>Archive</button>
+                      <button class="danger">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="#">Baptism: Infant vs Believer's</a></td>
+                <td><span class="badge badge-archived">Archived</span></td>
+                <td>PastorDave</td>
+                <td><span style="color:var(--sapphire)">Infant Baptism</span> vs <span style="color:var(--ruby)">Believer's Baptism</span></td>
+                <td>678</td>
+                <td>Jul 8, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn btn-sm btn-neutral">Actions &#9662;</button>
+                    <div class="dropdown-menu">
+                      <button>Reopen</button>
+                      <button class="danger">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ANALYTICS ==================== -->
+    <div class="page" id="page-analytics">
+      <div class="section-header">
+        <h2>Analytics</h2>
+      </div>
+
+      <!-- Health Metrics -->
+      <div class="stats-row" style="margin-bottom:28px;">
+        <div class="stat-card">
+          <div class="label">Active Users (24h)</div>
+          <div class="value">312</div>
+          <div class="change up">&#9650; +18% vs last week</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Avg Session Duration</div>
+          <div class="value">14m</div>
+          <div class="change up">&#9650; +2m vs last week</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Comments per Debate</div>
+          <div class="value">27.3</div>
+          <div class="change down">&#9660; -1.4 vs last week</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Stance Shift Rate</div>
+          <div class="value">8.2%</div>
+          <div class="change up">&#9650; +0.5% vs last week</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Engagement Over Time -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Engagement Over Time (Weekly)</h3>
+          </div>
+          <div class="card-body">
+            <div class="weekly-bars">
+              <div class="weekly-bar">
+                <div class="bar-fill" style="height:55%;background:var(--sapphire)"></div>
+                <div class="bar-label">W1</div>
+              </div>
+              <div class="weekly-bar">
+                <div class="bar-fill" style="height:72%;background:var(--sapphire)"></div>
+                <div class="bar-label">W2</div>
+              </div>
+              <div class="weekly-bar">
+                <div class="bar-fill" style="height:63%;background:var(--sapphire)"></div>
+                <div class="bar-label">W3</div>
+              </div>
+              <div class="weekly-bar">
+                <div class="bar-fill" style="height:88%;background:var(--sapphire)"></div>
+                <div class="bar-label">W4</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Debates -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Top Debates by Engagement</h3>
+          </div>
+          <div class="card-body">
+            <ul class="ranked-list">
+              <li class="ranked-item">
+                <span class="rank">1</span>
+                <div class="info">
+                  <div class="title">Predestination vs Free Will</div>
+                  <div class="sub">567 comments &middot; 89 unique users</div>
+                </div>
+                <div class="bar-indicator" style="width:180px"></div>
+              </li>
+              <li class="ranked-item">
+                <span class="rank">2</span>
+                <div class="info">
+                  <div class="title">Baptism: Infant vs Believer's</div>
+                  <div class="sub">678 comments &middot; 76 unique users</div>
+                </div>
+                <div class="bar-indicator" style="width:155px"></div>
+              </li>
+              <li class="ranked-item">
+                <span class="rank">3</span>
+                <div class="info">
+                  <div class="title">Women in Ministry</div>
+                  <div class="sub">412 comments &middot; 65 unique users</div>
+                </div>
+                <div class="bar-indicator" style="width:130px"></div>
+              </li>
+              <li class="ranked-item">
+                <span class="rank">4</span>
+                <div class="info">
+                  <div class="title">Sola Scriptura vs Tradition</div>
+                  <div class="sub">234 comments &middot; 48 unique users</div>
+                </div>
+                <div class="bar-indicator" style="width:95px"></div>
+              </li>
+              <li class="ranked-item">
+                <span class="rank">5</span>
+                <div class="info">
+                  <div class="title">Young Earth vs Old Earth</div>
+                  <div class="sub">189 comments &middot; 41 unique users</div>
+                </div>
+                <div class="bar-indicator" style="width:75px"></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vote Reason Distribution -->
+      <div class="card" style="margin-top:24px;">
+        <div class="card-header">
+          <h3>Vote Reason Distribution</h3>
+        </div>
+        <div class="card-body">
+          <div class="h-stacked-bar">
+            <div style="width:35%;background:var(--sapphire)">Well-Reasoned 35%</div>
+            <div style="width:22%;background:var(--emerald)">Scriptural 22%</div>
+            <div style="width:18%;background:var(--amber)">Novel Insight 18%</div>
+            <div style="width:15%;background:#7b3f8d">Charitable 15%</div>
+            <div style="width:10%;background:var(--ruby)">Other 10%</div>
+          </div>
+          <div class="chart-legend" style="margin-top:12px;flex-wrap:wrap;">
+            <span><span class="dot" style="background:var(--sapphire)"></span> Well-Reasoned</span>
+            <span><span class="dot" style="background:var(--emerald)"></span> Scriptural</span>
+            <span><span class="dot" style="background:var(--amber)"></span> Novel Insight</span>
+            <span><span class="dot" style="background:#7b3f8d"></span> Charitable</span>
+            <span><span class="dot" style="background:var(--ruby)"></span> Other</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Argument Taxonomy -->
+      <div class="card" style="margin-top:24px;">
+        <div class="card-header">
+          <h3>Argument Taxonomy Distribution</h3>
+        </div>
+        <div class="card-body">
+          <div class="taxonomy-grid">
+            <div class="taxonomy-cell">
+              <div class="t-count">1,842</div>
+              <div class="t-label">Scriptural Exegesis</div>
+            </div>
+            <div class="taxonomy-cell">
+              <div class="t-count">1,356</div>
+              <div class="t-label">Historical Context</div>
+            </div>
+            <div class="taxonomy-cell">
+              <div class="t-count">987</div>
+              <div class="t-label">Systematic Theology</div>
+            </div>
+            <div class="taxonomy-cell">
+              <div class="t-count">743</div>
+              <div class="t-label">Philosophical</div>
+            </div>
+            <div class="taxonomy-cell">
+              <div class="t-count">621</div>
+              <div class="t-label">Pastoral / Practical</div>
+            </div>
+            <div class="taxonomy-cell">
+              <div class="t-count">415</div>
+              <div class="t-label">Personal Testimony</div>
+            </div>
+            <div class="taxonomy-cell">
+              <div class="t-count">298</div>
+              <div class="t-label">Scientific</div>
+            </div>
+            <div class="taxonomy-cell">
+              <div class="t-count">184</div>
+              <div class="t-label">Ecumenical</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SETTINGS ==================== -->
+    <div class="page" id="page-settings">
+      <div class="section-header">
+        <h2>Settings</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><h3>Moderation Settings</h3></div>
+          <div class="card-body">
+            <div style="margin-bottom:20px;">
+              <label style="display:block;font-size:13px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Auto-Quarantine Threshold</label>
+              <input type="range" style="width:100%;accent-color:var(--gold);" min="1" max="10" value="3">
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-top:4px;">
+                <span>Lenient</span><span>Strict</span>
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <label style="display:block;font-size:13px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">New User Comment Limit (per day)</label>
+              <input type="number" value="10" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:'Crimson Pro',serif;width:100px;">
+            </div>
+            <div style="margin-bottom:20px;">
+              <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-muted);cursor:pointer;">
+                <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px;">
+                Auto-quarantine comments from new users with links
+              </label>
+            </div>
+            <div>
+              <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-muted);cursor:pointer;">
+                <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px;">
+                Require approval for first 5 comments from new users
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Trust Tier Thresholds</h3></div>
+          <div class="card-body">
+            <div style="margin-bottom:16px;">
+              <label style="display:block;font-size:13px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">New &rarr; Established</label>
+              <div style="display:flex;gap:12px;align-items:center;">
+                <input type="number" value="50" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:'Crimson Pro',serif;width:80px;">
+                <span style="color:var(--text-dim);font-size:13px;">reputation points</span>
+              </div>
+            </div>
+            <div style="margin-bottom:16px;">
+              <label style="display:block;font-size:13px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Established &rarr; Trusted</label>
+              <div style="display:flex;gap:12px;align-items:center;">
+                <input type="number" value="500" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:'Crimson Pro',serif;width:80px;">
+                <span style="color:var(--text-dim);font-size:13px;">reputation points</span>
+              </div>
+            </div>
+            <div>
+              <label style="display:block;font-size:13px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Trusted &rarr; Moderator</label>
+              <div style="display:flex;gap:12px;align-items:center;">
+                <span style="color:var(--text-dim);font-size:13px;">Manual promotion only</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+function switchPage(pageId, navEl) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Deactivate all nav items
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  // Show target page
+  const target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+  // Activate nav item
+  if (navEl) navEl.classList.add('active');
+  // Close sidebar on mobile
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

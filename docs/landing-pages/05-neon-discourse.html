@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christian Debate — Neon Discourse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0d0d0d;
+      --bg-card: rgba(20, 20, 30, 0.6);
+      --bg-card-hover: rgba(30, 30, 45, 0.7);
+      --neon-cyan: #00f0ff;
+      --neon-magenta: #ff00aa;
+      --neon-green: #00ff88;
+      --neon-cyan-dim: rgba(0, 240, 255, 0.15);
+      --neon-magenta-dim: rgba(255, 0, 170, 0.15);
+      --neon-green-dim: rgba(0, 255, 136, 0.15);
+      --text-primary: #e0e0e8;
+      --text-muted: #8888aa;
+      --grid-color: rgba(0, 240, 255, 0.04);
+      --border-glow: rgba(0, 240, 255, 0.2);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ===== SCAN-LINE OVERLAY ===== */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.08) 2px,
+        rgba(0, 0, 0, 0.08) 4px
+      );
+    }
+
+    /* ===== GRID / CIRCUIT BACKGROUND ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ===== GLOBAL UTILITIES ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--neon-magenta);
+      text-shadow: 0 0 10px var(--neon-magenta), 0 0 30px rgba(255, 0, 170, 0.3);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      color: #fff;
+      text-shadow:
+        0 0 10px var(--neon-cyan),
+        0 0 40px rgba(0, 240, 255, 0.3),
+        0 0 80px rgba(0, 240, 255, 0.1);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      font-weight: 300;
+    }
+
+    .text-center { text-align: center; }
+
+    /* ===== GLASSMORPHISM CARD ===== */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glow);
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+      transition: all 0.4s ease;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 13px;
+      padding: 1px;
+      background: linear-gradient(
+        135deg,
+        var(--neon-cyan),
+        transparent 40%,
+        transparent 60%,
+        var(--neon-magenta)
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .glass-card:hover::before {
+      opacity: 1;
+    }
+
+    .glass-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+    }
+
+    /* ===== ANIMATED GRADIENT BORDER CARD ===== */
+    .gradient-border-card {
+      position: relative;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px;
+      padding: 32px;
+      z-index: 1;
+    }
+
+    .gradient-border-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 14px;
+      background: linear-gradient(
+        var(--gradient-angle, 0deg),
+        var(--neon-cyan),
+        var(--neon-magenta),
+        var(--neon-green),
+        var(--neon-cyan)
+      );
+      z-index: -1;
+      animation: borderRotate 4s linear infinite;
+    }
+
+    .gradient-border-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      background: var(--bg-card);
+      z-index: -1;
+    }
+
+    @property --gradient-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes borderRotate {
+      to { --gradient-angle: 360deg; }
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      background: rgba(13, 13, 13, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.08);
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--neon-cyan);
+      text-decoration: none;
+      text-shadow: 0 0 10px var(--neon-cyan), 0 0 30px rgba(0, 240, 255, 0.4);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span {
+      color: var(--neon-magenta);
+      text-shadow: 0 0 10px var(--neon-magenta), 0 0 30px rgba(255, 0, 170, 0.4);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    .nav-cta {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid var(--neon-green);
+      border-radius: 4px;
+      color: var(--neon-green);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      transition: all 0.3s;
+      text-shadow: 0 0 6px var(--neon-green);
+      box-shadow: 0 0 8px rgba(0, 255, 136, 0.15);
+    }
+
+    .nav-cta:hover {
+      background: rgba(0, 255, 136, 0.1);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 6px var(--neon-cyan);
+      transition: all 0.3s;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.25;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    .hero-bg-orb--cyan {
+      width: 500px;
+      height: 500px;
+      background: var(--neon-cyan);
+      top: -10%;
+      left: -10%;
+      animation-delay: 0s;
+    }
+
+    .hero-bg-orb--magenta {
+      width: 400px;
+      height: 400px;
+      background: var(--neon-magenta);
+      bottom: -10%;
+      right: -10%;
+      animation-delay: -3s;
+    }
+
+    .hero-bg-orb--green {
+      width: 300px;
+      height: 300px;
+      background: var(--neon-green);
+      top: 50%;
+      left: 60%;
+      animation-delay: -5s;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--neon-green);
+      text-shadow: 0 0 10px var(--neon-green), 0 0 30px rgba(0, 255, 136, 0.3);
+      padding: 8px 24px;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 4px;
+      margin-bottom: 32px;
+      animation: tagPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes tagPulse {
+      0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 136, 0.1); }
+      50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      color: #fff;
+      text-shadow:
+        0 0 10px var(--neon-cyan),
+        0 0 40px rgba(0, 240, 255, 0.4),
+        0 0 80px rgba(0, 240, 255, 0.15);
+    }
+
+    .hero-title .accent {
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-muted);
+      font-weight: 300;
+      margin: 24px auto 40px;
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    .hero-subtitle .highlight {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-green));
+      border: none;
+      border-radius: 6px;
+      color: #0d0d0d;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow:
+        0 0 15px rgba(0, 240, 255, 0.3),
+        0 0 40px rgba(0, 240, 255, 0.1);
+      animation: ctaPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes ctaPulse {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5), 0 0 60px rgba(0, 240, 255, 0.2);
+      }
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 30px rgba(0, 240, 255, 0.5),
+        0 0 80px rgba(0, 240, 255, 0.2);
+    }
+
+    .btn-secondary {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 14px 36px;
+      background: transparent;
+      border: 1px solid var(--neon-magenta);
+      border-radius: 6px;
+      color: var(--neon-magenta);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-shadow: 0 0 6px var(--neon-magenta);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 0, 170, 0.1);
+      box-shadow: 0 0 20px rgba(255, 0, 170, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 64px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .hero-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      padding: 36px 28px;
+      text-align: left;
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .feature-icon--cyan {
+      background: var(--neon-cyan-dim);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+    }
+
+    .feature-icon--magenta {
+      background: var(--neon-magenta-dim);
+      border: 1px solid rgba(255, 0, 170, 0.2);
+      color: var(--neon-magenta);
+      box-shadow: 0 0 20px rgba(255, 0, 170, 0.1);
+    }
+
+    .feature-icon--green {
+      background: var(--neon-green-dim);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      color: var(--neon-green);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+    }
+
+    .feature-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.15);
+    }
+
+    .feature-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ===== HOW IT WORKS SECTION ===== */
+    .how-it-works {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+      position: relative;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+    }
+
+    .step-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--neon-cyan);
+      text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+
+    .step-terminal {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: left;
+      position: relative;
+    }
+
+    .step-terminal::before {
+      content: '';
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      height: 8px;
+      background:
+        radial-gradient(circle at 8px 4px, var(--neon-magenta) 3px, transparent 3px),
+        radial-gradient(circle at 22px 4px, var(--neon-green) 3px, transparent 3px),
+        radial-gradient(circle at 36px 4px, var(--neon-cyan) 3px, transparent 3px);
+      background-repeat: no-repeat;
+    }
+
+    .step-terminal-text {
+      font-size: 0.75rem;
+      color: var(--neon-green);
+      text-shadow: 0 0 4px var(--neon-green);
+      line-height: 1.6;
+    }
+
+    .step-terminal-text .prompt {
+      color: var(--neon-cyan);
+    }
+
+    .step-terminal-text .comment {
+      color: var(--text-muted);
+    }
+
+    .step-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    .step-connector {
+      display: none;
+      position: absolute;
+      top: 80px;
+      right: -20px;
+      color: var(--neon-cyan);
+      font-size: 1.2rem;
+      text-shadow: 0 0 10px var(--neon-cyan);
+      animation: connectorPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes connectorPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .testimonial-card {
+      padding: 32px;
+      position: relative;
+    }
+
+    .testimonial-card .quote-mark {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 15px var(--neon-cyan);
+      line-height: 1;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .testimonial-text {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #0d0d0d;
+    }
+
+    .testimonial-avatar--cyan {
+      background: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    .testimonial-avatar--magenta {
+      background: var(--neon-magenta);
+      box-shadow: 0 0 12px rgba(255, 0, 170, 0.4);
+    }
+
+    .testimonial-avatar--green {
+      background: var(--neon-green);
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
+    }
+
+    .testimonial-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .testimonial-role {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 100px 0 120px;
+      position: relative;
+    }
+
+    .cta-box {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 56px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(0, 240, 255, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(255, 0, 170, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: #fff;
+      text-shadow:
+        0 0 10px var(--neon-cyan),
+        0 0 40px rgba(0, 240, 255, 0.2);
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-bottom: 36px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-input-group {
+      display: flex;
+      gap: 12px;
+      max-width: 460px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-input {
+      flex: 1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      padding: 14px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 6px;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .cta-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .cta-input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+    }
+
+    .cta-submit {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--neon-magenta), #cc0088);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px rgba(255, 0, 170, 0.25);
+      animation: ctaPulse2 2.5s ease-in-out infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes ctaPulse2 {
+      0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 170, 0.25); }
+      50% { box-shadow: 0 0 30px rgba(255, 0, 170, 0.45); }
+    }
+
+    .cta-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255, 0, 170, 0.5);
+    }
+
+    .cta-note {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 40px 0;
+      border-top: 1px solid rgba(0, 240, 255, 0.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    .footer-copy {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--neon-cyan);
+    }
+
+    /* ===== DIVIDER ===== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--neon-cyan),
+        var(--neon-magenta),
+        transparent
+      );
+      opacity: 0.3;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    /* ===== CIRCUIT DECORATION ===== */
+    .circuit-line {
+      position: absolute;
+      background: var(--neon-cyan);
+      opacity: 0.06;
+    }
+
+    .circuit-line--h {
+      height: 1px;
+      width: 200px;
+    }
+
+    .circuit-line--v {
+      width: 1px;
+      height: 200px;
+    }
+
+    .circuit-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neon-cyan);
+      opacity: 0.1;
+      box-shadow: 0 0 8px var(--neon-cyan);
+      animation: dotBlink 3s ease-in-out infinite;
+    }
+
+    @keyframes dotBlink {
+      0%, 100% { opacity: 0.05; }
+      50% { opacity: 0.2; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (min-width: 768px) {
+      .step-connector {
+        display: block;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(13, 13, 13, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 24px;
+        gap: 20px;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero-stats {
+        gap: 24px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-input-group {
+        flex-direction: column;
+      }
+
+      .cta-box {
+        padding: 40px 24px;
+      }
+
+      .footer .container {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+    .fade-in-delay-5 { transition-delay: 0.5s; }
+    .fade-in-delay-6 { transition-delay: 0.6s; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">CHRISTIAN<span>//DEBATE</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">Process</a></li>
+        <li><a href="#testimonials">Voices</a></li>
+        <li><a href="#cta">Access</a></li>
+      </ul>
+      <a href="#cta" class="nav-cta">Request Access</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-orb hero-bg-orb--cyan"></div>
+    <div class="hero-bg-orb hero-bg-orb--magenta"></div>
+    <div class="hero-bg-orb hero-bg-orb--green"></div>
+
+    <!-- Circuit decorations -->
+    <div class="circuit-dot" style="top: 15%; left: 8%;"></div>
+    <div class="circuit-dot" style="top: 70%; left: 12%; animation-delay: -1s;"></div>
+    <div class="circuit-dot" style="top: 25%; right: 10%; animation-delay: -2s;"></div>
+    <div class="circuit-dot" style="top: 80%; right: 8%; animation-delay: -0.5s;"></div>
+    <div class="circuit-line circuit-line--h" style="top: 20%; left: 0;"></div>
+    <div class="circuit-line circuit-line--h" style="bottom: 30%; right: 0;"></div>
+    <div class="circuit-line circuit-line--v" style="top: 0; left: 15%;"></div>
+    <div class="circuit-line circuit-line--v" style="bottom: 0; right: 12%;"></div>
+
+    <div class="hero-content">
+      <span class="hero-tag fade-in">Faith // Future // Discourse</span>
+      <h1 class="hero-title fade-in fade-in-delay-1">
+        Structured Debate<br>
+        <span class="accent">Reimagined</span>
+      </h1>
+      <p class="hero-subtitle fade-in fade-in-delay-2">
+        Where <span class="highlight">ancient wisdom</span> meets cutting-edge discourse.
+        Multi-view debates, reasoned voting, and AI-neutral verdicts
+        for the conversations that matter most.
+      </p>
+      <div class="hero-buttons fade-in fade-in-delay-3">
+        <a href="#cta" class="btn-primary">Initialize Discourse</a>
+        <a href="#features" class="btn-secondary">Explore Systems</a>
+      </div>
+      <div class="hero-stats fade-in fade-in-delay-4">
+        <div class="hero-stat">
+          <div class="hero-stat-value">4</div>
+          <div class="hero-stat-label">View Modes</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">12+</div>
+          <div class="hero-stat-label">Vote Categories</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">360&deg;</div>
+          <div class="hero-stat-label">Analytics Engine</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-label fade-in">// System Modules</p>
+        <h2 class="section-title fade-in fade-in-delay-1">Debate Architecture</h2>
+        <p class="section-subtitle fade-in fade-in-delay-2">
+          Six interlocking systems designed to transform how Christians engage with theology,
+          doctrine, and the questions that define faith.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="glass-card feature-card fade-in fade-in-delay-1">
+          <div class="feature-icon feature-icon--cyan">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="feature-name">Thread View</h3>
+          <p class="feature-desc">
+            Classic threaded conversations with deep nesting, real-time updates, and
+            virtualized rendering for debates that scale to thousands of replies.
+          </p>
+        </div>
+
+        <div class="glass-card feature-card fade-in fade-in-delay-2">
+          <div class="feature-icon feature-icon--magenta">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
+          </div>
+          <h3 class="feature-name">Sides View</h3>
+          <p class="feature-desc">
+            Pro and Con columns displayed side by side. See the strongest arguments
+            for each position emerge organically through community reasoning.
+          </p>
+        </div>
+
+        <div class="glass-card feature-card fade-in fade-in-delay-3">
+          <div class="feature-icon feature-icon--green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 class="feature-name">Best Exchanges</h3>
+          <p class="feature-desc">
+            The most impactful argument-counterargument pairs, surfaced by collective
+            intelligence. The highlights reel of every debate.
+          </p>
+        </div>
+
+        <div class="glass-card feature-card fade-in fade-in-delay-4">
+          <div class="feature-icon feature-icon--cyan">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3 class="feature-name">Neutral Verdict</h3>
+          <p class="feature-desc">
+            AI-generated impartial summaries that synthesize both sides, identify
+            common ground, and present the state of the discourse without bias.
+          </p>
+        </div>
+
+        <div class="glass-card feature-card fade-in fade-in-delay-5">
+          <div class="feature-icon feature-icon--magenta">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          </div>
+          <h3 class="feature-name">Reasoned Voting</h3>
+          <p class="feature-desc">
+            Every vote requires a reason and category -- "well-sourced," "logically sound,"
+            "novel insight." Votes carry weight beyond simple up/down.
+          </p>
+        </div>
+
+        <div class="glass-card feature-card fade-in fade-in-delay-6">
+          <div class="feature-icon feature-icon--green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+          </div>
+          <h3 class="feature-name">Analytics Engine</h3>
+          <p class="feature-desc">
+            Stance shift tracking, argument quality metrics, engagement heatmaps, and
+            persuasion analytics. Data-driven discourse at every level.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-label fade-in">// Execution Protocol</p>
+        <h2 class="section-title fade-in fade-in-delay-1">How It Works</h2>
+        <p class="section-subtitle fade-in fade-in-delay-2">
+          From initialization to verdict -- a four-phase process engineered for depth.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step fade-in fade-in-delay-1">
+          <div class="step-number">01</div>
+          <div class="step-terminal">
+            <div class="step-terminal-text">
+              <span class="prompt">&gt;</span> init --topic<br>
+              <span class="comment">// declare your stance</span><br>
+              <span class="prompt">&gt;</span> stance.set("pro")<br>
+              <span style="color: var(--neon-cyan);">OK</span> Registered.
+            </div>
+          </div>
+          <h3 class="step-title">Declare Position</h3>
+          <p class="step-desc">Enter a debate and declare your stance. Your position is logged for shift tracking.</p>
+          <span class="step-connector">&raquo;</span>
+        </div>
+
+        <div class="step fade-in fade-in-delay-2">
+          <div class="step-number">02</div>
+          <div class="step-terminal">
+            <div class="step-terminal-text">
+              <span class="prompt">&gt;</span> compose --mode rich<br>
+              <span class="comment">// scripture + logic</span><br>
+              <span class="prompt">&gt;</span> cite("Rom 8:28")<br>
+              <span style="color: var(--neon-cyan);">OK</span> Linked.
+            </div>
+          </div>
+          <h3 class="step-title">Build Arguments</h3>
+          <p class="step-desc">Craft your case with rich text, scripture references, and structured reasoning.</p>
+          <span class="step-connector">&raquo;</span>
+        </div>
+
+        <div class="step fade-in fade-in-delay-3">
+          <div class="step-number">03</div>
+          <div class="step-terminal">
+            <div class="step-terminal-text">
+              <span class="prompt">&gt;</span> vote --reasoned<br>
+              <span class="comment">// category: "well-sourced"</span><br>
+              <span class="prompt">&gt;</span> submit(weight: 1.3)<br>
+              <span style="color: var(--neon-cyan);">OK</span> Counted.
+            </div>
+          </div>
+          <h3 class="step-title">Evaluate & Vote</h3>
+          <p class="step-desc">Review arguments across all views. Cast reasoned votes with specific categories.</p>
+          <span class="step-connector">&raquo;</span>
+        </div>
+
+        <div class="step fade-in fade-in-delay-4">
+          <div class="step-number">04</div>
+          <div class="step-terminal">
+            <div class="step-terminal-text">
+              <span class="prompt">&gt;</span> verdict --generate<br>
+              <span class="comment">// neutral synthesis</span><br>
+              <span class="prompt">&gt;</span> analytics.render()<br>
+              <span style="color: var(--neon-green);">COMPLETE</span>
+            </div>
+          </div>
+          <h3 class="step-title">Verdict & Insights</h3>
+          <p class="step-desc">Receive a neutral AI verdict, view stance shifts, and explore full analytics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-label fade-in">// Signal Intercepts</p>
+        <h2 class="section-title fade-in fade-in-delay-1">Community Transmissions</h2>
+        <p class="section-subtitle fade-in fade-in-delay-2">
+          Early adopters report from the frontier of faith-driven discourse.
+        </p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="glass-card testimonial-card fade-in fade-in-delay-1">
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">
+            The Sides View completely changed how I approach Calvinist-Arminian debates.
+            Seeing the strongest arguments laid out in parallel forced me to engage with
+            positions I'd always dismissed. My stance actually shifted -- and I can see
+            the data trail of exactly when and why.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar testimonial-avatar--cyan">DR</div>
+            <div>
+              <div class="testimonial-name">David R.</div>
+              <div class="testimonial-role">Seminary Student, Dallas</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card testimonial-card fade-in fade-in-delay-2">
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">
+            Reasoned voting is a revelation. No more drive-by downvotes. When someone
+            disagrees with my argument, I can see exactly why -- "lacks scriptural
+            support" or "logically inconsistent." That is the kind of feedback that
+            actually sharpens iron.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar testimonial-avatar--magenta">MK</div>
+            <div>
+              <div class="testimonial-name">Maria K.</div>
+              <div class="testimonial-role">Theology Blogger</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card testimonial-card fade-in fade-in-delay-3">
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">
+            I run a small group of 30 people. We use Best Exchanges to curate the
+            highlights from our weekly debates. The neutral verdict feature saves hours
+            of summary writing and is remarkably fair to all positions represented.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar testimonial-avatar--green">JP</div>
+            <div>
+              <div class="testimonial-name">James P.</div>
+              <div class="testimonial-role">Small Group Leader, Portland</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section" id="cta">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-label fade-in">// Join the Network</p>
+      </div>
+      <div class="gradient-border-card cta-box fade-in fade-in-delay-1">
+        <h2 class="cta-title">Initialize Your<br>Discourse Node</h2>
+        <p class="cta-desc">
+          Request early access to the platform where tradition meets technology.
+          Be among the first to experience structured Christian debate, reimagined.
+        </p>
+        <form class="cta-input-group" onsubmit="event.preventDefault(); this.querySelector('button').textContent='SIGNAL SENT'; this.querySelector('button').style.background='linear-gradient(135deg, var(--neon-green), #00cc6a)'; this.querySelector('input').value='';">
+          <input type="email" class="cta-input" placeholder="your@email.address" required>
+          <button type="submit" class="cta-submit">Transmit</button>
+        </form>
+        <p class="cta-note">// No spam. Encrypted channel. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">CHRISTIAN//DEBATE</div>
+      <ul class="footer-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">Process</a></li>
+        <li><a href="#testimonials">Voices</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+      <p class="footer-copy">2026 Christian Debate. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Close mobile nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+
+    // Intersection Observer for scroll animations
+    const fadeElements = document.querySelectorAll('.fade-in');
+
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    fadeElements.forEach(el => fadeObserver.observe(el));
+
+    // Smooth parallax on hero orbs
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const orbs = document.querySelectorAll('.hero-bg-orb');
+          orbs.forEach((orb, i) => {
+            const speed = 0.15 + (i * 0.05);
+            orb.style.transform = `translateY(${scrollY * speed}px)`;
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // Typing effect for hero stat values
+    function animateValue(element, start, end, duration, suffix = '') {
+      const range = end - start;
+      const startTime = performance.now();
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + range * eased);
+        element.textContent = current + suffix;
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    // Observe hero stats
+    const statsSection = document.querySelector('.hero-stats');
+    if (statsSection) {
+      const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const stats = entry.target.querySelectorAll('.hero-stat-value');
+            animateValue(stats[0], 0, 4, 1200);
+            animateValue(stats[1], 0, 12, 1400, '+');
+            statsObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      statsObserver.observe(statsSection);
+    }
+  </script>
+</body>
+</html>

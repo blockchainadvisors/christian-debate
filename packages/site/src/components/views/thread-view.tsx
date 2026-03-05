@@ -1,0 +1,153 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { CommentTree } from "@/components/comments/comment-tree";
+import { CommentEditor } from "@/components/comments/comment-editor";
+import { StanceDeclaration } from "@/components/stances/stance-declaration";
+import { StanceSummary } from "@/components/stances/stance-summary";
+import type { CommentWithAuthor } from "@/types/comments";
+import type { StanceSummary as StanceSummaryType, StanceSide } from "@/types/stances";
+
+interface Debate {
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  sideALabel: string;
+  sideBLabel: string;
+  status: string;
+  tags: string[] | null;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface ThreadViewProps {
+  debate: Debate;
+}
+
+export function ThreadView({ debate }: ThreadViewProps) {
+  const [comments, setComments] = useState<CommentWithAuthor[]>([]);
+  const [stanceSummary, setStanceSummary] = useState<StanceSummaryType | null>(null);
+  const [currentStance, setCurrentStance] = useState<StanceSide | null | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchComments = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/debates/${debate.slug}/comments`);
+      if (res.ok) {
+        const data = await res.json();
+        setComments(data);
+      }
+    } catch {
+      // silently fail — comments will remain empty
+    }
+  }, [debate.slug]);
+
+  const fetchStances = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/debates/${debate.slug}/stances`);
+      if (res.ok) {
+        const data = await res.json();
+        setStanceSummary(data.summary);
+      }
+    } catch {
+      // silently fail
+    }
+  }, [debate.slug]);
+
+  const fetchMyStance = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/debates/${debate.slug}/stances/me`);
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentStance(data.declaredStance ?? null);
+      } else if (res.status === 401) {
+        // Not authenticated
+        setCurrentStance(null);
+      } else {
+        setCurrentStance(null);
+      }
+    } catch {
+      setCurrentStance(null);
+    }
+  }, [debate.slug]);
+
+  useEffect(() => {
+    const load = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchComments(), fetchStances(), fetchMyStance()]);
+      setIsLoading(false);
+    };
+    load();
+  }, [fetchComments, fetchStances, fetchMyStance]);
+
+  const handleCommentAdded = useCallback(() => {
+    fetchComments();
+    fetchStances();
+  }, [fetchComments, fetchStances]);
+
+  const isOpen = debate.status === "open";
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-24 animate-pulse rounded-lg bg-muted" />
+        <div className="h-8 animate-pulse rounded-full bg-muted" />
+        <div className="h-32 animate-pulse rounded-lg bg-muted" />
+        <div className="h-48 animate-pulse rounded-lg bg-muted" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Stance Declaration */}
+      {isOpen && currentStance !== undefined && (
+        <StanceDeclaration
+          debateSlug={debate.slug}
+          sideALabel={debate.sideALabel}
+          sideBLabel={debate.sideBLabel}
+          currentStance={currentStance}
+        />
+      )}
+
+      {/* Stance Summary Bar */}
+      {stanceSummary && (
+        <StanceSummary
+          summary={stanceSummary}
+          sideALabel={debate.sideALabel}
+          sideBLabel={debate.sideBLabel}
+        />
+      )}
+
+      {/* Top-level Comment Editor */}
+      {isOpen && (
+        <div>
+          <h3 className="mb-3 text-sm font-medium text-muted-foreground">
+            Add your comment
+          </h3>
+          <CommentEditor
+            debateId={debate.id}
+            debateSlug={debate.slug}
+            sideALabel={debate.sideALabel}
+            sideBLabel={debate.sideBLabel}
+            onSubmit={handleCommentAdded}
+          />
+        </div>
+      )}
+
+      {/* Comment Tree */}
+      <CommentTree
+        comments={comments}
+        debate={{
+          id: debate.id,
+          slug: debate.slug,
+          sideALabel: debate.sideALabel,
+          sideBLabel: debate.sideBLabel,
+        }}
+        onCommentAdded={handleCommentAdded}
+      />
+    </div>
+  );
+}

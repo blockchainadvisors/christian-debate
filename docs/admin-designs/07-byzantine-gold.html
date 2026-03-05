@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Debate - Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Vollkorn:wght@400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-deep: #0d1442;
+    --bg-sidebar: #0a0f30;
+    --bg-card: #111a4a;
+    --bg-card-hover: #152060;
+    --text-cream: #fdf5e6;
+    --text-muted: #b0a890;
+    --gold: #ffd700;
+    --gold-dim: #c5a600;
+    --gold-glow: rgba(255, 215, 0, 0.25);
+    --crimson: #b71c1c;
+    --crimson-light: #e53935;
+    --teal: #00695c;
+    --teal-light: #00897b;
+    --font-logo: 'Uncial Antiqua', cursive;
+    --font-heading: 'Vollkorn', serif;
+    --font-body: 'Merriweather', serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--bg-deep);
+    color: var(--text-cream);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        rgba(255, 215, 0, 0.012) 0deg 90deg,
+        transparent 90deg 180deg
+      );
+    background-size: 60px 60px;
+  }
+
+  /* Layout */
+  .app { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid rgba(255, 215, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+    text-align: center;
+  }
+
+  .sidebar-logo h1 {
+    font-family: var(--font-logo);
+    font-size: 22px;
+    color: var(--gold);
+    text-shadow: 0 0 20px var(--gold-glow);
+    letter-spacing: 1px;
+  }
+
+  .sidebar-logo .badge {
+    display: inline-block;
+    margin-top: 6px;
+    background: rgba(255, 215, 0, 0.12);
+    color: var(--gold);
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .sidebar-nav a:hover {
+    color: var(--text-cream);
+    background: rgba(255, 215, 0, 0.06);
+  }
+
+  .sidebar-nav a.active {
+    color: var(--gold);
+    background: rgba(255, 215, 0, 0.08);
+    border-left: 3px solid var(--gold);
+    box-shadow: inset 4px 0 12px rgba(255, 215, 0, 0.1);
+    padding-left: 21px;
+  }
+
+  .sidebar-nav a .nav-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--crimson);
+    color: #fff;
+    font-size: 11px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  .sidebar-user {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255, 215, 0, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar-ring {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    padding: 2px;
+    box-shadow: 0 0 8px var(--gold-glow);
+    flex-shrink: 0;
+  }
+
+  .avatar-ring .avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--bg-sidebar);
+  }
+
+  .sidebar-user .user-info {
+    font-size: 13px;
+  }
+
+  .sidebar-user .user-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--text-cream);
+  }
+
+  .sidebar-user .user-role {
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  /* Mobile toggle */
+  .mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 200;
+    background: var(--bg-sidebar);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    color: var(--gold);
+    font-size: 22px;
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Main */
+  .main {
+    flex: 1;
+    margin-left: 260px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Top Bar */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 14px 32px;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .search-box {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-cream);
+    font-family: var(--font-body);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-box input::placeholder { color: var(--text-muted); }
+  .search-box input:focus { border-color: var(--gold); }
+
+  .search-box .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .notif-bell {
+    position: relative;
+    background: none;
+    border: none;
+    color: var(--text-cream);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px;
+  }
+
+  .notif-bell .notif-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--crimson);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+  }
+
+  /* Content */
+  .content { padding: 28px 32px; flex: 1; }
+
+  /* Section */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Arch header */
+  .arch-header {
+    text-align: center;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .arch-header h2 {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gold);
+    display: inline-block;
+    padding: 10px 40px;
+    position: relative;
+  }
+
+  .arch-header h2::before,
+  .arch-header h2::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim));
+  }
+
+  .arch-header h2::before { right: 100%; }
+  .arch-header h2::after { left: 100%; background: linear-gradient(to left, transparent, var(--gold-dim)); }
+
+  .arch-header .arch-shape {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 50px;
+    border: 1px solid rgba(255, 215, 0, 0.08);
+    border-bottom: none;
+    border-radius: 150px 150px 0 0;
+    pointer-events: none;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border-radius: 10px;
+    border-top: 3px solid var(--gold);
+    padding: 20px 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.08);
+  }
+
+  /* Stat Cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .stat-card .stat-value {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .stat-card .stat-change {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .stat-change.up { color: var(--teal-light); }
+  .stat-change.down { color: var(--crimson-light); }
+
+  /* Grid layouts */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .dashboard-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* Bar Chart */
+  .chart-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-cream);
+    margin-bottom: 20px;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 160px;
+    padding-top: 10px;
+  }
+
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .bar {
+    width: 100%;
+    max-width: 40px;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(to top, var(--gold-dim), var(--gold));
+    transition: height 0.5s ease;
+    position: relative;
+  }
+
+  .bar::after {
+    content: attr(data-value);
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+  }
+
+  .bar-label {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* Activity Feed */
+  .feed-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.06);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .feed-item:last-child { border-bottom: none; }
+
+  .feed-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .feed-dot.gold { background: var(--gold); }
+  .feed-dot.crimson { background: var(--crimson-light); }
+  .feed-dot.teal { background: var(--teal-light); }
+
+  .feed-text {
+    font-size: 13px;
+    color: var(--text-cream);
+  }
+
+  .feed-text strong { color: var(--gold); }
+
+  .feed-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Trust Tier */
+  .tier-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .tier-label {
+    font-size: 13px;
+    width: 100px;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+  }
+
+  .tier-bar-bg {
+    flex: 1;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .tier-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s ease;
+  }
+
+  .tier-bar-fill.gold-fill { background: linear-gradient(to right, var(--gold-dim), var(--gold)); }
+  .tier-bar-fill.teal-fill { background: linear-gradient(to right, var(--teal), var(--teal-light)); }
+  .tier-bar-fill.crimson-fill { background: linear-gradient(to right, var(--crimson), var(--crimson-light)); }
+  .tier-bar-fill.muted-fill { background: var(--text-muted); }
+
+  .tier-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    width: 40px;
+    text-align: right;
+  }
+
+  /* Quarantine Queue */
+  .queue-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .queue-card .queue-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .queue-card .queue-author {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-cream);
+  }
+
+  .queue-card .queue-reason {
+    font-size: 11px;
+    color: var(--crimson-light);
+    background: rgba(183, 28, 28, 0.15);
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+
+  .queue-card .queue-content {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.7;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border-left: 2px solid rgba(255, 215, 0, 0.15);
+  }
+
+  .queue-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 7px 16px;
+    border-radius: 6px;
+    border: none;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-approve {
+    background: var(--teal);
+    color: #fff;
+  }
+  .btn-approve:hover { background: var(--teal-light); }
+
+  .btn-reject {
+    background: var(--crimson);
+    color: #fff;
+  }
+  .btn-reject:hover { background: var(--crimson-light); }
+
+  .btn-edit {
+    background: rgba(255, 215, 0, 0.12);
+    color: var(--gold);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+  }
+  .btn-edit:hover { background: rgba(255, 215, 0, 0.2); }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+    color: var(--bg-sidebar);
+  }
+  .btn-gold:hover { box-shadow: 0 0 12px var(--gold-glow); }
+
+  /* Tables */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.15);
+  }
+
+  .data-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.06);
+    color: var(--text-cream);
+  }
+
+  .data-table tr:hover td {
+    background: rgba(255, 215, 0, 0.03);
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-heading);
+  }
+
+  .status-active { background: rgba(0, 105, 92, 0.2); color: var(--teal-light); }
+  .status-suspended { background: rgba(183, 28, 28, 0.2); color: var(--crimson-light); }
+  .status-pending { background: rgba(255, 215, 0, 0.12); color: var(--gold); }
+  .status-open { background: rgba(0, 105, 92, 0.2); color: var(--teal-light); }
+  .status-closed { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
+  .status-locked { background: rgba(183, 28, 28, 0.15); color: var(--crimson-light); }
+
+  /* Report Cards */
+  .report-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .report-card .report-type {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--crimson-light);
+    margin-bottom: 10px;
+  }
+
+  .report-card .report-target {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-cream);
+    margin-bottom: 6px;
+  }
+
+  .report-card .report-by {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .report-card .report-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  /* Analytics */
+  .analytics-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .health-metric .metric-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .health-metric .metric-value {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-cream);
+  }
+
+  .health-metric .metric-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .mini-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .mini-bar .mini-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mini-bar .mini-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .mini-bar .mini-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold-dim), var(--gold));
+    border-radius: 4px;
+  }
+
+  .mini-bar .mini-val {
+    font-size: 12px;
+    color: var(--text-muted);
+    width: 36px;
+    text-align: right;
+  }
+
+  /* Vote donut placeholder */
+  .donut-chart {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 10px auto;
+    position: relative;
+    background: conic-gradient(
+      var(--gold) 0deg 130deg,
+      var(--teal-light) 130deg 230deg,
+      var(--crimson-light) 230deg 300deg,
+      var(--text-muted) 300deg 360deg
+    );
+  }
+
+  .donut-chart::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--bg-card);
+  }
+
+  .donut-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .taxonomy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .taxonomy-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  .taxonomy-item span:first-child { color: var(--text-cream); }
+  .taxonomy-item span:last-child { color: var(--gold); font-family: var(--font-heading); font-weight: 700; }
+
+  /* Gold shimmer hover on cards */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 215, 0, 0.6) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover::before {
+    opacity: 1;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Small avatar */
+  .avatar-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--bg-sidebar);
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--gold-glow);
+  }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .dashboard-grid-3 { grid-template-columns: 1fr; }
+    .queue-grid { grid-template-columns: 1fr; }
+    .report-grid { grid-template-columns: 1fr; }
+    .analytics-grid { grid-template-columns: 1fr; }
+    .analytics-stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .taxonomy-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .mobile-toggle { display: flex; }
+    .main { margin-left: 0; }
+    .top-bar { padding: 14px 16px; padding-left: 64px; }
+    .content { padding: 20px 16px; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 10px 8px; }
+  }
+
+  /* Overlay for mobile */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 90;
+  }
+
+  .sidebar-overlay.show { display: block; }
+
+  /* Engagement line chart (CSS-only approximation) */
+  .line-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 120px;
+  }
+
+  .line-chart .line-point {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+  }
+
+  .line-chart .line-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--bg-card);
+    box-shadow: 0 0 4px var(--gold-glow);
+  }
+
+  .line-chart .line-stem {
+    width: 2px;
+    background: rgba(255, 215, 0, 0.2);
+  }
+
+  .line-chart .line-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Mobile Toggle -->
+  <button class="mobile-toggle" onclick="toggleSidebar()">&#9776;</button>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <h1>Christian Debate</h1>
+      <span class="badge">Admin</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="active" data-section="dashboard" onclick="navigate(event, 'dashboard')">
+        <span class="nav-icon">&#9670;</span> Dashboard
+      </a>
+      <a href="#" data-section="quarantine" onclick="navigate(event, 'quarantine')">
+        <span class="nav-icon">&#9888;</span> Quarantine Queue
+        <span class="nav-badge">12</span>
+      </a>
+      <a href="#" data-section="reports" onclick="navigate(event, 'reports')">
+        <span class="nav-icon">&#9873;</span> Reports
+        <span class="nav-badge">5</span>
+      </a>
+      <a href="#" data-section="users" onclick="navigate(event, 'users')">
+        <span class="nav-icon">&#9823;</span> Users
+      </a>
+      <a href="#" data-section="debates" onclick="navigate(event, 'debates')">
+        <span class="nav-icon">&#9997;</span> Debates
+      </a>
+      <a href="#" data-section="analytics" onclick="navigate(event, 'analytics')">
+        <span class="nav-icon">&#9636;</span> Analytics
+      </a>
+      <a href="#" data-section="settings" onclick="navigate(event, 'settings')">
+        <span class="nav-icon">&#9881;</span> Settings
+      </a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="avatar-ring">
+        <div class="avatar-inner">SM</div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Sarah M.</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="search-box">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" placeholder="Search users, debates, reports...">
+      </div>
+      <button class="notif-bell">
+        &#128276;
+        <span class="notif-count">3</span>
+      </button>
+    </header>
+
+    <div class="content">
+
+      <!-- ========== DASHBOARD ========== -->
+      <section class="section active" id="section-dashboard">
+        <div class="arch-header">
+          <div class="arch-shape"></div>
+          <h2>Dashboard Overview</h2>
+        </div>
+
+        <div class="stat-grid">
+          <div class="card stat-card">
+            <div class="stat-label">Active Users</div>
+            <div class="stat-value">2,847</div>
+            <div class="stat-change up">+12.3% this week</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-label">Open Debates</div>
+            <div class="stat-value">184</div>
+            <div class="stat-change up">+8 new today</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-label">Pending Moderation</div>
+            <div class="stat-value">12</div>
+            <div class="stat-change down">3 flagged critical</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-label">Avg. Trust Score</div>
+            <div class="stat-value">73.2</div>
+            <div class="stat-change up">+1.4 from last month</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Bar Chart -->
+          <div class="card">
+            <div class="chart-title">Moderation Activity (Last 7 Days)</div>
+            <div class="bar-chart">
+              <div class="bar-col">
+                <div class="bar" style="height: 55%;" data-value="18"></div>
+                <span class="bar-label">Mon</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 80%;" data-value="26"></div>
+                <span class="bar-label">Tue</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 45%;" data-value="14"></div>
+                <span class="bar-label">Wed</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 95%;" data-value="31"></div>
+                <span class="bar-label">Thu</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 60%;" data-value="19"></div>
+                <span class="bar-label">Fri</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 35%;" data-value="11"></div>
+                <span class="bar-label">Sat</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 25%;" data-value="8"></div>
+                <span class="bar-label">Sun</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Feed -->
+          <div class="card">
+            <div class="chart-title">Recent Activity</div>
+            <div class="feed-item">
+              <span class="feed-dot crimson"></span>
+              <div>
+                <div class="feed-text"><strong>User flagged</strong> &mdash; Comment by JohnCalvin99 auto-quarantined for ad hominem</div>
+                <div class="feed-time">4 minutes ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <span class="feed-dot teal"></span>
+              <div>
+                <div class="feed-text"><strong>Debate approved</strong> &mdash; "Sola Scriptura vs Sacred Tradition" went live</div>
+                <div class="feed-time">18 minutes ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <span class="feed-dot gold"></span>
+              <div>
+                <div class="feed-text"><strong>Report resolved</strong> &mdash; Harassment report against user TheologianX dismissed</div>
+                <div class="feed-time">1 hour ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <span class="feed-dot crimson"></span>
+              <div>
+                <div class="feed-text"><strong>Trust demoted</strong> &mdash; GraceAlone dropped from Tier 3 to Tier 2</div>
+                <div class="feed-time">2 hours ago</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <span class="feed-dot teal"></span>
+              <div>
+                <div class="feed-text"><strong>New moderator</strong> &mdash; PastorDave accepted moderator invitation</div>
+                <div class="feed-time">5 hours ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Tier Distribution -->
+        <div class="card" style="max-width: 700px;">
+          <div class="chart-title">Trust Tier Distribution</div>
+          <div class="tier-row">
+            <span class="tier-label">Tier 4 (Elder)</span>
+            <div class="tier-bar-bg"><div class="tier-bar-fill gold-fill" style="width: 12%;"></div></div>
+            <span class="tier-count">341</span>
+          </div>
+          <div class="tier-row">
+            <span class="tier-label">Tier 3 (Trusted)</span>
+            <div class="tier-bar-bg"><div class="tier-bar-fill teal-fill" style="width: 28%;"></div></div>
+            <span class="tier-count">797</span>
+          </div>
+          <div class="tier-row">
+            <span class="tier-label">Tier 2 (Regular)</span>
+            <div class="tier-bar-bg"><div class="tier-bar-fill muted-fill" style="width: 42%;"></div></div>
+            <span class="tier-count">1,196</span>
+          </div>
+          <div class="tier-row">
+            <span class="tier-label">Tier 1 (New)</span>
+            <div class="tier-bar-bg"><div class="tier-bar-fill crimson-fill" style="width: 18%;"></div></div>
+            <span class="tier-count">513</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== QUARANTINE QUEUE ========== -->
+      <section class="section" id="section-quarantine">
+        <div class="arch-header">
+          <div class="arch-shape"></div>
+          <h2>Quarantine Queue</h2>
+        </div>
+
+        <div class="queue-grid">
+          <div class="card queue-card">
+            <div class="queue-header">
+              <div class="avatar-sm">JC</div>
+              <span class="queue-author">JohnCalvin99</span>
+              <span class="queue-reason">Ad Hominem</span>
+            </div>
+            <div class="queue-content">
+              "Anyone who believes in infant baptism clearly hasn't read their Bible and is just following traditions of men blindly like sheep..."
+            </div>
+            <div class="queue-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-edit">Edit &amp; Approve</button>
+              <button class="btn btn-reject">Reject</button>
+            </div>
+          </div>
+
+          <div class="card queue-card">
+            <div class="queue-header">
+              <div class="avatar-sm">RF</div>
+              <span class="queue-author">ReformedFaith</span>
+              <span class="queue-reason">Spam / Proselytizing</span>
+            </div>
+            <div class="queue-content">
+              "VISIT MY YOUTUBE CHANNEL for the TRUTH about end times prophecy! Link in bio. Subscribe and share with everyone you know!!!!"
+            </div>
+            <div class="queue-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-edit">Edit &amp; Approve</button>
+              <button class="btn btn-reject">Reject</button>
+            </div>
+          </div>
+
+          <div class="card queue-card">
+            <div class="queue-header">
+              <div class="avatar-sm">GA</div>
+              <span class="queue-author">GraceAlone</span>
+              <span class="queue-reason">Sensitive Topic</span>
+            </div>
+            <div class="queue-content">
+              "The early church fathers were unanimous on this issue, and modern scholarship that disagrees is frankly heretical and has no place in serious theological discussion."
+            </div>
+            <div class="queue-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-edit">Edit &amp; Approve</button>
+              <button class="btn btn-reject">Reject</button>
+            </div>
+          </div>
+
+          <div class="card queue-card">
+            <div class="queue-header">
+              <div class="avatar-sm">TX</div>
+              <span class="queue-author">TheologianX</span>
+              <span class="queue-reason">Personal Attack</span>
+            </div>
+            <div class="queue-content">
+              "Your argument is so poorly constructed that I question whether you've ever attended seminary or even read a single systematic theology textbook."
+            </div>
+            <div class="queue-actions">
+              <button class="btn btn-approve">Approve</button>
+              <button class="btn btn-edit">Edit &amp; Approve</button>
+              <button class="btn btn-reject">Reject</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== USERS ========== -->
+      <section class="section" id="section-users">
+        <div class="arch-header">
+          <div class="arch-shape"></div>
+          <h2>User Management</h2>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Trust Tier</th>
+                <th>Posts</th>
+                <th>Joined</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar-sm">JC</div> JohnCalvin99</div></td>
+                <td>john.c@email.com</td>
+                <td>Tier 3</td>
+                <td>847</td>
+                <td>Jan 2024</td>
+                <td><span class="status-badge status-active">Active</span></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar-sm">GA</div> GraceAlone</div></td>
+                <td>grace.a@email.com</td>
+                <td>Tier 2</td>
+                <td>312</td>
+                <td>Mar 2024</td>
+                <td><span class="status-badge status-active">Active</span></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar-sm">PD</div> PastorDave</div></td>
+                <td>dave.p@church.org</td>
+                <td>Tier 4</td>
+                <td>1,203</td>
+                <td>Nov 2023</td>
+                <td><span class="status-badge status-active">Active</span></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar-sm">TX</div> TheologianX</div></td>
+                <td>theox@email.com</td>
+                <td>Tier 1</td>
+                <td>56</td>
+                <td>Feb 2026</td>
+                <td><span class="status-badge status-suspended">Suspended</span></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar-sm">RF</div> ReformedFaith</div></td>
+                <td>reformed@email.com</td>
+                <td>Tier 2</td>
+                <td>189</td>
+                <td>Jul 2024</td>
+                <td><span class="status-badge status-pending">Pending Review</span></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar-sm">MC</div> MercyChild</div></td>
+                <td>mercy.c@email.com</td>
+                <td>Tier 3</td>
+                <td>634</td>
+                <td>May 2024</td>
+                <td><span class="status-badge status-active">Active</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========== REPORTS ========== -->
+      <section class="section" id="section-reports">
+        <div class="arch-header">
+          <div class="arch-shape"></div>
+          <h2>Reports</h2>
+        </div>
+
+        <div class="report-grid">
+          <div class="card report-card">
+            <div class="report-type">Harassment</div>
+            <div class="report-target">TheologianX</div>
+            <div class="report-by">Reported by GraceAlone &middot; 2 hours ago</div>
+            <div class="report-desc">Repeated personal attacks in the "Free Will vs. Predestination" thread, targeting multiple users with demeaning language.</div>
+            <div class="queue-actions">
+              <button class="btn btn-approve">Dismiss</button>
+              <button class="btn btn-reject">Action</button>
+            </div>
+          </div>
+
+          <div class="card report-card">
+            <div class="report-type">Spam</div>
+            <div class="report-target">ReformedFaith</div>
+            <div class="report-by">Reported by PastorDave &middot; 5 hours ago</div>
+            <div class="report-desc">Posting identical promotional links across 8 different debate threads. Content appears to be self-promotion of external YouTube channel.</div>
+            <div class="queue-actions">
+              <button class="btn btn-approve">Dismiss</button>
+              <button class="btn btn-reject">Action</button>
+            </div>
+          </div>
+
+          <div class="card report-card">
+            <div class="report-type">Misinformation</div>
+            <div class="report-target">JohnCalvin99</div>
+            <div class="report-by">Reported by MercyChild &middot; 1 day ago</div>
+            <div class="report-desc">Attributed a fabricated quote to Augustine of Hippo in the "Church Fathers on Eucharist" debate, misleading other participants.</div>
+            <div class="queue-actions">
+              <button class="btn btn-approve">Dismiss</button>
+              <button class="btn btn-reject">Action</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== DEBATES ========== -->
+      <section class="section" id="section-debates">
+        <div class="arch-header">
+          <div class="arch-shape"></div>
+          <h2>Debates</h2>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Participants</th>
+                <th>Comments</th>
+                <th>Created</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sola Scriptura vs Sacred Tradition</td>
+                <td>Authority</td>
+                <td>48</td>
+                <td>312</td>
+                <td>Feb 28, 2026</td>
+                <td><span class="status-badge status-open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Free Will vs. Predestination</td>
+                <td>Soteriology</td>
+                <td>127</td>
+                <td>1,843</td>
+                <td>Dec 15, 2025</td>
+                <td><span class="status-badge status-open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Infant Baptism: Valid or Not?</td>
+                <td>Sacraments</td>
+                <td>63</td>
+                <td>547</td>
+                <td>Jan 20, 2026</td>
+                <td><span class="status-badge status-locked">Locked</span></td>
+              </tr>
+              <tr>
+                <td>Young Earth vs Old Earth Creationism</td>
+                <td>Origins</td>
+                <td>89</td>
+                <td>921</td>
+                <td>Nov 3, 2025</td>
+                <td><span class="status-badge status-open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Cessationism vs Continuationism</td>
+                <td>Pneumatology</td>
+                <td>34</td>
+                <td>198</td>
+                <td>Mar 1, 2026</td>
+                <td><span class="status-badge status-closed">Closed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========== ANALYTICS ========== -->
+      <section class="section" id="section-analytics">
+        <div class="arch-header">
+          <div class="arch-shape"></div>
+          <h2>Analytics</h2>
+        </div>
+
+        <!-- Health Metrics -->
+        <div class="analytics-stat-grid">
+          <div class="card health-metric">
+            <div class="metric-label">Platform Health Score</div>
+            <div class="metric-value" style="color: var(--teal-light);">87 / 100</div>
+            <div class="metric-sub">Based on toxicity, engagement, and moderation velocity</div>
+          </div>
+          <div class="card health-metric">
+            <div class="metric-label">Avg. Response Time</div>
+            <div class="metric-value">14 min</div>
+            <div class="metric-sub">Moderator response to flagged content</div>
+          </div>
+          <div class="card health-metric">
+            <div class="metric-label">Civility Index</div>
+            <div class="metric-value" style="color: var(--gold);">8.4 / 10</div>
+            <div class="metric-sub">ML-scored average across all debates</div>
+          </div>
+        </div>
+
+        <!-- Engagement Chart + Top Debates -->
+        <div class="analytics-grid">
+          <div class="card">
+            <div class="chart-title">Engagement (Last 30 Days)</div>
+            <div class="line-chart">
+              <div class="line-point"><div class="line-dot"></div><div class="line-stem" style="height:40px;"></div><span class="line-label">W1</span></div>
+              <div class="line-point"><div class="line-dot"></div><div class="line-stem" style="height:55px;"></div><span class="line-label">W2</span></div>
+              <div class="line-point"><div class="line-dot"></div><div class="line-stem" style="height:48px;"></div><span class="line-label">W3</span></div>
+              <div class="line-point"><div class="line-dot"></div><div class="line-stem" style="height:72px;"></div><span class="line-label">W4</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="chart-title">Top Debates by Engagement</div>
+            <div class="mini-bar">
+              <span class="mini-label">Free Will vs. Predestination</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width: 92%;"></div></div>
+              <span class="mini-val">1,843</span>
+            </div>
+            <div class="mini-bar">
+              <span class="mini-label">Young Earth vs Old Earth</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width: 68%;"></div></div>
+              <span class="mini-val">921</span>
+            </div>
+            <div class="mini-bar">
+              <span class="mini-label">Infant Baptism</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width: 45%;"></div></div>
+              <span class="mini-val">547</span>
+            </div>
+            <div class="mini-bar">
+              <span class="mini-label">Sola Scriptura</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width: 28%;"></div></div>
+              <span class="mini-val">312</span>
+            </div>
+            <div class="mini-bar">
+              <span class="mini-label">Cessationism</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width: 16%;"></div></div>
+              <span class="mini-val">198</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vote Distribution + Taxonomy -->
+        <div class="analytics-grid">
+          <div class="card">
+            <div class="chart-title">Vote Distribution</div>
+            <div class="donut-chart"></div>
+            <div class="donut-legend">
+              <div class="legend-item"><span class="legend-dot" style="background:var(--gold);"></span> Upvotes (36%)</div>
+              <div class="legend-item"><span class="legend-dot" style="background:var(--teal-light);"></span> Neutral (28%)</div>
+              <div class="legend-item"><span class="legend-dot" style="background:var(--crimson-light);"></span> Downvotes (19%)</div>
+              <div class="legend-item"><span class="legend-dot" style="background:var(--text-muted);"></span> Abstain (17%)</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="chart-title">Taxonomy Stats</div>
+            <div class="taxonomy-grid">
+              <div class="taxonomy-item"><span>Soteriology</span><span>423</span></div>
+              <div class="taxonomy-item"><span>Ecclesiology</span><span>287</span></div>
+              <div class="taxonomy-item"><span>Eschatology</span><span>198</span></div>
+              <div class="taxonomy-item"><span>Christology</span><span>356</span></div>
+              <div class="taxonomy-item"><span>Pneumatology</span><span>142</span></div>
+              <div class="taxonomy-item"><span>Sacraments</span><span>231</span></div>
+              <div class="taxonomy-item"><span>Biblical Authority</span><span>314</span></div>
+              <div class="taxonomy-item"><span>Ethics &amp; Morality</span><span>176</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SETTINGS ========== -->
+      <section class="section" id="section-settings">
+        <div class="arch-header">
+          <div class="arch-shape"></div>
+          <h2>Settings</h2>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="card">
+            <div class="chart-title">Moderation Settings</div>
+            <div style="margin-bottom: 18px;">
+              <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted);margin-bottom:12px;cursor:pointer;">
+                <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px;">
+                Auto-quarantine comments with toxicity score &gt; 0.7
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted);margin-bottom:12px;cursor:pointer;">
+                <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px;">
+                Require approval for Tier 1 users' first 5 posts
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted);margin-bottom:12px;cursor:pointer;">
+                <input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px;">
+                Enable AI-assisted moderation suggestions
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted);margin-bottom:12px;cursor:pointer;">
+                <input type="checkbox" checked style="accent-color:var(--gold);width:16px;height:16px;">
+                Send email notifications on critical reports
+              </label>
+            </div>
+            <button class="btn btn-gold">Save Changes</button>
+          </div>
+
+          <div class="card">
+            <div class="chart-title">Trust Tier Thresholds</div>
+            <div style="margin-bottom: 14px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:8px;">
+                <span>Tier 1 &rarr; Tier 2</span>
+                <span style="color:var(--gold);">20 posts, 30 days</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:8px;">
+                <span>Tier 2 &rarr; Tier 3</span>
+                <span style="color:var(--gold);">100 posts, 90 days, trust &ge; 60</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:8px;">
+                <span>Tier 3 &rarr; Tier 4</span>
+                <span style="color:var(--gold);">500 posts, 180 days, trust &ge; 80</span>
+              </div>
+            </div>
+            <button class="btn btn-edit">Edit Thresholds</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  function navigate(event, sectionId) {
+    event.preventDefault();
+
+    // Update nav
+    document.querySelectorAll('.sidebar-nav a').forEach(function(link) {
+      link.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+
+    // Update sections
+    document.querySelectorAll('.section').forEach(function(section) {
+      section.classList.remove('active');
+    });
+    var target = document.getElementById('section-' + sectionId);
+    if (target) {
+      target.classList.add('active');
+    }
+
+    // Close mobile sidebar
+    if (window.innerWidth <= 768) {
+      toggleSidebar();
+    }
+  }
+
+  function toggleSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+  }
+</script>
+</body>
+</html>
