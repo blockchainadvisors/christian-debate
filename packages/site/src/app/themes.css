@@ -1780,10 +1780,36 @@ html[data-theme="warm-parchment"] header {
   background: #3d2b1f !important;
   border-color: #5c4033 !important;
   color: #f4edd3 !important;
+  --foreground: #f4edd3;
+  --accent: #5c4033;
+  --accent-foreground: #f4edd3;
+  --muted: #4d3b2f;
+  --muted-foreground: #d4c9a8;
+  --primary: #b8860b;
+  --primary-foreground: #3d2b1f;
+  --border: #5c4033;
+  --input: #5c4033;
+}
+
+html[data-theme="warm-parchment"] header .theme-selector-dropdown {
+  --foreground: #5c4033;
+  --accent: #ebe3c8;
+  --accent-foreground: #8b2500;
+  --muted: #ebe3c8;
+  --muted-foreground: #8a7b6b;
+  --primary: #8b2500;
+  --primary-foreground: #f4edd3;
+  --border: #d4c9a8;
+  --input: #d4c9a8;
+  --ring: #b8860b;
+}
+
+html[data-theme="warm-parchment"] header .theme-selector-dropdown button {
+  color: var(--popover-foreground) !important;
 }
 
 html[data-theme="warm-parchment"] header a,
-html[data-theme="warm-parchment"] header button {
+html[data-theme="warm-parchment"] header button:not(.theme-selector-option) {
   color: #f4edd3 !important;
 }
 
@@ -1902,10 +1928,36 @@ html[data-theme="ink-and-paper"] header {
   background: #111111 !important;
   border-color: #333333 !important;
   color: #ffffff !important;
+  --foreground: #ffffff;
+  --accent: #2a2a2a;
+  --accent-foreground: #ffffff;
+  --muted: #222222;
+  --muted-foreground: #aaaaaa;
+  --primary: #b91c1c;
+  --primary-foreground: #ffffff;
+  --border: #333333;
+  --input: #333333;
+}
+
+html[data-theme="ink-and-paper"] header .theme-selector-dropdown {
+  --foreground: #111111;
+  --accent: #fafafa;
+  --accent-foreground: #111111;
+  --muted: #f5f5f5;
+  --muted-foreground: #555555;
+  --primary: #b91c1c;
+  --primary-foreground: #ffffff;
+  --border: #dddddd;
+  --input: #dddddd;
+  --ring: #b91c1c;
+}
+
+html[data-theme="ink-and-paper"] header .theme-selector-dropdown button {
+  color: var(--popover-foreground) !important;
 }
 
 html[data-theme="ink-and-paper"] header a,
-html[data-theme="ink-and-paper"] header button {
+html[data-theme="ink-and-paper"] header button:not(.theme-selector-option) {
   color: #ffffff !important;
 }
 
@@ -2390,10 +2442,36 @@ html[data-theme="slate-academic"] header {
   background: #002147 !important;
   border-color: #1a3a5f !important;
   color: #fffff0 !important;
+  --foreground: #fffff0;
+  --accent: #1a3a5f;
+  --accent-foreground: #fffff0;
+  --muted: #0a3157;
+  --muted-foreground: #b0c4de;
+  --primary: #a51c30;
+  --primary-foreground: #fffff0;
+  --border: #1a3a5f;
+  --input: #1a3a5f;
+}
+
+html[data-theme="slate-academic"] header .theme-selector-dropdown {
+  --foreground: #002147;
+  --accent: #f0f0e0;
+  --accent-foreground: #002147;
+  --muted: #f0f0e0;
+  --muted-foreground: #4a5568;
+  --primary: #a51c30;
+  --primary-foreground: #fffff0;
+  --border: #d0d0c0;
+  --input: #d0d0c0;
+  --ring: #a51c30;
+}
+
+html[data-theme="slate-academic"] header .theme-selector-dropdown button {
+  color: var(--popover-foreground) !important;
 }
 
 html[data-theme="slate-academic"] header a,
-html[data-theme="slate-academic"] header button {
+html[data-theme="slate-academic"] header button:not(.theme-selector-option) {
   color: #fffff0 !important;
 }
 

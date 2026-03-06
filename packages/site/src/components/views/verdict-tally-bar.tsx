@@ -43,12 +43,12 @@ export function VerdictTallyBar({
       </div>
 
       {/* Labels and counts */}
-      <div className="mt-3 flex justify-between text-sm">
+      <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
         <div className="text-center">
           <p className="text-2xl font-bold text-blue-600">{tally.sideA}</p>
           <p className="text-muted-foreground">{sideALabel}</p>
         </div>
-        <div className="text-center">
+        <div className="text-center border-x border-border px-2">
           <p className="text-2xl font-bold text-gray-500">{tally.draw}</p>
           <p className="text-muted-foreground">Draw</p>
         </div>

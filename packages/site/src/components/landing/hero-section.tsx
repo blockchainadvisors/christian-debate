@@ -7,7 +7,7 @@ export function HeroSection() {
       <div className="landing-hero-ornament" aria-hidden="true" />
       <div className="landing-hero-content">
         <p className="landing-overline">A Platform for Meaningful Discourse</p>
-        <h1 className="landing-title">Christian Debate</h1>
+        <h1 className="landing-title">Christians Debate</h1>
         <p className="landing-subtitle">
           Engage in thoughtful, structured debates on theology, doctrine, and
           faith. Explore opposing perspectives with civility and depth.

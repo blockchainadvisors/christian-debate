@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { db } from "@/db";
-import { debates, users } from "@/db/schema";
-import { eq, desc, and, ilike, sql } from "drizzle-orm";
+import { debates, users, comments } from "@/db/schema";
+import { eq, desc, and, ilike, sql, count, max } from "drizzle-orm";
 import { Button } from "@/components/ui/button";
 import { DebateCard } from "@/components/debate-card";
 import { DebateSearch } from "@/components/debate-search";
@@ -46,10 +46,14 @@ export default async function DebatesPage({ searchParams }: PageProps) {
       updatedAt: debates.updatedAt,
       creatorName: users.displayName,
       creatorUsername: users.username,
+      commentCount: count(comments.id),
+      lastActivityAt: max(comments.createdAt),
     })
     .from(debates)
     .leftJoin(users, eq(debates.createdBy, users.id))
+    .leftJoin(comments, eq(comments.debateId, debates.id))
     .where(whereClause)
+    .groupBy(debates.id, users.displayName, users.username)
     .orderBy(desc(debates.createdAt));
 
   return (

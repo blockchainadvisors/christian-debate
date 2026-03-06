@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { db } from "@/db";
 import { debates, users, comments } from "@/db/schema";
-import { eq, desc, count } from "drizzle-orm";
+import { eq, desc, count, max } from "drizzle-orm";
 import { DebateCard } from "@/components/debate-card";
 import { HeroSection } from "@/components/landing/hero-section";
 import { FeaturesSection } from "@/components/landing/features-section";
@@ -25,10 +25,14 @@ export default async function Home() {
       updatedAt: debates.updatedAt,
       creatorName: users.displayName,
       creatorUsername: users.username,
+      commentCount: count(comments.id),
+      lastActivityAt: max(comments.createdAt),
     })
     .from(debates)
     .leftJoin(users, eq(debates.createdBy, users.id))
+    .leftJoin(comments, eq(comments.debateId, debates.id))
     .where(eq(debates.status, "open"))
+    .groupBy(debates.id, users.displayName, users.username)
     .orderBy(desc(debates.createdAt))
     .limit(6);
 
@@ -84,7 +88,7 @@ export default async function Home() {
 
       <footer className="landing-footer">
         <div className="landing-section-inner">
-          <p>Christian Debate Platform. Iron sharpens iron.</p>
+          <p>Christians Debate Platform. Iron sharpens iron.</p>
         </div>
       </footer>
     </div>

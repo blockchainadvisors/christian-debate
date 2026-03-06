@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Christian Debate",
-    template: "%s | Christian Debate",
+    default: "Christians Debate",
+    template: "%s | Christians Debate",
   },
   description:
     "Structured debate platform for meaningful theological discussions. Explore multiple perspectives, track stance shifts, and find the strongest arguments.",
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
-    siteName: "Christian Debate",
-    title: "Christian Debate",
+    siteName: "Christians Debate",
+    title: "Christians Debate",
     description:
       "Structured debate platform for meaningful theological discussions. Explore multiple perspectives, track stance shifts, and find the strongest arguments.",
     images: [
@@ -41,13 +41,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Christian Debate — Structured discussions that illuminate truth",
+        alt: "Christians Debate — Structured discussions that illuminate truth",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Christian Debate",
+    title: "Christians Debate",
     description:
       "Structured debate platform for meaningful theological discussions.",
     images: ["/og-image.png"],

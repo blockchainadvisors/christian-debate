@@ -15,6 +15,8 @@ export interface DebateCardData {
   createdAt: Date | string;
   creatorName: string | null;
   creatorUsername: string | null;
+  commentCount?: number | null;
+  lastActivityAt?: Date | string | null;
 }
 
 function statusVariant(status: string) {
@@ -35,7 +37,7 @@ export function DebateCard({ debate }: { debate: DebateCardData }) {
 
   return (
     <Link href={`/d/${debate.slug}`} className="group block">
-      <Card className="h-full transition-shadow hover:shadow-md">
+      <Card className="h-full overflow-hidden transition-shadow hover:shadow-md">
         <CardHeader>
           <div className="flex items-start justify-between gap-2">
             <CardTitle className="line-clamp-2 text-base group-hover:text-primary/80 transition-colors">
@@ -53,15 +55,15 @@ export function DebateCard({ debate }: { debate: DebateCardData }) {
         </CardHeader>
 
         <CardContent className="space-y-3">
-          <div className="flex items-center gap-3 text-sm">
-            <div className="flex items-center gap-1.5">
-              <span className="inline-block h-2 w-2 rounded-full bg-blue-500 debate-side-dot--a" />
-              <span className="text-muted-foreground truncate max-w-[120px]">{debate.sideALabel}</span>
+          <div className="flex items-center gap-2 text-sm min-w-0">
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-blue-500 debate-side-dot--a" />
+              <span className="text-muted-foreground truncate">{debate.sideALabel}</span>
             </div>
-            <span className="text-muted-foreground/50">vs</span>
-            <div className="flex items-center gap-1.5">
-              <span className="inline-block h-2 w-2 rounded-full bg-amber-500 debate-side-dot--b" />
-              <span className="text-muted-foreground truncate max-w-[120px]">{debate.sideBLabel}</span>
+            <span className="text-muted-foreground/50 shrink-0">vs</span>
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-amber-500 debate-side-dot--b" />
+              <span className="text-muted-foreground truncate">{debate.sideBLabel}</span>
             </div>
           </div>
 
@@ -76,9 +78,28 @@ export function DebateCard({ debate }: { debate: DebateCardData }) {
           )}
         </CardContent>
 
-        <CardFooter className="text-xs text-muted-foreground justify-between">
-          <span>{debate.creatorName || debate.creatorUsername || "Anonymous"}</span>
-          <span>{timeAgo(createdAt)}</span>
+        <CardFooter className="text-xs text-muted-foreground flex-col items-start gap-2">
+          <div className="flex w-full items-center justify-between">
+            <span>{debate.creatorName || debate.creatorUsername || "Anonymous"}</span>
+            <span>{timeAgo(createdAt)}</span>
+          </div>
+          {(debate.commentCount != null || debate.lastActivityAt != null) && (
+            <div className="flex w-full items-center justify-between border-t border-border pt-2">
+              {debate.commentCount != null && (
+                <span className="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-3.5 w-3.5">
+                    <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h11A1.5 1.5 0 0 1 15 3.5v7A1.5 1.5 0 0 1 13.5 12H9l-3.5 3v-3H2.5A1.5 1.5 0 0 1 1 10.5v-7z" />
+                  </svg>
+                  {debate.commentCount} {debate.commentCount === 1 ? "reply" : "replies"}
+                </span>
+              )}
+              {debate.lastActivityAt != null && (
+                <span>
+                  Active {timeAgo(typeof debate.lastActivityAt === "string" ? new Date(debate.lastActivityAt) : debate.lastActivityAt)}
+                </span>
+              )}
+            </div>
+          )}
         </CardFooter>
       </Card>
     </Link>

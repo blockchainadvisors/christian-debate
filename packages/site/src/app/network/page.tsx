@@ -4,7 +4,7 @@ import { NetworkLeaderboard } from "@/components/federation/network-leaderboard"
 import { NetworkStats } from "./network-stats";
 
 export const metadata = {
-  title: "Agora Network - Christian Debate",
+  title: "Agora Network - Christians Debate",
   description: "Browse sites and top debaters across the Agora network",
 };
 

@@ -42,9 +42,9 @@ export function Header() {
             alt=""
             width={28}
             height={28}
-            className="shrink-0"
+            className="shrink-0 rounded-md bg-white/90 p-0.5 dark:bg-white/90"
           />
-          <span className="hidden sm:inline">Christian Debate</span>
+          <span className="hidden sm:inline">Christians Debate</span>
           <span className="sm:hidden">CD</span>
         </Link>
 

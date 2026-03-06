@@ -60,7 +60,7 @@ export function MobileNav({
               className="flex items-center gap-2 text-lg font-bold"
             >
               <img src="/icons/logo-40.png" alt="" width={28} height={28} />
-              Christian Debate
+              Christians Debate
             </Link>
           </SheetTitle>
         </SheetHeader>
