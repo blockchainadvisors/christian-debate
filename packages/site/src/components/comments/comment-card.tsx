@@ -63,6 +63,7 @@ export function CommentCard({
   // Cap visual indentation at depth 6
   const visualDepth = Math.min(depth, 6);
 
+  const isGuest = !!comment.isGuestComment;
   const isDeleted =
     comment.status === "deleted_by_author" ||
     comment.status === "removed_by_mod";
@@ -76,7 +77,11 @@ export function CommentCard({
   return (
     <div
       id={`comment-${comment.id}`}
-      className={cn("group min-w-0 overflow-hidden", depth > 0 && "border-l-2 border-gray-200")}
+      className={cn(
+        "group min-w-0 overflow-hidden",
+        depth > 0 && "border-l-2 border-gray-200",
+        isGuest && "border border-dashed border-amber-300 rounded-lg bg-amber-50/30"
+      )}
       style={{ marginLeft: `${visualDepth * 12}px` }}
     >
       <div className="py-3 px-4">
@@ -135,6 +140,15 @@ export function CommentCard({
                 {timeAgo(comment.createdAt)}
               </span>
 
+              {isGuest && (
+                <Badge
+                  variant="outline"
+                  className="text-xs px-1.5 py-0 bg-amber-50 border-amber-300 text-amber-700 shrink-0"
+                >
+                  Pending — saved on login
+                </Badge>
+              )}
+
               {comment.status === "edited" && (
                 <span className="text-xs text-gray-400 italic shrink-0">
                   (edited{comment.editedAt ? ` ${timeAgo(comment.editedAt)}` : ""})
@@ -159,14 +173,16 @@ export function CommentCard({
             {/* Actions */}
             {!isDeleted && (
               <div className="flex items-center gap-2 mt-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs min-h-[44px] px-2 text-gray-500 hover:text-gray-700"
-                  onClick={() => setShowReplyEditor(!showReplyEditor)}
-                >
-                  Reply
-                </Button>
+                {!isGuest && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs min-h-[44px] px-2 text-gray-500 hover:text-gray-700"
+                    onClick={() => setShowReplyEditor(!showReplyEditor)}
+                  >
+                    Reply
+                  </Button>
+                )}
 
                 {comment.children.length > 0 && (
                   <Button
@@ -181,10 +197,12 @@ export function CommentCard({
                   </Button>
                 )}
 
-                <VoteButton
-                  commentId={comment.id}
-                  initialScore={comment.score}
-                />
+                {!isGuest && (
+                  <VoteButton
+                    commentId={comment.id}
+                    initialScore={comment.score}
+                  />
+                )}
               </div>
             )}
           </>

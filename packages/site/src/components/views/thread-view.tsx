@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { CommentTree } from "@/components/comments/comment-tree";
 import { CommentEditor } from "@/components/comments/comment-editor";
 import { StanceDeclaration } from "@/components/stances/stance-declaration";
 import { StanceSummary } from "@/components/stances/stance-summary";
+import { useGuestCache } from "@/hooks/use-guest-cache";
 import type { CommentWithAuthor } from "@/types/comments";
 import type { StanceSummary as StanceSummaryType, StanceSide } from "@/types/stances";
 
@@ -27,17 +28,52 @@ interface ThreadViewProps {
 }
 
 export function ThreadView({ debate }: ThreadViewProps) {
-  const [comments, setComments] = useState<CommentWithAuthor[]>([]);
+  const [serverComments, setServerComments] = useState<CommentWithAuthor[]>([]);
   const [stanceSummary, setStanceSummary] = useState<StanceSummaryType | null>(null);
   const [currentStance, setCurrentStance] = useState<StanceSide | null | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const { comments: guestComments } = useGuestCache();
+
+  // Merge server comments with guest comments for this debate
+  const comments = useMemo(() => {
+    const debateGuestComments = guestComments.filter(
+      (gc) => gc.debateSlug === debate.slug
+    );
+    if (debateGuestComments.length === 0) return serverComments;
+
+    const guestAsComments: CommentWithAuthor[] = debateGuestComments.map((gc) => ({
+      id: gc.localId,
+      debateId: gc.debateId,
+      authorId: "guest",
+      parentId: gc.parentId,
+      rootId: null,
+      depth: 0,
+      content: gc.content,
+      stanceSide: gc.stanceSide,
+      ancestorPath: null,
+      isQuarantined: false,
+      quarantineReason: null,
+      status: "active" as const,
+      score: 0,
+      createdAt: gc.createdAt,
+      editedAt: null,
+      author: {
+        id: "guest",
+        displayName: "You (Guest)",
+        username: "guest",
+        avatarUrl: null,
+      },
+    }));
+
+    return [...serverComments, ...guestAsComments];
+  }, [serverComments, guestComments, debate.slug, debate.id]);
 
   const fetchComments = useCallback(async () => {
     try {
       const res = await fetch(`/api/debates/${debate.slug}/comments`);
       if (res.ok) {
         const data = await res.json();
-        setComments(data);
+        setServerComments(data);
       }
     } catch {
       // silently fail — comments will remain empty

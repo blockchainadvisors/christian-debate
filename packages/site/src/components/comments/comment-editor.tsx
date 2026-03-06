@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { addGuestComment } from "@/lib/guest-cache";
 
 interface CommentEditorProps {
   debateId: string;
@@ -33,6 +35,8 @@ export function CommentEditor({
   onSubmit,
   initialContent,
 }: CommentEditorProps) {
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
   const [stanceSide, setStanceSide] = useState<string>("neutral");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +60,27 @@ export function CommentEditor({
 
     setIsSubmitting(true);
     setError(null);
+
+    if (!isAuthenticated) {
+      // Guest mode: save to localStorage
+      const result = addGuestComment({
+        debateSlug,
+        debateId,
+        parentId: parentId ?? null,
+        content: html,
+        stanceSide: stanceSide as "side_a" | "side_b" | "neutral" | "meta",
+      });
+
+      if (!result) {
+        setError("Guest limit reached. Login to continue.");
+      } else {
+        editor.commands.clearContent();
+        setStanceSide("neutral");
+        onSubmit();
+      }
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const res = await fetch(`/api/debates/${debateSlug}/comments`, {
