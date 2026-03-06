@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MobileNav } from "./mobile-nav";
 import { ThemeSelector } from "@/components/theme-selector";
+import { useGuestCache } from "@/hooks/use-guest-cache";
+import { useSignInModal } from "@/components/auth/sign-in-modal";
 
 const NAV_LINKS = [
   { href: "/debates", label: "Debates" },
@@ -24,6 +26,9 @@ export function Header() {
   const pathname = usePathname();
   const isAuthenticated = status === "authenticated";
   const user = session?.user;
+  const { counts } = useGuestCache();
+  const { openSignIn } = useSignInModal();
+  const pendingCount = counts.comments + counts.votes + counts.stances;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -32,7 +37,9 @@ export function Header() {
         <MobileNav
           isAuthenticated={isAuthenticated}
           userName={user?.name}
-          onSignOut={() => signOut({ callbackUrl: "/" })}
+          pendingCount={pendingCount}
+          onSignOut={() => signOut({ redirect: false })}
+          onSignIn={openSignIn}
         />
 
         {/* Logo */}
@@ -106,14 +113,19 @@ export function Header() {
                   <Link href="/settings">Settings</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
+                <DropdownMenuItem onClick={() => signOut({ redirect: false })}>
                   Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild variant="outline" size="sm">
-              <Link href="/login">Sign In</Link>
+            <Button variant="outline" size="sm" className="relative" onClick={openSignIn}>
+              Sign In
+              {pendingCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1 text-[11px] font-bold text-white">
+                  {pendingCount}
+                </span>
+              )}
             </Button>
           )}
         </div>

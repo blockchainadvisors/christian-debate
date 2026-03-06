@@ -15,7 +15,9 @@ import { useState } from "react";
 interface MobileNavProps {
   isAuthenticated: boolean;
   userName?: string | null;
+  pendingCount?: number;
   onSignOut: () => void;
+  onSignIn: () => void;
 }
 
 const NAV_LINKS = [
@@ -26,7 +28,9 @@ const NAV_LINKS = [
 export function MobileNav({
   isAuthenticated,
   userName,
+  pendingCount = 0,
   onSignOut,
+  onSignIn,
 }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -112,13 +116,20 @@ export function MobileNav({
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground/70 hover:bg-accent hover:text-accent-foreground"
+            <button
+              onClick={() => {
+                setOpen(false);
+                onSignIn();
+              }}
+              className="flex items-center gap-2 rounded-md px-3 py-2.5 text-left text-sm font-medium text-foreground/70 hover:bg-accent hover:text-accent-foreground"
             >
               Sign In
-            </Link>
+              {pendingCount > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1 text-[11px] font-bold text-white">
+                  {pendingCount}
+                </span>
+              )}
+            </button>
           )}
         </div>
       </SheetContent>

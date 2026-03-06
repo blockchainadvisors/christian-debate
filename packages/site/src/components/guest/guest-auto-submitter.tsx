@@ -17,7 +17,7 @@ export function GuestAutoSubmitter() {
 
     const cache = getGuestCache();
 
-    submitGuestData(cache.comments, cache.votes)
+    submitGuestData(cache.comments, cache.votes, cache.stances ?? [])
       .then((result) => {
         clearGuestCache();
 
@@ -27,6 +27,9 @@ export function GuestAutoSubmitter() {
         }
         if (result.submittedVotes > 0) {
           parts.push(`${result.submittedVotes} vote${result.submittedVotes !== 1 ? "s" : ""}`);
+        }
+        if (result.submittedStances > 0) {
+          parts.push(`${result.submittedStances} stance${result.submittedStances !== 1 ? "s" : ""}`);
         }
 
         if (parts.length > 0) {

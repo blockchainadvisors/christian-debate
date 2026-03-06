@@ -9,7 +9,8 @@ import {
   TRUST_TIER_WEIGHTS,
   computeCommentScore,
 } from "@/lib/vote-scoring";
-import type { GuestComment, GuestVote } from "@/types/guest";
+import type { GuestComment, GuestVote, GuestStance } from "@/types/guest";
+import { debateStances } from "@/db/schema";
 
 const MAX_COMMENTS = 50;
 const MAX_VOTES = 100;
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const guestComments: GuestComment[] = body.comments ?? [];
   const guestVotes: GuestVote[] = body.votes ?? [];
+  const guestStances: GuestStance[] = body.stances ?? [];
 
   // Cap validation
   if (guestComments.length > MAX_COMMENTS || guestVotes.length > MAX_VOTES) {
@@ -212,5 +214,52 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ submittedComments, submittedVotes, errors });
+  // Process stances
+  let submittedStances = 0;
+  const VALID_STANCE_SIDES = ["side_a", "side_b", "neutral"] as const;
+
+  for (const gs of guestStances) {
+    try {
+      if (!VALID_STANCE_SIDES.includes(gs.declaredStance as any)) continue;
+
+      const [debate] = await db
+        .select({ id: debates.id })
+        .from(debates)
+        .where(eq(debates.slug, gs.debateSlug))
+        .limit(1);
+
+      if (!debate) continue;
+
+      // Upsert stance
+      const [existing] = await db
+        .select({ id: debateStances.id })
+        .from(debateStances)
+        .where(
+          and(
+            eq(debateStances.debateId, debate.id),
+            eq(debateStances.userId, session.user.id)
+          )
+        )
+        .limit(1);
+
+      if (existing) {
+        await db
+          .update(debateStances)
+          .set({ declaredStance: gs.declaredStance, changedAt: new Date() })
+          .where(eq(debateStances.id, existing.id));
+      } else {
+        await db.insert(debateStances).values({
+          debateId: debate.id,
+          userId: session.user.id,
+          declaredStance: gs.declaredStance,
+        });
+      }
+
+      submittedStances++;
+    } catch {
+      // skip failed stances silently
+    }
+  }
+
+  return NextResponse.json({ submittedComments, submittedVotes, submittedStances, errors });
 }

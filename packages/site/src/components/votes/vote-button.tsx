@@ -143,6 +143,7 @@ export function VoteButton({
       <ReasonPicker
         direction="up"
         commentId={commentId}
+        currentScore={score}
         onVoted={handleVoted}
         open={upPickerOpen}
         onOpenChange={setUpPickerOpen}
@@ -193,6 +194,7 @@ export function VoteButton({
       <ReasonPicker
         direction="down"
         commentId={commentId}
+        currentScore={score}
         onVoted={handleVoted}
         open={downPickerOpen}
         onOpenChange={setDownPickerOpen}

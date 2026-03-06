@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useGuestCache } from "@/hooks/use-guest-cache";
+import { useSignInModal } from "@/components/auth/sign-in-modal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function GuestBanner() {
   const { status } = useSession();
   const { counts, hasData } = useGuestCache();
+  const { openSignIn } = useSignInModal();
   const [dismissed, setDismissed] = useState(false);
 
   if (status === "authenticated" || !hasData || dismissed) return null;
@@ -20,6 +21,9 @@ export function GuestBanner() {
   }
   if (counts.votes > 0) {
     parts.push(`${counts.votes} vote${counts.votes !== 1 ? "s" : ""}`);
+  }
+  if (counts.stances > 0) {
+    parts.push(`${counts.stances} stance${counts.stances !== 1 ? "s" : ""}`);
   }
 
   return (
@@ -33,9 +37,9 @@ export function GuestBanner() {
     >
       <p className="flex-1 min-w-0">
         You have <strong>{parts.join(" and ")}</strong> pending.{" "}
-        <Link href="/login" className="underline font-medium hover:text-amber-700">
-          Login to save
-        </Link>
+        <button onClick={openSignIn} className="underline font-medium hover:text-amber-700">
+          Sign in to save
+        </button>
       </p>
       <Button
         variant="ghost"

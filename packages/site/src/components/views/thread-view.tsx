@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSession } from "next-auth/react";
 import { CommentTree } from "@/components/comments/comment-tree";
 import { CommentEditor } from "@/components/comments/comment-editor";
 import { StanceDeclaration } from "@/components/stances/stance-declaration";
 import { StanceSummary } from "@/components/stances/stance-summary";
 import { useGuestCache } from "@/hooks/use-guest-cache";
+import { getGuestStanceForDebate } from "@/lib/guest-cache";
 import type { CommentWithAuthor } from "@/types/comments";
 import type { StanceSummary as StanceSummaryType, StanceSide } from "@/types/stances";
 
@@ -28,11 +30,13 @@ interface ThreadViewProps {
 }
 
 export function ThreadView({ debate }: ThreadViewProps) {
+  const { status } = useSession();
+  const isGuest = status !== "authenticated";
   const [serverComments, setServerComments] = useState<CommentWithAuthor[]>([]);
   const [stanceSummary, setStanceSummary] = useState<StanceSummaryType | null>(null);
   const [currentStance, setCurrentStance] = useState<StanceSide | null | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const { comments: guestComments } = useGuestCache();
+  const { comments: guestComments, setStance } = useGuestCache();
 
   // Merge server comments with guest comments for this debate
   const comments = useMemo(() => {
@@ -93,6 +97,12 @@ export function ThreadView({ debate }: ThreadViewProps) {
   }, [debate.slug]);
 
   const fetchMyStance = useCallback(async () => {
+    if (isGuest) {
+      // Check guest cache for saved stance
+      const guestStance = getGuestStanceForDebate(debate.slug);
+      setCurrentStance(guestStance?.declaredStance ?? null);
+      return;
+    }
     try {
       const res = await fetch(`/api/debates/${debate.slug}/stances/me`);
       if (res.ok) {
@@ -107,7 +117,7 @@ export function ThreadView({ debate }: ThreadViewProps) {
     } catch {
       setCurrentStance(null);
     }
-  }, [debate.slug]);
+  }, [debate.slug, isGuest]);
 
   useEffect(() => {
     const load = async () => {
@@ -142,9 +152,12 @@ export function ThreadView({ debate }: ThreadViewProps) {
       {isOpen && currentStance !== undefined && (
         <StanceDeclaration
           debateSlug={debate.slug}
+          debateId={debate.id}
           sideALabel={debate.sideALabel}
           sideBLabel={debate.sideBLabel}
           currentStance={currentStance}
+          isGuest={isGuest}
+          onGuestStance={(stance) => setStance(debate.slug, debate.id, stance)}
         />
       )}
 

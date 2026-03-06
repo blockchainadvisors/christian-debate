@@ -89,6 +89,14 @@ export default async function Home() {
       <footer className="landing-footer">
         <div className="landing-section-inner">
           <p>Christians Debate Platform. Iron sharpens iron.</p>
+          <nav className="mt-3 flex items-center justify-center gap-4 text-xs opacity-70">
+            <Link href="/privacy" className="hover:opacity-100 transition-opacity">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:opacity-100 transition-opacity">
+              Terms of Service
+            </Link>
+          </nav>
         </div>
       </footer>
     </div>

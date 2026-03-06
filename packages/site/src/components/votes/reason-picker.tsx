@@ -30,6 +30,7 @@ const DOWNVOTE_OPTIONS: { reason: VoteReason; label: string; icon: string; hint:
 interface ReasonPickerProps {
   direction: VoteDirection;
   commentId: string;
+  currentScore: number;
   onVoted: (direction: VoteDirection, reason: VoteReason, newScore: number) => void;
   trigger: React.ReactNode;
   open: boolean;
@@ -39,6 +40,7 @@ interface ReasonPickerProps {
 export function ReasonPicker({
   direction,
   commentId,
+  currentScore,
   onVoted,
   trigger,
   open,
@@ -56,9 +58,8 @@ export function ReasonPicker({
         // Guest mode: save to localStorage
         const result = addGuestVote({ commentId, direction, reason });
         if (result) {
-          // Use current score +/- 1 as optimistic display
           const delta = direction === "up" ? 1 : -1;
-          onVoted(direction, reason, delta);
+          onVoted(direction, reason, currentScore + delta);
         }
         return;
       }

@@ -1,4 +1,5 @@
-import type { GuestCache, GuestComment, GuestVote } from "@/types/guest";
+import type { GuestCache, GuestComment, GuestVote, GuestStance } from "@/types/guest";
+import type { StanceSide } from "@/types/stances";
 
 const STORAGE_KEY = "cd_guest_cache";
 const MAX_COMMENTS = 50;
@@ -6,7 +7,7 @@ const MAX_VOTES = 100;
 const CACHE_EVENT = "cd-guest-cache-update";
 
 function emptyCache(): GuestCache {
-  return { version: 1, comments: [], votes: [] };
+  return { version: 1, comments: [], votes: [], stances: [] };
 }
 
 export function getGuestCache(): GuestCache {
@@ -63,6 +64,29 @@ export function addGuestVote(vote: Omit<GuestVote, "localId" | "createdAt">): Gu
   return saveCache(cache) ? entry : null;
 }
 
+export function setGuestStance(debateSlug: string, debateId: string, declaredStance: StanceSide): GuestStance {
+  const cache = getGuestCache();
+  const stances = cache.stances ?? [];
+
+  // Replace existing stance for this debate
+  const filtered = stances.filter((s) => s.debateSlug !== debateSlug);
+  const entry: GuestStance = {
+    debateSlug,
+    debateId,
+    declaredStance,
+    createdAt: new Date().toISOString(),
+  };
+  filtered.push(entry);
+  cache.stances = filtered;
+  saveCache(cache);
+  return entry;
+}
+
+export function getGuestStanceForDebate(debateSlug: string): GuestStance | null {
+  const cache = getGuestCache();
+  return (cache.stances ?? []).find((s) => s.debateSlug === debateSlug) ?? null;
+}
+
 export function removeGuestComment(localId: string): void {
   const cache = getGuestCache();
   cache.comments = cache.comments.filter((c) => c.localId !== localId);
@@ -86,14 +110,14 @@ export function clearGuestCache(): void {
   }
 }
 
-export function getGuestCounts(): { comments: number; votes: number } {
+export function getGuestCounts(): { comments: number; votes: number; stances: number } {
   const cache = getGuestCache();
-  return { comments: cache.comments.length, votes: cache.votes.length };
+  return { comments: cache.comments.length, votes: cache.votes.length, stances: (cache.stances ?? []).length };
 }
 
 export function hasGuestData(): boolean {
   const cache = getGuestCache();
-  return cache.comments.length > 0 || cache.votes.length > 0;
+  return cache.comments.length > 0 || cache.votes.length > 0 || (cache.stances ?? []).length > 0;
 }
 
 export function getGuestVoteForComment(commentId: string): GuestVote | null {

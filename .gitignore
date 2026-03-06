@@ -13,3 +13,6 @@ playwright-report/
 
 # Worktrees
 .worktrees/
+
+# Secrets
+secrets/

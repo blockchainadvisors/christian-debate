@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { getGuestCounts } from "@/lib/guest-cache";
+import { useSignInModal } from "@/components/auth/sign-in-modal";
 
 interface GuestExitModalProps {
   open: boolean;
@@ -20,6 +20,7 @@ interface GuestExitModalProps {
 
 export function GuestExitModal({ open, onOpenChange, onLeave }: GuestExitModalProps) {
   const counts = getGuestCounts();
+  const { openSignIn } = useSignInModal();
 
   const parts: string[] = [];
   if (counts.comments > 0) {
@@ -27,6 +28,9 @@ export function GuestExitModal({ open, onOpenChange, onLeave }: GuestExitModalPr
   }
   if (counts.votes > 0) {
     parts.push(`${counts.votes} vote${counts.votes !== 1 ? "s" : ""}`);
+  }
+  if (counts.stances > 0) {
+    parts.push(`${counts.stances} stance${counts.stances !== 1 ? "s" : ""}`);
   }
 
   return (
@@ -40,11 +44,13 @@ export function GuestExitModal({ open, onOpenChange, onLeave }: GuestExitModalPr
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex flex-col sm:flex-row gap-2">
-          <Button asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/register">Register</Link>
+          <Button
+            onClick={() => {
+              onOpenChange(false);
+              openSignIn();
+            }}
+          >
+            Sign In
           </Button>
           <Button
             variant="ghost"

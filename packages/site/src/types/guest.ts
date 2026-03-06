@@ -1,4 +1,5 @@
 import type { VoteReason } from "./votes";
+import type { StanceSide } from "./stances";
 
 export interface GuestComment {
   localId: string;
@@ -18,8 +19,16 @@ export interface GuestVote {
   createdAt: string;
 }
 
+export interface GuestStance {
+  debateSlug: string;
+  debateId: string;
+  declaredStance: StanceSide;
+  createdAt: string;
+}
+
 export interface GuestCache {
   version: 1;
   comments: GuestComment[];
   votes: GuestVote[];
+  stances?: GuestStance[];
 }

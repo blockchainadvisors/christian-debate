@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,40 +20,65 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { useSignInModal } from "@/components/auth/sign-in-modal";
 import type { StanceSide } from "@/types/stances";
 
 interface StanceDeclarationProps {
   debateSlug: string;
+  debateId: string;
   sideALabel: string;
   sideBLabel: string;
   currentStance?: StanceSide | null;
+  isGuest?: boolean;
+  onGuestStance?: (stance: StanceSide) => void;
 }
 
-const stanceOptions: { value: StanceSide; colorClass: string }[] = [
+const stanceOptions: { value: StanceSide; colorClass: string; selectedBg: string; cardBorder: string; icon: string }[] = [
   {
     value: "side_a",
     colorClass:
       "border-blue-300 bg-blue-50 text-blue-900 hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-100 dark:hover:bg-blue-900",
+    selectedBg:
+      "ring-2 ring-blue-500 bg-blue-200 border-blue-500 shadow-md dark:bg-blue-800 dark:ring-blue-400 dark:border-blue-400",
+    cardBorder: "border-l-blue-500",
+    icon: "text-blue-600 dark:text-blue-400",
   },
   {
     value: "side_b",
     colorClass:
       "border-red-300 bg-red-50 text-red-900 hover:bg-red-100 dark:border-red-700 dark:bg-red-950 dark:text-red-100 dark:hover:bg-red-900",
+    selectedBg:
+      "ring-2 ring-red-500 bg-red-200 border-red-500 shadow-md dark:bg-red-800 dark:ring-red-400 dark:border-red-400",
+    cardBorder: "border-l-red-500",
+    icon: "text-red-600 dark:text-red-400",
   },
   {
     value: "neutral",
     colorClass:
       "border-gray-300 bg-gray-50 text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700",
+    selectedBg:
+      "ring-2 ring-gray-500 bg-gray-200 border-gray-500 shadow-md dark:bg-gray-600 dark:ring-gray-400 dark:border-gray-400",
+    cardBorder: "border-l-gray-500",
+    icon: "text-gray-600 dark:text-gray-400",
   },
 ];
 
-const selectedStyles: Record<StanceSide, string> = {
-  side_a:
-    "ring-2 ring-blue-500 bg-blue-100 dark:bg-blue-900 dark:ring-blue-400",
-  side_b: "ring-2 ring-red-500 bg-red-100 dark:bg-red-900 dark:ring-red-400",
-  neutral:
-    "ring-2 ring-gray-500 bg-gray-200 dark:bg-gray-700 dark:ring-gray-400",
-};
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      className={cn("size-5", className)}
+    >
+      <path
+        fillRule="evenodd"
+        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
 
 function getLabel(
   value: StanceSide,
@@ -66,10 +92,17 @@ function getLabel(
 
 export function StanceDeclaration({
   debateSlug,
+  debateId,
   sideALabel,
   sideBLabel,
   currentStance: initialStance,
+  isGuest,
+  onGuestStance,
 }: StanceDeclarationProps) {
+  const { status } = useSession();
+  const { openSignIn } = useSignInModal();
+  const isGuestUser = isGuest ?? status !== "authenticated";
+
   const [currentStance, setCurrentStance] = useState<StanceSide | null>(
     initialStance ?? null
   );
@@ -83,6 +116,12 @@ export function StanceDeclaration({
     (stance: StanceSide) => {
       if (stance === currentStance) return;
 
+      if (isGuestUser) {
+        setCurrentStance(stance);
+        onGuestStance?.(stance);
+        return;
+      }
+
       if (currentStance) {
         // Changing stance — show confirmation
         setPendingStance(stance);
@@ -94,7 +133,7 @@ export function StanceDeclaration({
         submitStance(stance);
       }
     },
-    [currentStance]
+    [currentStance, isGuestUser, onGuestStance]
   );
 
   const submitStance = async (
@@ -145,15 +184,49 @@ export function StanceDeclaration({
     setPendingStance(null);
   };
 
+  const selectedOption = currentStance
+    ? stanceOptions.find((o) => o.value === currentStance)
+    : null;
+
   return (
     <>
-      <Card>
+      <Card
+        className={cn(
+          "transition-all duration-200",
+          selectedOption && `border-l-4 ${selectedOption.cardBorder}`
+        )}
+      >
         <CardHeader>
-          <CardTitle>Your Stance</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Your Stance</CardTitle>
+            {currentStance && isGuestUser && (
+              <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
+                unsaved
+              </span>
+            )}
+          </div>
           <CardDescription>
-            {currentStance
-              ? "You can change your stance at any time."
-              : "Declare where you stand on this debate."}
+            {currentStance ? (
+              <>
+                You selected{" "}
+                <strong className="text-foreground">
+                  {getLabel(currentStance, sideALabel, sideBLabel)}
+                </strong>
+                .{" "}
+                {isGuestUser ? (
+                  <button
+                    onClick={openSignIn}
+                    className="underline font-medium hover:text-foreground"
+                  >
+                    Sign in to save
+                  </button>
+                ) : (
+                  "You can change your stance at any time."
+                )}
+              </>
+            ) : (
+              "Declare where you stand on this debate."
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -166,14 +239,16 @@ export function StanceDeclaration({
                   variant="outline"
                   disabled={isSubmitting}
                   className={cn(
-                    "min-w-0 flex-1 border-2 py-3 font-medium transition-all whitespace-normal h-auto text-center",
+                    "min-w-0 flex-1 border-2 py-3 font-medium transition-all whitespace-normal h-auto text-center relative",
                     option.colorClass,
-                    isSelected && selectedStyles[option.value]
+                    isSelected && option.selectedBg
                   )}
                   onClick={() => handleSelect(option.value)}
                 >
+                  {isSelected && (
+                    <CheckIcon className={cn("mr-1.5 shrink-0", option.icon)} />
+                  )}
                   {getLabel(option.value, sideALabel, sideBLabel)}
-                  {isSelected && " (current)"}
                 </Button>
               );
             })}

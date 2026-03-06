@@ -1,17 +1,29 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import GitHub from "next-auth/providers/github";
+import Apple from "next-auth/providers/apple";
+import Facebook from "next-auth/providers/facebook";
+import MicrosoftEntraId from "next-auth/providers/microsoft-entra-id";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "@/db";
 import { users, accounts as accountsTable, federatedIdentity } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import { generateAppleClientSecret } from "./apple-secret";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
   session: { strategy: "jwt" },
   providers: [
     Google,
-    GitHub,
+    ...(process.env.AUTH_APPLE_TEAM_ID
+      ? [
+          Apple({
+            clientId: process.env.AUTH_APPLE_ID,
+            clientSecret: generateAppleClientSecret(),
+          }),
+        ]
+      : []),
+    Facebook,
+    MicrosoftEntraId,
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
@@ -197,7 +209,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/login",
   },
-});
+}));
 
 async function generateUniqueUsername(displayName: string): Promise<string> {
   const base = displayName
