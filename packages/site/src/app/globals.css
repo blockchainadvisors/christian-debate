@@ -125,3 +125,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Vote button pop animation */
+@keyframes vote-pop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.35); }
+  60% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}

@@ -45,7 +45,7 @@ interface ViewSwitcherProps {
 export function ViewSwitcher({ debate }: ViewSwitcherProps) {
   return (
     <Tabs defaultValue="thread" className="w-full">
-      <TabsList className="w-full overflow-x-auto">
+      <TabsList className="flex w-full">
         {VIEWS.map((view) => (
           <TabsTrigger key={view.value} value={view.value}>
             {view.label}

@@ -42,8 +42,19 @@ export function computeCommentScore(
 ): number {
   let score = 0;
   for (const vote of votes) {
-    const reasonMultiplier = REASON_MULTIPLIERS[vote.reason] ?? 1;
-    score += reasonMultiplier * vote.weight;
+    const defaultMultiplier = vote.direction === "down" ? -1 : 1;
+    const reasonMultiplier = REASON_MULTIPLIERS[vote.reason] ?? defaultMultiplier;
+    const raw = reasonMultiplier * vote.weight;
+    // Every vote contributes at least ±1 (unless weight is zero)
+    let contribution: number;
+    if (vote.weight === 0) {
+      contribution = 0;
+    } else if (raw >= 0) {
+      contribution = Math.max(1, Math.round(raw));
+    } else {
+      contribution = Math.min(-1, Math.round(raw));
+    }
+    score += contribution;
   }
-  return Math.round(score);
+  return score;
 }

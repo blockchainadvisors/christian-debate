@@ -37,8 +37,17 @@ export async function GET(
         }
       };
 
-      // Send initial tally
-      const initialData = await redis.get(`debate:${debateId}:verdict`);
+      // Send initial tally from cache, or fetch from REST endpoint
+      let initialData = await redis.get(`debate:${debateId}:verdict`);
+      if (!initialData) {
+        // Cache miss — fetch from REST endpoint to populate cache and get real data
+        try {
+          const res = await fetch(new URL(`/api/debates/${slug}/verdict`, request.url));
+          if (res.ok) {
+            initialData = JSON.stringify(await res.json());
+          }
+        } catch {}
+      }
       sendEvent(initialData ?? JSON.stringify({ tally: { sideA: 0, sideB: 0, draw: 0, totalVoters: 0, verifiedNeutralCount: 0 }, pinnedComments: [] }));
 
       let lastData = initialData;

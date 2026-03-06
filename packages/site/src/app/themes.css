@@ -69,6 +69,7 @@
   border-radius: 8px;
   border: 1.5px solid transparent;
   background: transparent;
+  color: var(--popover-foreground);
   cursor: pointer;
   transition: all 0.15s;
   text-align: left;
@@ -99,9 +100,10 @@
   border-radius: 2px 6px 0 0;
 }
 .theme-selector-option-name {
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   line-height: 1.2;
+  color: var(--popover-foreground);
 }
 
 /* ================================================================

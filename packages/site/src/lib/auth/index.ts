@@ -85,6 +85,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 id_token: account.id_token,
               })
               .where(eq(accountsTable.id, existingAccount.id));
+            // Set user.id to the database user ID so JWT picks it up
+            user.id = existingAccount.userId;
           } else {
             // Find or create user
             let [existingUser] = await db

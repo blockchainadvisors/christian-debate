@@ -21,6 +21,13 @@ import {
 } from "@/components/ui/select";
 import type { VerdictTally, PinnedComment, VerdictResponse } from "@/types/verdict";
 
+function pickBestTally(a: VerdictTally | null, b: VerdictTally | null): VerdictTally | null {
+  if (!a) return b;
+  if (!b) return a;
+  // Prefer whichever has more voters (SSE live data will always be >= REST cached data)
+  return a.totalVoters >= b.totalVoters ? a : b;
+}
+
 interface DebateInfo {
   slug: string;
   sideALabel: string;
@@ -42,6 +49,7 @@ export function VerdictView({ debate }: VerdictViewProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [canVote, setCanVote] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchVerdict = useCallback(async () => {
     try {
@@ -54,6 +62,8 @@ export function VerdictView({ debate }: VerdictViewProps) {
       }
     } catch {
       // silently fail
+    } finally {
+      setIsLoading(false);
     }
   }, [debate.slug, verifiedOnly]);
 
@@ -62,8 +72,10 @@ export function VerdictView({ debate }: VerdictViewProps) {
     fetchVerdict();
   }, [fetchVerdict]);
 
-  // Use stream tally when not filtering by verified only
-  const displayTally = verifiedOnly ? filteredTally : (streamTally ?? filteredTally);
+  // Show whichever source has more data; REST loads fast, SSE upgrades with live updates
+  const displayTally = verifiedOnly
+    ? filteredTally
+    : pickBestTally(streamTally, filteredTally);
 
   const handleSubmitVote = async () => {
     if (!winningSide) return;
@@ -122,9 +134,11 @@ export function VerdictView({ debate }: VerdictViewProps) {
               sideALabel={debate.sideALabel}
               sideBLabel={debate.sideBLabel}
             />
+          ) : isLoading ? (
+            <div className="flex h-10 w-full items-center justify-center rounded-lg bg-muted animate-pulse" />
           ) : (
             <div className="flex h-10 w-full items-center justify-center rounded-lg bg-muted text-muted-foreground text-sm">
-              Loading verdict data...
+              No verdict data yet
             </div>
           )}
         </CardContent>
@@ -202,11 +216,11 @@ export function VerdictView({ debate }: VerdictViewProps) {
               Only neutral participants can vote. Select who you think won the debate.
             </p>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-              <div className="flex-1 space-y-2">
+            <div className="grid gap-4 sm:grid-cols-[1fr_1fr_auto]">
+              <div className="space-y-2 min-w-0">
                 <label className="text-sm font-medium">Winning Side</label>
                 <Select value={winningSide} onValueChange={setWinningSide}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full [&>span]:truncate [&>span]:text-left">
                     <SelectValue placeholder="Select winner..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -217,7 +231,7 @@ export function VerdictView({ debate }: VerdictViewProps) {
                 </Select>
               </div>
 
-              <div className="flex-1 space-y-2">
+              <div className="space-y-2 min-w-0">
                 <label className="text-sm font-medium">
                   Pin a Decisive Comment <span className="text-muted-foreground">(optional)</span>
                 </label>
@@ -230,12 +244,15 @@ export function VerdictView({ debate }: VerdictViewProps) {
                 />
               </div>
 
-              <Button
-                onClick={handleSubmitVote}
-                disabled={!winningSide || isSubmitting}
-              >
-                {isSubmitting ? "Submitting..." : "Submit Vote"}
-              </Button>
+              <div className="flex items-end">
+                <Button
+                  onClick={handleSubmitVote}
+                  disabled={!winningSide || isSubmitting}
+                  className="whitespace-nowrap"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Vote"}
+                </Button>
+              </div>
             </div>
 
             {error && (

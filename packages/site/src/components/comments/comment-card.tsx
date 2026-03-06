@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { timeAgo } from "@/lib/time";
 import type { CommentNode } from "@/types/comments";
 import { CommentEditor } from "./comment-editor";
+import { VoteButton } from "@/components/votes/vote-button";
 
 const STANCE_COLORS: Record<string, string> = {
   side_a: "bg-blue-100 text-blue-800 border-blue-200",
@@ -180,10 +181,10 @@ export function CommentCard({
                   </Button>
                 )}
 
-                <span className="text-xs text-gray-400">
-                  {comment.score > 0 ? `+${comment.score}` : comment.score}{" "}
-                  points
-                </span>
+                <VoteButton
+                  commentId={comment.id}
+                  initialScore={comment.score}
+                />
               </div>
             )}
           </>
