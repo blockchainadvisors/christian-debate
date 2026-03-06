@@ -22,10 +22,12 @@ export interface CommentWithAuthor {
   createdAt: string;
   editedAt: string | null;
   author: CommentAuthor;
+  isGuestComment?: boolean;
 }
 
 export interface CommentNode extends CommentWithAuthor {
   children: CommentNode[];
+  isGuestComment?: boolean;
 }
 
 /**

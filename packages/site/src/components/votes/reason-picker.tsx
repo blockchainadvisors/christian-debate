@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   Popover,
   PopoverContent,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/popover";
 import type { VoteDirection, VoteReason } from "@/types/votes";
 import { cn } from "@/lib/utils";
+import { addGuestVote } from "@/lib/guest-cache";
 
 const UPVOTE_OPTIONS: { reason: VoteReason; label: string; icon: string; hint: string }[] = [
   { reason: "well_reasoned", label: "Well Reasoned", icon: "\u{1F9E0}", hint: "Clear, logical argument" },
@@ -42,12 +44,25 @@ export function ReasonPicker({
   open,
   onOpenChange,
 }: ReasonPickerProps) {
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const options = direction === "up" ? UPVOTE_OPTIONS : DOWNVOTE_OPTIONS;
 
   async function handleSelect(reason: VoteReason) {
     setIsSubmitting(true);
     try {
+      if (!isAuthenticated) {
+        // Guest mode: save to localStorage
+        const result = addGuestVote({ commentId, direction, reason });
+        if (result) {
+          // Use current score +/- 1 as optimistic display
+          const delta = direction === "up" ? 1 : -1;
+          onVoted(direction, reason, delta);
+        }
+        return;
+      }
+
       let res = await fetch(`/api/comments/${commentId}/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

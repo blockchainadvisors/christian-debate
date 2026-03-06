@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSession } from "next-auth/react";
 import { ReasonPicker } from "@/components/votes/reason-picker";
 import type {
   VoteDirection,
@@ -8,6 +9,7 @@ import type {
   UserVote,
 } from "@/types/votes";
 import { cn } from "@/lib/utils";
+import { getGuestVoteForComment, removeGuestVote } from "@/lib/guest-cache";
 
 interface VoteButtonProps {
   commentId: string;
@@ -54,14 +56,23 @@ export function VoteButton({
   initialScore,
   initialUserVote,
 }: VoteButtonProps) {
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
   const [score, setScore] = useState(initialScore);
   const [userVote, setUserVote] = useState<UserVote>(initialUserVote ?? null);
   const [upPickerOpen, setUpPickerOpen] = useState(false);
   const [downPickerOpen, setDownPickerOpen] = useState(false);
   const [popDirection, setPopDirection] = useState<"up" | "down" | null>(null);
 
-  // Fetch the user's existing vote on mount
+  // Fetch the user's existing vote on mount (or check guest cache)
   useEffect(() => {
+    if (!isAuthenticated) {
+      const guestVote = getGuestVoteForComment(commentId);
+      if (guestVote) {
+        setUserVote({ direction: guestVote.direction, reason: guestVote.reason });
+      }
+      return;
+    }
     fetch(`/api/comments/${commentId}/votes`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
@@ -70,10 +81,15 @@ export function VoteButton({
         }
       })
       .catch(() => {});
-  }, [commentId]);
+  }, [commentId, isAuthenticated]);
 
   const handleUpClick = useCallback(async () => {
     if (userVote?.direction === "up") {
+      if (!isAuthenticated) {
+        removeGuestVote(commentId);
+        setUserVote(null);
+        return;
+      }
       const res = await fetch(`/api/comments/${commentId}/vote`, {
         method: "DELETE",
       });
@@ -85,10 +101,15 @@ export function VoteButton({
     } else {
       setUpPickerOpen(true);
     }
-  }, [userVote, commentId]);
+  }, [userVote, commentId, isAuthenticated]);
 
   const handleDownClick = useCallback(async () => {
     if (userVote?.direction === "down") {
+      if (!isAuthenticated) {
+        removeGuestVote(commentId);
+        setUserVote(null);
+        return;
+      }
       const res = await fetch(`/api/comments/${commentId}/vote`, {
         method: "DELETE",
       });
@@ -100,7 +121,7 @@ export function VoteButton({
     } else {
       setDownPickerOpen(true);
     }
-  }, [userVote, commentId]);
+  }, [userVote, commentId, isAuthenticated]);
 
   const handleVoted = useCallback(
     (direction: VoteDirection, reason: VoteReason, newScore: number) => {
