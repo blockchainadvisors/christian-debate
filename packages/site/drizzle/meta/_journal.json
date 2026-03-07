@@ -8,6 +8,13 @@
       "when": 1772672297184,
       "tag": "0000_blushing_stone_men",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772842229938,
+      "tag": "0001_pink_susan_delgado",
+      "breakpoints": true
     }
   ]
 }

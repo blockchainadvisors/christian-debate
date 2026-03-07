@@ -9,6 +9,11 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { EmailSignInForm } from "./email-sign-in-form";
+import { RegisterForm } from "./register-form";
+import { MagicLinkForm } from "./magic-link-form";
+import { ForgotPasswordForm } from "./forgot-password-form";
 
 interface SignInModalContextValue {
   openSignIn: () => void;
@@ -67,34 +72,140 @@ const SSO_PROVIDERS = [
   { id: "microsoft-entra-id", label: "Continue with Microsoft", icon: MicrosoftIcon },
 ];
 
+type SubView = "default" | "magic-link" | "forgot-password" | "check-email";
+
+function SSOButtons() {
+  return (
+    <div className="flex flex-col gap-2">
+      {SSO_PROVIDERS.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          onClick={() => signIn(id)}
+          className="flex w-full items-center justify-center gap-3 rounded-lg border border-foreground/10 px-4 py-3 text-sm font-medium hover:bg-foreground/5 transition-colors"
+        >
+          <Icon />
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Divider() {
+  return (
+    <div className="relative my-4">
+      <div className="absolute inset-0 flex items-center">
+        <div className="w-full border-t border-foreground/10" />
+      </div>
+      <div className="relative flex justify-center text-xs">
+        <span className="bg-background px-2 text-foreground/40">or</span>
+      </div>
+    </div>
+  );
+}
+
 export function SignInModalProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [subView, setSubView] = useState<SubView>("default");
+  const [registeredEmail, setRegisteredEmail] = useState("");
 
-  const openSignIn = useCallback(() => setOpen(true), []);
+  const openSignIn = useCallback(() => {
+    setSubView("default");
+    setOpen(true);
+  }, []);
+
+  function handleRegisterSuccess(email: string) {
+    setRegisteredEmail(email);
+    setSubView("check-email");
+  }
 
   return (
     <SignInModalContext.Provider value={{ openSignIn }}>
       {children}
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setSubView("default"); }}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center text-2xl">Sign In</DialogTitle>
-            <DialogDescription className="text-center">
-              Sign in to save your contributions and join the discussion.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-col gap-3 pt-2">
-            {SSO_PROVIDERS.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                onClick={() => signIn(id)}
-                className="flex w-full items-center justify-center gap-3 rounded-lg border border-foreground/10 px-4 py-3 text-sm font-medium hover:bg-foreground/5 transition-colors"
-              >
-                <Icon />
-                {label}
-              </button>
-            ))}
-          </div>
+          {subView === "check-email" ? (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-center text-2xl">Check Your Email</DialogTitle>
+                <DialogDescription className="text-center">
+                  We sent a verification link to <strong>{registeredEmail}</strong>.
+                  Click it to verify your account, then sign in.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-center pt-4">
+                <button
+                  onClick={() => setSubView("default")}
+                  className="text-sm font-medium text-primary hover:underline"
+                >
+                  Back to sign in
+                </button>
+              </div>
+            </>
+          ) : subView === "magic-link" ? (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-center text-2xl">Magic Link</DialogTitle>
+                <DialogDescription className="text-center">
+                  Sign in without a password
+                </DialogDescription>
+              </DialogHeader>
+              <div className="pt-2">
+                <MagicLinkForm />
+                <div className="mt-4 text-center">
+                  <button
+                    onClick={() => setSubView("default")}
+                    className="text-sm text-foreground/60 hover:text-foreground"
+                  >
+                    Back to sign in
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : subView === "forgot-password" ? (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-center text-2xl">Reset Password</DialogTitle>
+                <DialogDescription className="text-center">
+                  We&apos;ll send you a reset link
+                </DialogDescription>
+              </DialogHeader>
+              <div className="pt-2">
+                <ForgotPasswordForm onBack={() => setSubView("default")} />
+              </div>
+            </>
+          ) : (
+            <Tabs defaultValue="signin" className="w-full">
+              <DialogHeader>
+                <DialogTitle className="text-center text-2xl">Welcome</DialogTitle>
+                <DialogDescription className="text-center">
+                  Sign in to save your contributions and join the discussion.
+                </DialogDescription>
+              </DialogHeader>
+              <TabsList className="mt-4 w-full">
+                <TabsTrigger value="signin" className="flex-1">Sign In</TabsTrigger>
+                <TabsTrigger value="register" className="flex-1">Register</TabsTrigger>
+              </TabsList>
+              <TabsContent value="signin" className="pt-4">
+                <SSOButtons />
+                <Divider />
+                <EmailSignInForm onForgotPassword={() => setSubView("forgot-password")} />
+                <div className="mt-3 text-center">
+                  <button
+                    onClick={() => setSubView("magic-link")}
+                    className="text-sm text-foreground/60 hover:text-foreground"
+                  >
+                    Use magic link instead
+                  </button>
+                </div>
+              </TabsContent>
+              <TabsContent value="register" className="pt-4">
+                <SSOButtons />
+                <Divider />
+                <RegisterForm onSuccess={handleRegisterSuccess} />
+              </TabsContent>
+            </Tabs>
+          )}
         </DialogContent>
       </Dialog>
     </SignInModalContext.Provider>

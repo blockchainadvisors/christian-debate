@@ -325,6 +325,28 @@ export const burdenOfProofRequests = pgTable("burden_of_proof_requests", {
   resolvedAt: timestamp("resolved_at", { mode: "date" }),
 });
 
+// ─── MFA Secrets ───────────────────────────────────────────────────
+
+export const mfaSecrets = pgTable("mfa_secrets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" })
+    .unique(),
+  encryptedSecret: text("encrypted_secret").notNull(),
+  verified: boolean("verified").notNull().default(false),
+  recoveryCodes: text("recovery_codes"),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+// ─── Password Reset Tokens ─────────────────────────────────────────
+
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  identifier: varchar("identifier", { length: 255 }).notNull(),
+  token: varchar("token", { length: 255 }).notNull().unique(),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
+});
+
 // ─── Federated Identity (Phase 3 placeholder) ──────────────────────
 
 export const federatedIdentity = pgTable("federated_identity", {
