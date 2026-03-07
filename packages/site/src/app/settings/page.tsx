@@ -1,27 +1,33 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { db } from "@/db";
-import { users, mfaSecrets } from "@/db/schema";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { users } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { AgoraNetworkSection } from "@/components/settings/agora-network-section";
-import { MfaSetup } from "@/components/auth/mfa-setup";
-import { and } from "drizzle-orm";
 
-const trustTierColors: Record<string, string> = {
-  new: "bg-gray-100 text-gray-800",
-  established: "bg-blue-100 text-blue-800",
-  trusted: "bg-green-100 text-green-800",
-  moderator: "bg-purple-100 text-purple-800",
-  admin: "bg-red-100 text-red-800",
+const trustTierStyles: Record<string, { badge: string; dot: string }> = {
+  new: {
+    badge: "border-muted-foreground/30 text-muted-foreground bg-muted/50",
+    dot: "bg-muted-foreground/40",
+  },
+  established: {
+    badge: "border-blue-500/30 text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-950/40",
+    dot: "bg-blue-500",
+  },
+  trusted: {
+    badge: "border-emerald-500/30 text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-950/40",
+    dot: "bg-emerald-500",
+  },
+  moderator: {
+    badge: "border-violet-500/30 text-violet-700 bg-violet-50 dark:text-violet-300 dark:bg-violet-950/40",
+    dot: "bg-violet-500",
+  },
+  admin: {
+    badge: "border-amber-500/30 text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-950/40",
+    dot: "bg-amber-500",
+  },
 };
 
 export default async function SettingsPage() {
@@ -34,110 +40,140 @@ export default async function SettingsPage() {
     .where(eq(users.id, session.user.id as string))
     .limit(1);
 
-  const [mfa] = await db
-    .select({ id: mfaSecrets.id })
-    .from(mfaSecrets)
-    .where(
-      and(
-        eq(mfaSecrets.userId, session.user.id as string),
-        eq(mfaSecrets.verified, true)
-      )
-    )
-    .limit(1);
+  if (!user) redirect("/login");
 
-  const hasMfa = !!mfa;
+  const tier = trustTierStyles[user.trustTier] ?? trustTierStyles.new;
+  const initials = user.displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-8">
-      <h1 className="text-2xl font-bold">Settings</h1>
-      <p className="mt-2 text-foreground/60">
-        Signed in as {session.user.email}
-      </p>
+    <div className="space-y-8">
+      {/* Profile Card */}
+      <section className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+        {/* Accent strip */}
+        <div className="h-1 bg-gradient-to-r from-primary/20 via-primary/60 to-primary/20" />
 
-      {user && (
-        <>
-          {/* Profile Info */}
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>Your Profile</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-4">
-                {user.avatarUrl ? (
-                  <img
-                    src={user.avatarUrl}
-                    alt={user.displayName}
-                    className="h-16 w-16 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary">
-                    {user.displayName
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .slice(0, 2)
-                      .toUpperCase()}
-                  </div>
-                )}
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-semibold">
-                      {user.displayName}
-                    </span>
-                    <Badge
-                      className={trustTierColors[user.trustTier] ?? ""}
-                      variant="outline"
-                    >
-                      {user.trustTier}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    @{user.username}
-                  </p>
+        <div className="p-6 sm:p-8">
+          {/* Avatar + identity */}
+          <div className="flex items-start gap-5">
+            {/* Avatar with decorative ring */}
+            <div className="relative shrink-0">
+              <div className="absolute -inset-1 rounded-full border border-dashed border-primary/20" />
+              {user.avatarUrl ? (
+                <img
+                  src={user.avatarUrl}
+                  alt={user.displayName}
+                  className="relative h-18 w-18 rounded-full object-cover ring-2 ring-background"
+                />
+              ) : (
+                <div className="relative flex h-18 w-18 items-center justify-center rounded-full bg-primary/8 text-xl font-bold tracking-wide text-primary ring-2 ring-background">
+                  {initials}
                 </div>
+              )}
+            </div>
+
+            {/* Name + meta */}
+            <div className="min-w-0 flex-1 pt-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-xl font-bold tracking-tight text-foreground">
+                  {user.displayName}
+                </h2>
+                <Badge
+                  variant="outline"
+                  className={tier.badge}
+                >
+                  <span className={`mr-1 inline-block h-1.5 w-1.5 rounded-full ${tier.dot}`} />
+                  {user.trustTier}
+                </Badge>
               </div>
+              <p className="mt-0.5 text-sm text-muted-foreground">
+                @{user.username}
+              </p>
+              {user.email && (
+                <p className="mt-0.5 text-xs text-muted-foreground/60">
+                  {user.email}
+                </p>
+              )}
+            </div>
+          </div>
 
-              <Separator className="my-4" />
+          <Separator className="my-6" />
 
-              <Link
-                href={`/u/${user.username}`}
-                className="text-sm font-medium text-primary hover:underline"
-              >
-                View your public profile
-              </Link>
-            </CardContent>
-          </Card>
+          {/* Stats row */}
+          <div className="grid grid-cols-2 gap-6">
+            <div className="text-center">
+              <p className="text-3xl font-bold tabular-nums tracking-tight text-foreground">
+                {user.reputationScore}
+              </p>
+              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground/70">
+                Reputation
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold tabular-nums tracking-tight text-foreground">
+                {user.persuasionRating}
+              </p>
+              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground/70">
+                Minds Changed
+              </p>
+            </div>
+          </div>
 
-          {/* MFA */}
-          <MfaSetup mfaEnabled={hasMfa} />
+          <Separator className="my-6" />
 
-          {/* Agora Network */}
-          {process.env.AGORA_HUB_URL && <AgoraNetworkSection />}
+          {/* Actions */}
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href={`/u/${user.username}`}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent/50"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 12l4-4-4-4" />
+              </svg>
+              View Public Profile
+            </Link>
+          </div>
+        </div>
+      </section>
 
-          {/* Stats */}
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle>Your Stats</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <p className="text-2xl font-bold">{user.reputationScore}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Reputation Score
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold">{user.persuasionRating}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Minds Changed
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
-    </main>
+      {/* Account info */}
+      <section className="rounded-xl border border-border bg-card shadow-sm">
+        <div className="border-b border-border px-6 py-4">
+          <h3 className="text-sm font-semibold text-foreground">Account Details</h3>
+        </div>
+        <div className="divide-y divide-border">
+          <div className="flex items-center justify-between px-6 py-3.5">
+            <span className="text-sm text-muted-foreground">Email</span>
+            <span className="text-sm font-medium text-foreground">{user.email}</span>
+          </div>
+          <div className="flex items-center justify-between px-6 py-3.5">
+            <span className="text-sm text-muted-foreground">Username</span>
+            <span className="text-sm font-medium text-foreground">@{user.username}</span>
+          </div>
+          <div className="flex items-center justify-between px-6 py-3.5">
+            <span className="text-sm text-muted-foreground">Trust Tier</span>
+            <Badge variant="outline" className={tier.badge}>
+              <span className={`mr-1 inline-block h-1.5 w-1.5 rounded-full ${tier.dot}`} />
+              {user.trustTier}
+            </Badge>
+          </div>
+          <div className="flex items-center justify-between px-6 py-3.5">
+            <span className="text-sm text-muted-foreground">Member Since</span>
+            <span className="text-sm font-medium text-foreground">
+              {user.createdAt
+                ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })
+                : "Unknown"}
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
