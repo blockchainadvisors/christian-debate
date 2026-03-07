@@ -3,13 +3,18 @@ import { db } from "@/db";
 import { users, verificationTokens } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 
+function redirectUrl(path: string) {
+  const base = process.env.AUTH_URL || "http://localhost:3000";
+  return new URL(path, base);
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
   const email = searchParams.get("email");
 
   if (!token || !email) {
-    return NextResponse.redirect(new URL("/login?error=InvalidToken", req.url));
+    return NextResponse.redirect(redirectUrl("/login?error=InvalidToken"));
   }
 
   const [record] = await db
@@ -30,7 +35,7 @@ export async function GET(req: NextRequest) {
         .delete(verificationTokens)
         .where(eq(verificationTokens.token, token));
     }
-    return NextResponse.redirect(new URL("/login?error=InvalidToken", req.url));
+    return NextResponse.redirect(redirectUrl("/login?error=InvalidToken"));
   }
 
   // Delete the token (single-use)
@@ -44,5 +49,5 @@ export async function GET(req: NextRequest) {
     .set({ emailVerified: new Date() })
     .where(eq(users.email, email));
 
-  return NextResponse.redirect(new URL("/login?verified=true", req.url));
+  return NextResponse.redirect(redirectUrl("/login?verified=true"));
 }
