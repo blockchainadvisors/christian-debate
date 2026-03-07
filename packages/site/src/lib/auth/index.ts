@@ -19,6 +19,7 @@ import { generateUniqueUsername } from "./utils";
 
 export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
   adapter: DrizzleAdapter(db),
+  trustHost: true,
   session: { strategy: "jwt" },
   providers: [
     Google,
@@ -111,10 +112,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
       },
       from: process.env.EMAIL_FROM || "Christians Debate <noreply@christiansdebate.com>",
       sendVerificationRequest: async ({ identifier: email, url }) => {
+        // Rewrite URL to use AUTH_URL to avoid localhost in emails
+        const canonicalUrl = process.env.AUTH_URL;
+        const finalUrl = canonicalUrl
+          ? url.replace(/^https?:\/\/[^/]+/, canonicalUrl)
+          : url;
         await sendEmail({
           to: email,
           subject: "Sign in to Christians Debate",
-          html: magicLinkEmailTemplate(url),
+          html: magicLinkEmailTemplate(finalUrl),
         });
       },
       maxAge: 600, // 10 minutes
