@@ -100,8 +100,8 @@ export function GuestConflictDialog({
 
         <div className="space-y-4 py-2">
           {cleanTotal > 0 && (
-            <div className="rounded-md bg-[var(--card-bg,hsl(var(--muted)))] p-3 text-sm">
-              <strong>{cleanTotal}</strong> item{cleanTotal !== 1 ? "s" : ""} will be saved
+            <div className="rounded-md bg-muted text-muted-foreground p-3 text-sm">
+              <strong className="text-foreground">{cleanTotal}</strong> item{cleanTotal !== 1 ? "s" : ""} will be saved
               automatically
               {clean.comments > 0 && ` (${clean.comments} comment${clean.comments !== 1 ? "s" : ""})`}
               {clean.votes > 0 && ` (${clean.votes} vote${clean.votes !== 1 ? "s" : ""})`}
@@ -174,7 +174,7 @@ export function GuestConflictDialog({
 function ConflictSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <h4 className="text-sm font-semibold">{title}</h4>
+      <h4 className="text-sm font-semibold text-foreground">{title}</h4>
       {children}
     </div>
   );
@@ -198,8 +198,8 @@ function ChoiceButtons<T extends string>({
           onClick={() => onChange(opt.value)}
           className={`px-2 py-0.5 text-xs rounded border transition-colors ${
             value === opt.value
-              ? "bg-[var(--accent-color,hsl(var(--primary)))] text-white border-transparent"
-              : "border-[var(--border-color,hsl(var(--border)))] hover:bg-[var(--card-bg,hsl(var(--muted)))]"
+              ? "bg-primary text-primary-foreground border-transparent"
+              : "border-border text-foreground hover:bg-muted"
           }`}
         >
           {opt.label}
@@ -219,12 +219,12 @@ function VoteConflictItem({
   onChange: (c: VoteChoice) => void;
 }) {
   return (
-    <div className="rounded border border-[var(--border-color,hsl(var(--border)))] p-2 text-sm space-y-1">
-      <p className="text-xs text-[var(--text-muted,hsl(var(--muted-foreground)))]">
+    <div className="rounded border border-border p-2 text-sm text-foreground space-y-1">
+      <p className="text-xs text-muted-foreground">
         {conflict.debateTitle}
       </p>
-      <p className="text-xs italic truncate">&ldquo;{conflict.commentPreview}&rdquo;</p>
-      <div className="flex gap-4 text-xs">
+      <p className="text-xs italic truncate text-foreground">&ldquo;{conflict.commentPreview}&rdquo;</p>
+      <div className="flex gap-4 text-xs text-muted-foreground">
         <span>
           Account: {conflict.existingDirection === "up" ? "\u2191" : "\u2193"}{" "}
           {formatReason(conflict.existingReason)}
@@ -257,9 +257,9 @@ function StanceConflictItem({
   onChange: (c: StanceChoice) => void;
 }) {
   return (
-    <div className="rounded border border-[var(--border-color,hsl(var(--border)))] p-2 text-sm space-y-1">
+    <div className="rounded border border-border p-2 text-sm text-foreground space-y-1">
       <p className="font-medium text-xs">{conflict.debateTitle}</p>
-      <div className="flex gap-4 text-xs">
+      <div className="flex gap-4 text-xs text-muted-foreground">
         <span>
           Account: {formatStance(conflict.existingStance, conflict.sideALabel, conflict.sideBLabel)}
         </span>
@@ -290,12 +290,12 @@ function CommentConflictItem({
   onChange: (c: CommentChoice) => void;
 }) {
   return (
-    <div className="rounded border border-[var(--border-color,hsl(var(--border)))] p-2 text-sm space-y-1">
-      <p className="text-xs text-[var(--text-muted,hsl(var(--muted-foreground)))]">
+    <div className="rounded border border-border p-2 text-sm text-foreground space-y-1">
+      <p className="text-xs text-muted-foreground">
         {conflict.debateTitle}
       </p>
-      <p className="text-xs italic truncate">&ldquo;{conflict.contentPreview}&rdquo;</p>
-      <p className="text-xs text-amber-600">Already posted (duplicate)</p>
+      <p className="text-xs italic truncate text-foreground">&ldquo;{conflict.contentPreview}&rdquo;</p>
+      <p className="text-xs text-amber-600 dark:text-amber-400">Already posted (duplicate)</p>
       <ChoiceButtons
         options={[
           { value: "skip" as const, label: "Skip (recommended)" },
