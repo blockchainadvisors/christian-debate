@@ -5,6 +5,7 @@ import Facebook from "next-auth/providers/facebook";
 import MicrosoftEntraId from "next-auth/providers/microsoft-entra-id";
 import Credentials from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db";
 import { users, accounts as accountsTable, federatedIdentity, mfaSecrets } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -17,6 +18,7 @@ import { generateAppleClientSecret } from "./apple-secret";
 import { generateUniqueUsername } from "./utils";
 
 export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
+  adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   providers: [
     Google,
@@ -100,6 +102,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
       },
     }),
     EmailProvider({
+      server: {
+        host: process.env.SMTP_HOST || "localhost",
+        port: parseInt(process.env.SMTP_PORT || "1025", 10),
+        auth: process.env.SMTP_USER
+          ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
+          : undefined,
+      },
+      from: process.env.EMAIL_FROM || "Christians Debate <noreply@christiansdebate.com>",
       sendVerificationRequest: async ({ identifier: email, url }) => {
         await sendEmail({
           to: email,

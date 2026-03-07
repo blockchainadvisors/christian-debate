@@ -46,9 +46,16 @@ pnpm --filter site exec tsc --noEmit
 ### Authentication (Auth.js v5)
 
 - Config: `packages/site/src/lib/auth/index.ts`
-- Providers: Google OAuth, Apple, Facebook, Microsoft Entra ID, Credentials (bcrypt), Agora OIDC (conditional on `AGORA_HUB_URL`)
+- Providers: Google OAuth, Apple, Facebook, Microsoft Entra ID, Credentials (bcrypt + TOTP MFA), Email (magic links via nodemailer), Agora OIDC (conditional on `AGORA_HUB_URL`)
 - Strategy: JWT sessions
 - Env vars use Auth.js simplified naming: `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, etc.
+- **Email/Password Registration:** `POST /api/auth/register` creates user with `emailVerified: null`, sends verification email. Unverified users cannot sign in via credentials.
+- **Email Verification:** `GET /api/auth/verify-email?token=...&email=...` validates token, marks user verified. Resend via `POST /api/auth/resend-verification`.
+- **Magic Links:** Auth.js Email provider, auto-creates accounts for new emails (Slack/Notion pattern). 10-minute expiry.
+- **Password Reset:** `POST /api/auth/forgot-password` (never leaks email existence), `POST /api/auth/reset-password` with token. Reset page at `/reset-password`.
+- **MFA (TOTP):** Optional per-user. Setup: `POST /api/auth/mfa/setup` returns QR + secret, `POST /api/auth/mfa/verify` confirms with 6-digit code and returns 8 recovery codes. Disable: `DELETE /api/auth/mfa/setup` with code. Secrets encrypted with AES-256-GCM using `AUTH_SECRET`. MFA utility at `packages/site/src/lib/auth/mfa.ts`.
+- **Rate Limiting:** Redis-based (`packages/site/src/lib/rate-limit.ts`). Registration: 5/hr/IP, credentials login: 10/15min/email, magic link: 3/hr/email, resend verification: 1/60s/email, forgot password: 3/hr/email.
+- `generateUniqueUsername` lives in `packages/site/src/lib/auth/utils.ts` (shared by registration, OAuth, and magic link flows).
 - Apple Sign In: secret auto-generated at runtime from `.p8` key (`packages/site/src/lib/auth/apple-secret.ts`), self-renewing, no manual intervention needed. Apple Developer Team ID: `GN86WL6B9C`, Key ID: `327KK4ZZHV`, Services ID: `com.christiansdebate.web`.
 - Facebook: App ID `1604518684217333`. Data deletion callback at `api/auth/facebook/data-deletion`. App is Live (published).
 - Microsoft Entra ID: App ID `62fe729a-e051-49ff-b39d-6cdb46e4345c`. Issuer uses `/common/v2.0` for personal + work accounts. Secret expires 2028-05-03.
@@ -90,6 +97,15 @@ The debate detail page (`/d/[slug]/`) shows the same comment data through 5 tab 
 - Scoring logic: `packages/site/src/lib/vote-scoring.ts`
 - One vote per user per comment (DB unique constraint, upsert on change)
 
+### Email Infrastructure
+
+- **Dev/Staging:** Mailpit (SMTP on `:1025`, web UI on `:8025`). No auth needed.
+- **Production:** Mailjet SMTP (use `SMTP_USER`/`SMTP_PASSWORD` env vars).
+- **Email service:** `packages/site/src/lib/email/index.ts` — lazy singleton nodemailer transporter.
+- **Email templates:** `packages/site/src/lib/email/templates.ts` — verification, magic link, password reset, MFA enabled.
+- **Env vars:** `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`.
+- **`.npmrc`** has `public-hoist-pattern[]=nodemailer` so `@auth/core`'s internal email provider can resolve it under pnpm strict mode.
+
 ### Guest Mode
 
 - Unauthenticated users can comment/vote with data cached in `localStorage` (key: `cd_guest_cache`)
@@ -105,6 +121,8 @@ The debate detail page (`/d/[slug]/`) shows the same comment data through 5 tab 
 - **Playwright theme screenshots** require `page.evaluate()` to set `data-theme` attribute directly (not just localStorage) to ensure CSS applies before screenshot.
 - **Drizzle adapter** for Auth.js manages its own tables (accounts, sessions, verification_tokens). Don't modify these manually.
 - **Next.js output** is set to `"standalone"` in `next.config.ts`.
+- **pnpm hoisting:** `.npmrc` has `public-hoist-pattern[]=nodemailer` — required for `@auth/core`'s internal email provider to resolve nodemailer under pnpm strict mode.
+- **Drizzle migrate needs DATABASE_URL:** `pnpm db:migrate` may fail if `.env.local` isn't loaded. Run directly: `DATABASE_URL=postgresql://dev:dev@localhost:5432/christian_debate pnpm --filter site exec drizzle-kit migrate`.
 
 ## Key Paths
 
@@ -125,3 +143,14 @@ The debate detail page (`/d/[slug]/`) shows the same comment data through 5 tab 
 | Secrets (gitignored) | `secrets/` |
 | Apple secret generator | `packages/site/src/lib/auth/apple-secret.ts` |
 | Apple secret script | `packages/site/scripts/generate-apple-secret.ts` |
+| Email service | `packages/site/src/lib/email/index.ts` |
+| Email templates | `packages/site/src/lib/email/templates.ts` |
+| MFA utility | `packages/site/src/lib/auth/mfa.ts` |
+| Auth utilities | `packages/site/src/lib/auth/utils.ts` |
+| Rate limiter | `packages/site/src/lib/rate-limit.ts` |
+| Registration API | `packages/site/src/app/api/auth/register/route.ts` |
+| Email verification API | `packages/site/src/app/api/auth/verify-email/route.ts` |
+| Password reset APIs | `packages/site/src/app/api/auth/{forgot,reset}-password/route.ts` |
+| MFA APIs | `packages/site/src/app/api/auth/mfa/{setup,verify}/route.ts` |
+| MFA settings component | `packages/site/src/components/auth/mfa-setup.tsx` |
+| Auth form components | `packages/site/src/components/auth/{email-sign-in,register,magic-link,forgot-password}-form.tsx` |
