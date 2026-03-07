@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, mfaSecrets } from "@/db/schema";
 import {
   Card,
   CardContent,
@@ -13,6 +13,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { AgoraNetworkSection } from "@/components/settings/agora-network-section";
+import { MfaSetup } from "@/components/auth/mfa-setup";
+import { and } from "drizzle-orm";
 
 const trustTierColors: Record<string, string> = {
   new: "bg-gray-100 text-gray-800",
@@ -31,6 +33,19 @@ export default async function SettingsPage() {
     .from(users)
     .where(eq(users.id, session.user.id as string))
     .limit(1);
+
+  const [mfa] = await db
+    .select({ id: mfaSecrets.id })
+    .from(mfaSecrets)
+    .where(
+      and(
+        eq(mfaSecrets.userId, session.user.id as string),
+        eq(mfaSecrets.verified, true)
+      )
+    )
+    .limit(1);
+
+  const hasMfa = !!mfa;
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-8">
@@ -92,6 +107,9 @@ export default async function SettingsPage() {
               </Link>
             </CardContent>
           </Card>
+
+          {/* MFA */}
+          <MfaSetup mfaEnabled={hasMfa} />
 
           {/* Agora Network */}
           {process.env.AGORA_HUB_URL && <AgoraNetworkSection />}

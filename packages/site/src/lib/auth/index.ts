@@ -4,11 +4,17 @@ import Apple from "next-auth/providers/apple";
 import Facebook from "next-auth/providers/facebook";
 import MicrosoftEntraId from "next-auth/providers/microsoft-entra-id";
 import Credentials from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
 import { db } from "@/db";
-import { users, accounts as accountsTable, federatedIdentity } from "@/db/schema";
+import { users, accounts as accountsTable, federatedIdentity, mfaSecrets } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import { sendEmail } from "@/lib/email";
+import { magicLinkEmailTemplate } from "@/lib/email/templates";
+import { verifyMfaToken, decryptSecret, verifyRecoveryCode } from "./mfa";
+import { rateLimit } from "@/lib/rate-limit";
 import { generateAppleClientSecret } from "./apple-secret";
+import { generateUniqueUsername } from "./utils";
 
 export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
   session: { strategy: "jwt" },
@@ -28,12 +34,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        mfaToken: { label: "MFA Token", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
         const email = credentials.email as string;
         const password = credentials.password as string;
+        const mfaToken = (credentials.mfaToken as string) || "";
+
+        const { allowed } = await rateLimit(`login:${email}`, 10, 900);
+        if (!allowed) return null;
 
         const [user] = await db
           .select()
@@ -46,6 +57,40 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
         const isValid = await bcrypt.compare(password, user.passwordHash);
         if (!isValid) return null;
 
+        if (!user.emailVerified) {
+          throw new Error("EmailNotVerified");
+        }
+
+        const [mfa] = await db
+          .select()
+          .from(mfaSecrets)
+          .where(and(eq(mfaSecrets.userId, user.id), eq(mfaSecrets.verified, true)))
+          .limit(1);
+
+        if (mfa) {
+          if (!mfaToken) {
+            throw new Error("MFARequired");
+          }
+          const secret = decryptSecret(mfa.encryptedSecret);
+          const isValidMfa = verifyMfaToken(secret, mfaToken);
+          if (!isValidMfa) {
+            // Try recovery codes
+            if (mfa.recoveryCodes) {
+              const codes: string[] = JSON.parse(mfa.recoveryCodes);
+              const matchIndex = codes.findIndex((c) => verifyRecoveryCode(mfaToken, c));
+              if (matchIndex === -1) return null;
+              // Remove used recovery code
+              codes.splice(matchIndex, 1);
+              await db
+                .update(mfaSecrets)
+                .set({ recoveryCodes: JSON.stringify(codes) })
+                .where(eq(mfaSecrets.id, mfa.id));
+            } else {
+              return null;
+            }
+          }
+        }
+
         return {
           id: user.id,
           name: user.displayName,
@@ -53,6 +98,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
           image: user.avatarUrl,
         };
       },
+    }),
+    EmailProvider({
+      sendVerificationRequest: async ({ identifier: email, url }) => {
+        await sendEmail({
+          to: email,
+          subject: "Sign in to Christians Debate",
+          html: magicLinkEmailTemplate(url),
+        });
+      },
+      maxAge: 600, // 10 minutes
     }),
     ...(process.env.AGORA_HUB_URL
       ? [
@@ -70,6 +125,43 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
   callbacks: {
     async signIn({ user, account, profile }) {
       if (!account || !user.email) return true;
+
+      // For magic link sign-ins, create user if needed
+      if (account.type === "email") {
+        try {
+          let [existingUser] = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, user.email!))
+            .limit(1);
+
+          if (!existingUser) {
+            const displayName = user.email!.split("@")[0];
+            const username = await generateUniqueUsername(displayName);
+
+            const [newUser] = await db
+              .insert(users)
+              .values({
+                email: user.email!,
+                displayName,
+                username,
+                emailVerified: new Date(),
+              })
+              .returning();
+            existingUser = newUser;
+          } else if (!existingUser.emailVerified) {
+            await db
+              .update(users)
+              .set({ emailVerified: new Date() })
+              .where(eq(users.id, existingUser.id));
+          }
+
+          user.id = existingUser.id;
+        } catch (error) {
+          console.error("Magic link sign-in error:", error);
+          return false;
+        }
+      }
 
       // For OAuth providers, create or link user + account manually
       if (account.type === "oauth" || account.type === "oidc") {
@@ -208,30 +300,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
   },
   pages: {
     signIn: "/login",
+    error: "/login",
+    verifyRequest: "/verify-email",
   },
 }));
-
-async function generateUniqueUsername(displayName: string): Promise<string> {
-  const base = displayName
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "")
-    .slice(0, 30) || "user";
-
-  let username = base;
-  let attempt = 0;
-
-  while (attempt < 20) {
-    const [existing] = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.username, username))
-      .limit(1);
-
-    if (!existing) return username;
-
-    attempt++;
-    username = `${base}${Math.floor(Math.random() * 10000)}`;
-  }
-
-  return `${base}${Date.now()}`;
-}
