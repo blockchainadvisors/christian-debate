@@ -101,6 +101,23 @@ export function removeGuestVote(commentId: string): void {
   saveCache(cache);
 }
 
+export function removeSubmittedItems(
+  succeededCommentIds: string[],
+  succeededVoteIds: string[],
+  succeededStanceSlugs: string[]
+): void {
+  const cache = getGuestCache();
+  cache.comments = cache.comments.filter((c) => !succeededCommentIds.includes(c.localId));
+  cache.votes = cache.votes.filter((v) => !succeededVoteIds.includes(v.localId));
+  cache.stances = (cache.stances ?? []).filter((s) => !succeededStanceSlugs.includes(s.debateSlug));
+
+  if (!cache.comments.length && !cache.votes.length && !(cache.stances ?? []).length) {
+    clearGuestCache();
+  } else {
+    saveCache(cache);
+  }
+}
+
 export function clearGuestCache(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);

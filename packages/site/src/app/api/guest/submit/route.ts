@@ -9,7 +9,7 @@ import {
   TRUST_TIER_WEIGHTS,
   computeCommentScore,
 } from "@/lib/vote-scoring";
-import type { GuestComment, GuestVote, GuestStance } from "@/types/guest";
+import type { GuestComment, GuestVote, GuestStance, ConflictResolutions } from "@/types/guest";
 import { debateStances } from "@/db/schema";
 
 const MAX_COMMENTS = 50;
@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
   const guestComments: GuestComment[] = body.comments ?? [];
   const guestVotes: GuestVote[] = body.votes ?? [];
   const guestStances: GuestStance[] = body.stances ?? [];
+  const resolutions: ConflictResolutions | undefined = body.resolutions;
 
   // Cap validation
   if (guestComments.length > MAX_COMMENTS || guestVotes.length > MAX_VOTES) {
@@ -33,8 +34,12 @@ export async function POST(request: NextRequest) {
   }
 
   const errors: Array<{ localId: string; error: string }> = [];
+  const failedLocalIds: string[] = [];
   let submittedComments = 0;
   let submittedVotes = 0;
+  let skippedComments = 0;
+  let skippedVotes = 0;
+  let skippedStances = 0;
 
   // Map guest localId -> server ID for resolving reply chains
   const localIdToServerId = new Map<string, string>();
@@ -59,15 +64,24 @@ export async function POST(request: NextRequest) {
 
   for (const gc of sortedComments) {
     try {
+      // Check resolution for this comment
+      const commentResolution = resolutions?.comments?.[gc.localId];
+      if (commentResolution === "skip") {
+        skippedComments++;
+        continue;
+      }
+
       // Validate stance
       if (!VALID_STANCES.includes(gc.stanceSide as any)) {
         errors.push({ localId: gc.localId, error: "Invalid stance" });
+        failedLocalIds.push(gc.localId);
         continue;
       }
 
       // Validate content
       if (!gc.content || gc.content.trim().length < 1) {
         errors.push({ localId: gc.localId, error: "Empty content" });
+        failedLocalIds.push(gc.localId);
         continue;
       }
 
@@ -80,11 +94,13 @@ export async function POST(request: NextRequest) {
 
       if (!debate) {
         errors.push({ localId: gc.localId, error: "Debate not found" });
+        failedLocalIds.push(gc.localId);
         continue;
       }
 
       if (debate.status !== "open") {
         errors.push({ localId: gc.localId, error: "Debate is locked" });
+        failedLocalIds.push(gc.localId);
         continue;
       }
 
@@ -108,6 +124,7 @@ export async function POST(request: NextRequest) {
 
         if (!parent) {
           errors.push({ localId: gc.localId, error: "Parent comment not found" });
+          failedLocalIds.push(gc.localId);
           continue;
         }
 
@@ -135,25 +152,36 @@ export async function POST(request: NextRequest) {
       submittedComments++;
     } catch (err) {
       errors.push({ localId: gc.localId, error: "Server error" });
+      failedLocalIds.push(gc.localId);
     }
   }
 
   // Process votes
   for (const gv of guestVotes) {
     try {
+      // Check resolution for this vote
+      const voteResolution = resolutions?.votes?.[gv.localId];
+      if (voteResolution === "keep_existing" || voteResolution === "skip") {
+        skippedVotes++;
+        continue;
+      }
+
       // Validate direction
       if (gv.direction !== "up" && gv.direction !== "down") {
         errors.push({ localId: gv.localId, error: "Invalid direction" });
+        failedLocalIds.push(gv.localId);
         continue;
       }
 
       // Validate reason
       if (gv.direction === "up" && !UPVOTE_REASONS.includes(gv.reason as any)) {
         errors.push({ localId: gv.localId, error: "Invalid reason" });
+        failedLocalIds.push(gv.localId);
         continue;
       }
       if (gv.direction === "down" && !DOWNVOTE_REASONS.includes(gv.reason as any)) {
         errors.push({ localId: gv.localId, error: "Invalid reason" });
+        failedLocalIds.push(gv.localId);
         continue;
       }
 
@@ -169,6 +197,7 @@ export async function POST(request: NextRequest) {
 
       if (!comment) {
         errors.push({ localId: gv.localId, error: "Comment not found" });
+        failedLocalIds.push(gv.localId);
         continue;
       }
 
@@ -211,6 +240,7 @@ export async function POST(request: NextRequest) {
       submittedVotes++;
     } catch (err) {
       errors.push({ localId: gv.localId, error: "Server error" });
+      failedLocalIds.push(gv.localId);
     }
   }
 
@@ -220,6 +250,13 @@ export async function POST(request: NextRequest) {
 
   for (const gs of guestStances) {
     try {
+      // Check resolution for this stance
+      const stanceResolution = resolutions?.stances?.[gs.debateSlug];
+      if (stanceResolution === "keep_existing" || stanceResolution === "skip") {
+        skippedStances++;
+        continue;
+      }
+
       if (!VALID_STANCE_SIDES.includes(gs.declaredStance as any)) continue;
 
       const [debate] = await db
@@ -228,11 +265,14 @@ export async function POST(request: NextRequest) {
         .where(eq(debates.slug, gs.debateSlug))
         .limit(1);
 
-      if (!debate) continue;
+      if (!debate) {
+        errors.push({ localId: gs.debateSlug, error: "Debate not found" });
+        continue;
+      }
 
       // Upsert stance
       const [existing] = await db
-        .select({ id: debateStances.id })
+        .select({ id: debateStances.id, declaredStance: debateStances.declaredStance })
         .from(debateStances)
         .where(
           and(
@@ -245,7 +285,11 @@ export async function POST(request: NextRequest) {
       if (existing) {
         await db
           .update(debateStances)
-          .set({ declaredStance: gs.declaredStance, changedAt: new Date() })
+          .set({
+            previousStance: existing.declaredStance,
+            declaredStance: gs.declaredStance,
+            changedAt: new Date(),
+          })
           .where(eq(debateStances.id, existing.id));
       } else {
         await db.insert(debateStances).values({
@@ -256,10 +300,19 @@ export async function POST(request: NextRequest) {
       }
 
       submittedStances++;
-    } catch {
-      // skip failed stances silently
+    } catch (err) {
+      errors.push({ localId: gs.debateSlug, error: "Server error" });
     }
   }
 
-  return NextResponse.json({ submittedComments, submittedVotes, submittedStances, errors });
+  return NextResponse.json({
+    submittedComments,
+    submittedVotes,
+    submittedStances,
+    skippedComments,
+    skippedVotes,
+    skippedStances,
+    errors,
+    failedLocalIds,
+  });
 }
