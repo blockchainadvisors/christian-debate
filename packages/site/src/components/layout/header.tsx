@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,11 +24,20 @@ const NAV_LINKS = [
 export function Header() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const isAuthenticated = status === "authenticated";
   const user = session?.user;
   const { counts } = useGuestCache();
   const { openSignIn } = useSignInModal();
   const pendingCount = counts.comments + counts.votes + counts.stances;
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    // Redirect away from auth-only pages (profile, settings, etc.)
+    if (pathname.startsWith("/u/") || pathname.startsWith("/settings") || pathname.startsWith("/debates/new")) {
+      router.push("/debates");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -38,7 +47,7 @@ export function Header() {
           isAuthenticated={isAuthenticated}
           userName={user?.name}
           pendingCount={pendingCount}
-          onSignOut={() => signOut({ redirect: false })}
+          onSignOut={handleSignOut}
           onSignIn={openSignIn}
         />
 
@@ -113,7 +122,7 @@ export function Header() {
                   <Link href="/settings">Settings</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut({ redirect: false })}>
+                <DropdownMenuItem onClick={handleSignOut}>
                   Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>

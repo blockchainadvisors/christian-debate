@@ -308,6 +308,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
           token.id = linked.userId;
         }
       }
+      // Populate avatar from DB on sign-in (schema uses avatarUrl, not image)
+      if (account && token.id) {
+        const [dbUser] = await db
+          .select({ avatarUrl: users.avatarUrl })
+          .from(users)
+          .where(eq(users.id, token.id as string))
+          .limit(1);
+        if (dbUser?.avatarUrl) {
+          token.picture = dbUser.avatarUrl;
+        }
+      }
       if (account?.provider === "agora") {
         token.hubUserId = account.providerAccountId;
       }
@@ -316,6 +327,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
     async session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id as string;
+      }
+      if (session.user && token.picture) {
+        session.user.image = token.picture as string;
       }
       return session;
     },
