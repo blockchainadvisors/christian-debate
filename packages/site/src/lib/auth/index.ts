@@ -7,7 +7,7 @@ import Credentials from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db";
-import { users, accounts as accountsTable, federatedIdentity, mfaSecrets } from "@/db/schema";
+import { users, accounts as accountsTable, sessions, verificationTokens, federatedIdentity, mfaSecrets } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "@/lib/email";
@@ -18,7 +18,13 @@ import { generateAppleClientSecret } from "./apple-secret";
 import { generateUniqueUsername } from "./utils";
 
 export const { handlers, auth, signIn, signOut } = NextAuth(() => ({
-  adapter: DrizzleAdapter(db),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  adapter: DrizzleAdapter(db, {
+    usersTable: users as any,
+    accountsTable: accountsTable as any,
+    sessionsTable: sessions as any,
+    verificationTokensTable: verificationTokens as any,
+  }),
   trustHost: true,
   session: { strategy: "jwt" },
   providers: [
