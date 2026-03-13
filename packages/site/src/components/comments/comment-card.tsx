@@ -294,41 +294,77 @@ export function CommentCard({
       )}
     >
       {depth > 0 ? (
-        <div className="flex">
-          <div
-            className="relative shrink-0 w-5"
-            data-depth={visualDepth}
-          >
-            {/* Vertical thread line — stops at connector for last child */}
-            <div className={cn(
-              "thread-line absolute left-2 top-0 w-0.5",
-              isLastChild ? "h-5" : "bottom-0"
-            )} />
-            {/* Horizontal connector */}
-            <div className="thread-line absolute left-2 top-5 w-2.5 h-0.5" />
-          </div>
-          <div className="flex-1 min-w-0">
-            {commentContent}
-            {/* Children */}
+        isLastChild ? (
+          /* Last child: thread line wraps only the comment content, not nested children */
+          <div>
+            <div className="flex">
+              <div
+                className="relative shrink-0 w-5"
+                data-depth={visualDepth}
+              >
+                {/* Vertical thread line — extends to bottom of comment content */}
+                <div className="thread-line absolute left-2 top-0 bottom-0 w-0.5" />
+                {/* Horizontal connector */}
+                <div className="thread-line absolute left-2 top-5 w-2.5 h-0.5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                {commentContent}
+              </div>
+            </div>
+            {/* Children rendered outside the flex so thread line doesn't extend */}
             {!isCollapsed &&
               comment.children.map((child, i) => (
-                <CommentCard
-                  key={child.id}
-                  comment={child}
-                  debate={debate}
-                  onReply={onReply}
-                  onCommentAdded={onCommentAdded}
-                  depth={depth + 1}
-                  activeReplyId={activeReplyId}
-                  onSetActiveReply={onSetActiveReply}
-                  highlightId={highlightId}
-                  isPromoted={promotedIds?.has(child.id)}
-                  promotedIds={promotedIds}
-                  isLastChild={i === comment.children.length - 1}
-                />
+                <div key={child.id} className="ml-5">
+                  <CommentCard
+                    comment={child}
+                    debate={debate}
+                    onReply={onReply}
+                    onCommentAdded={onCommentAdded}
+                    depth={depth + 1}
+                    activeReplyId={activeReplyId}
+                    onSetActiveReply={onSetActiveReply}
+                    highlightId={highlightId}
+                    isPromoted={promotedIds?.has(child.id)}
+                    promotedIds={promotedIds}
+                    isLastChild={i === comment.children.length - 1}
+                  />
+                </div>
               ))}
           </div>
-        </div>
+        ) : (
+          <div className="flex">
+            <div
+              className="relative shrink-0 w-5"
+              data-depth={visualDepth}
+            >
+              {/* Vertical thread line — continuous for non-last children */}
+              <div className="thread-line absolute left-2 top-0 bottom-0 w-0.5" />
+              {/* Horizontal connector */}
+              <div className="thread-line absolute left-2 top-5 w-2.5 h-0.5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              {commentContent}
+              {/* Children */}
+              {!isCollapsed &&
+                comment.children.map((child, i) => (
+                  <CommentCard
+                    key={child.id}
+                    comment={child}
+                    debate={debate}
+                    onReply={onReply}
+                    onCommentAdded={onCommentAdded}
+                    depth={depth + 1}
+                    activeReplyId={activeReplyId}
+                    onSetActiveReply={onSetActiveReply}
+                    highlightId={highlightId}
+                    isPromoted={promotedIds?.has(child.id)}
+                    promotedIds={promotedIds}
+                    isLastChild={i === comment.children.length - 1}
+                  />
+                ))}
+            </div>
+          </div>
+        )
       ) : (
         <>
           {commentContent}
