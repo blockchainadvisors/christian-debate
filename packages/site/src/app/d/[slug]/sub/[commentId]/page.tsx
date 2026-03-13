@@ -63,7 +63,11 @@ function CommentPreview({
             </div>
           )}
           <span className="text-sm font-medium truncate shrink min-w-0">{comment.authorDisplayName}</span>
-          <Badge variant="outline" className={`text-xs px-1.5 py-0 shrink-0 ${STANCE_COLORS[comment.stanceSide] ?? ""}`}>
+          <Badge
+            variant="outline"
+            className={`text-xs px-1.5 py-0 max-w-[200px] truncate shrink min-w-0 ${STANCE_COLORS[comment.stanceSide] ?? ""}`}
+            title={getStanceLabel(comment.stanceSide, sideALabel, sideBLabel)}
+          >
             {getStanceLabel(comment.stanceSide, sideALabel, sideBLabel)}
           </Badge>
           <span className="ml-auto text-xs text-muted-foreground shrink-0">
@@ -220,7 +224,11 @@ export default async function SubDebatePage({
             <Link href={`/u/${thesis.authorUsername}`} className="font-medium hover:underline truncate min-w-0">
               {thesis.authorDisplayName}
             </Link>
-            <Badge variant="outline" className={`text-xs px-1.5 py-0 shrink-0 ${STANCE_COLORS[thesis.stanceSide] ?? ""}`}>
+            <Badge
+              variant="outline"
+              className={`text-xs px-1.5 py-0 max-w-[300px] truncate shrink min-w-0 ${STANCE_COLORS[thesis.stanceSide] ?? ""}`}
+              title={getStanceLabel(thesis.stanceSide, debate.sideALabel, debate.sideBLabel)}
+            >
               {getStanceLabel(thesis.stanceSide, debate.sideALabel, debate.sideBLabel)}
             </Badge>
           </div>
@@ -229,7 +237,7 @@ export default async function SubDebatePage({
             dangerouslySetInnerHTML={{ __html: thesis.content }}
           />
           <p className="mt-3 text-xs text-muted-foreground">
-            Score: {thesis.score} · Promoted with {promoted.directReplyCount} replies
+            Score: {thesis.score} · Promoted with {promoted.directReplyCount} {promoted.directReplyCount === 1 ? "reply" : "replies"}
           </p>
         </CardContent>
       </Card>
