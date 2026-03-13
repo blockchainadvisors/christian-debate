@@ -33,6 +33,7 @@ interface CommentCardProps {
   highlightId?: string | null;
   isPromoted?: boolean;
   promotedIds?: Set<string>;
+  isLastChild?: boolean;
 }
 
 function getStanceLabel(
@@ -82,6 +83,7 @@ export function CommentCard({
   highlightId,
   isPromoted,
   promotedIds,
+  isLastChild,
 }: CommentCardProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isQuarantineRevealed, setIsQuarantineRevealed] = useState(false);
@@ -297,8 +299,11 @@ export function CommentCard({
             className="relative shrink-0 w-5"
             data-depth={visualDepth}
           >
-            {/* Vertical thread line */}
-            <div className="thread-line absolute left-2 top-0 bottom-0 w-0.5" />
+            {/* Vertical thread line — stops at connector for last child */}
+            <div className={cn(
+              "thread-line absolute left-2 top-0 w-0.5",
+              isLastChild ? "h-5" : "bottom-0"
+            )} />
             {/* Horizontal connector */}
             <div className="thread-line absolute left-2 top-5 w-2.5 h-0.5" />
           </div>
@@ -306,7 +311,7 @@ export function CommentCard({
             {commentContent}
             {/* Children */}
             {!isCollapsed &&
-              comment.children.map((child) => (
+              comment.children.map((child, i) => (
                 <CommentCard
                   key={child.id}
                   comment={child}
@@ -319,6 +324,7 @@ export function CommentCard({
                   highlightId={highlightId}
                   isPromoted={promotedIds?.has(child.id)}
                   promotedIds={promotedIds}
+                  isLastChild={i === comment.children.length - 1}
                 />
               ))}
           </div>
@@ -328,7 +334,7 @@ export function CommentCard({
           {commentContent}
           {/* Children */}
           {!isCollapsed &&
-            comment.children.map((child) => (
+            comment.children.map((child, i) => (
               <CommentCard
                 key={child.id}
                 comment={child}
@@ -341,6 +347,7 @@ export function CommentCard({
                 highlightId={highlightId}
                 isPromoted={promotedIds?.has(child.id)}
                 promotedIds={promotedIds}
+                isLastChild={i === comment.children.length - 1}
               />
             ))}
         </>
