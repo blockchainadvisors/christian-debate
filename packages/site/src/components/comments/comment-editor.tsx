@@ -123,7 +123,7 @@ export function CommentEditor({
   }
 
   return (
-    <div className="space-y-3 rounded-lg border p-4 bg-background">
+    <div className="space-y-3 rounded-lg border-2 border-primary/20 p-4 bg-muted/40 shadow-sm">
       {/* Stance picker */}
       <div>
         <Label className="text-sm font-medium mb-2 block">Your stance</Label>
@@ -194,8 +194,13 @@ export function CommentEditor({
       )}
 
       {/* Editor */}
-      <div className="min-h-[100px] border border-gray-200 rounded-md p-3 prose prose-sm max-w-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
+      <div className="min-h-[100px] border-2 border-border rounded-md p-3 bg-background prose prose-sm max-w-none focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary/50 transition-colors">
         <EditorContent editor={editor} />
+        {editor && editor.isEmpty && (
+          <p className="text-muted-foreground/50 text-sm pointer-events-none select-none -mt-7">
+            Share your perspective...
+          </p>
+        )}
       </div>
 
       {/* Error */}
