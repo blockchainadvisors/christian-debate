@@ -65,7 +65,7 @@ function CommentPreview({
           <span className="text-sm font-medium truncate shrink min-w-0">{comment.authorDisplayName}</span>
           <Badge
             variant="outline"
-            className={`text-xs px-1.5 py-0 max-w-[200px] truncate shrink min-w-0 text-left ${STANCE_COLORS[comment.stanceSide] ?? ""}`}
+            className={`text-xs px-1.5 py-0 max-w-[200px] shrink min-w-0 justify-start overflow-hidden text-ellipsis whitespace-nowrap ${STANCE_COLORS[comment.stanceSide] ?? ""}`}
             title={getStanceLabel(comment.stanceSide, sideALabel, sideBLabel)}
           >
             {getStanceLabel(comment.stanceSide, sideALabel, sideBLabel)}
@@ -226,7 +226,7 @@ export default async function SubDebatePage({
             </Link>
             <Badge
               variant="outline"
-              className={`text-xs px-1.5 py-0 max-w-[300px] truncate shrink min-w-0 text-left ${STANCE_COLORS[thesis.stanceSide] ?? ""}`}
+              className={`text-xs px-1.5 py-0 max-w-[300px] shrink min-w-0 justify-start overflow-hidden text-ellipsis whitespace-nowrap ${STANCE_COLORS[thesis.stanceSide] ?? ""}`}
               title={getStanceLabel(thesis.stanceSide, debate.sideALabel, debate.sideBLabel)}
             >
               {getStanceLabel(thesis.stanceSide, debate.sideALabel, debate.sideBLabel)}
