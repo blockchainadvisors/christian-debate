@@ -5,6 +5,7 @@ import { promotedComments, comments, users, debates } from "@/db/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { SubDebateComments } from "./sub-debate-comments";
 
 const STANCE_COLORS: Record<string, string> = {
   side_a: "bg-blue-100 text-blue-800 border-blue-200",
@@ -28,7 +29,7 @@ interface CommentData {
   content: string;
   stanceSide: string;
   score: number;
-  createdAt: Date;
+  createdAt: string;
   authorDisplayName: string;
   authorUsername: string;
   authorAvatarUrl: string | null;
@@ -47,30 +48,30 @@ function CommentPreview({
   sideBLabel: string;
 }) {
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardContent className="pt-4">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-2 min-w-0">
           {comment.authorAvatarUrl ? (
             <img
               src={comment.authorAvatarUrl}
               alt={comment.authorDisplayName}
-              className="w-6 h-6 rounded-full"
+              className="w-6 h-6 rounded-full shrink-0"
             />
           ) : (
-            <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600">
+            <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600 shrink-0">
               {comment.authorDisplayName.charAt(0).toUpperCase()}
             </div>
           )}
-          <span className="text-sm font-medium">{comment.authorDisplayName}</span>
-          <Badge variant="outline" className={`text-xs px-1.5 py-0 ${STANCE_COLORS[comment.stanceSide] ?? ""}`}>
+          <span className="text-sm font-medium truncate shrink min-w-0">{comment.authorDisplayName}</span>
+          <Badge variant="outline" className={`text-xs px-1.5 py-0 shrink-0 ${STANCE_COLORS[comment.stanceSide] ?? ""}`}>
             {getStanceLabel(comment.stanceSide, sideALabel, sideBLabel)}
           </Badge>
-          <span className="ml-auto text-xs text-muted-foreground">
+          <span className="ml-auto text-xs text-muted-foreground shrink-0">
             Score: {comment.score}
           </span>
         </div>
         <div
-          className="text-sm prose prose-sm max-w-none"
+          className="text-sm prose prose-sm max-w-none break-words overflow-hidden"
           dangerouslySetInnerHTML={{ __html: comment.content }}
         />
       </CardContent>
@@ -93,6 +94,7 @@ export default async function SubDebatePage({
       title: debates.title,
       sideALabel: debates.sideALabel,
       sideBLabel: debates.sideBLabel,
+      status: debates.status,
     })
     .from(debates)
     .where(eq(debates.slug, slug))
@@ -137,7 +139,7 @@ export default async function SubDebatePage({
   if (!thesis) notFound();
 
   // Fetch descendants
-  const descendants: CommentData[] = await db
+  const descendants = await db
     .select({
       id: comments.id,
       content: comments.content,
@@ -161,7 +163,10 @@ export default async function SubDebatePage({
     )
     .orderBy(comments.createdAt);
 
-  const active = descendants.filter((d) => d.status === "active");
+  const active = descendants
+    .filter((d) => d.status === "active")
+    .map((d) => ({ ...d, createdAt: d.createdAt.toISOString() }));
+
   const thesisStance = thesis.stanceSide;
 
   const supporting = active.filter((d) => d.stanceSide === thesisStance);
@@ -181,11 +186,13 @@ export default async function SubDebatePage({
   const supportLabel = thesisStance === "side_a" ? debate.sideALabel : thesisStance === "side_b" ? debate.sideBLabel : "Supporting";
   const refuteLabel = thesisStance === "side_a" ? debate.sideBLabel : thesisStance === "side_b" ? debate.sideALabel : "Refuting";
 
+  const isOpen = debate.status === "open";
+
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8">
+    <main className="mx-auto max-w-5xl px-4 py-8 overflow-hidden">
       {/* Breadcrumb */}
-      <nav className="mb-6 text-sm text-muted-foreground">
-        <Link href={`/d/${slug}`} className="hover:underline">
+      <nav className="mb-6 text-sm text-muted-foreground min-w-0">
+        <Link href={`/d/${slug}`} className="hover:underline truncate inline-block max-w-[60vw] align-bottom">
           {debate.title}
         </Link>
         <span className="mx-2">/</span>
@@ -193,32 +200,32 @@ export default async function SubDebatePage({
       </nav>
 
       {/* Thesis */}
-      <Card className="mb-8 border-2 border-primary/30">
+      <Card className="mb-8 border-2 border-primary/30 overflow-hidden">
         <CardContent className="pt-6">
-          <div className="flex items-center gap-2 mb-3">
-            <Badge variant="outline" className="bg-amber-50 border-amber-300 text-amber-700">
+          <div className="flex flex-wrap items-center gap-2 mb-3 min-w-0">
+            <Badge variant="outline" className="bg-amber-50 border-amber-300 text-amber-700 shrink-0">
               Thesis
             </Badge>
             {thesis.authorAvatarUrl ? (
               <img
                 src={thesis.authorAvatarUrl}
                 alt={thesis.authorDisplayName}
-                className="w-8 h-8 rounded-full"
+                className="w-8 h-8 rounded-full shrink-0"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-medium text-gray-600">
+              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-medium text-gray-600 shrink-0">
                 {thesis.authorDisplayName.charAt(0).toUpperCase()}
               </div>
             )}
-            <Link href={`/u/${thesis.authorUsername}`} className="font-medium hover:underline">
+            <Link href={`/u/${thesis.authorUsername}`} className="font-medium hover:underline truncate min-w-0">
               {thesis.authorDisplayName}
             </Link>
-            <Badge variant="outline" className={`text-xs px-1.5 py-0 ${STANCE_COLORS[thesis.stanceSide] ?? ""}`}>
+            <Badge variant="outline" className={`text-xs px-1.5 py-0 shrink-0 ${STANCE_COLORS[thesis.stanceSide] ?? ""}`}>
               {getStanceLabel(thesis.stanceSide, debate.sideALabel, debate.sideBLabel)}
             </Badge>
           </div>
           <div
-            className="text-base prose max-w-none"
+            className="text-base prose max-w-none break-words overflow-hidden"
             dangerouslySetInnerHTML={{ __html: thesis.content }}
           />
           <p className="mt-3 text-xs text-muted-foreground">
@@ -227,10 +234,20 @@ export default async function SubDebatePage({
         </CardContent>
       </Card>
 
-      {/* Sides layout */}
-      {/* Desktop: two columns */}
+      {/* Comment editor for adding arguments */}
+      {isOpen && (
+        <SubDebateComments
+          debateId={debate.id}
+          debateSlug={debate.slug}
+          sideALabel={debate.sideALabel}
+          sideBLabel={debate.sideBLabel}
+          thesisCommentId={commentId}
+        />
+      )}
+
+      {/* Sides layout — Desktop: two columns */}
       <div className="hidden md:grid md:grid-cols-2 md:gap-6">
-        <div>
+        <div className="min-w-0">
           <div className="mb-4 rounded-lg bg-blue-50 px-4 py-2 dark:bg-blue-950">
             <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200">
               {supportLabel}
@@ -251,7 +268,7 @@ export default async function SubDebatePage({
             </div>
           )}
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="mb-4 rounded-lg bg-red-50 px-4 py-2 dark:bg-red-950">
             <h3 className="text-sm font-semibold text-red-800 dark:text-red-200">
               {refuteLabel}
