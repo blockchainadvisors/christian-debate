@@ -168,7 +168,7 @@ export default async function SubDebatePage({
     .orderBy(comments.createdAt);
 
   const active = descendants
-    .filter((d) => d.status === "active")
+    .filter((d) => d.status === "active" || d.status === "edited")
     .map((d) => ({ ...d, createdAt: d.createdAt.toISOString() }));
 
   const thesisStance = thesis.stanceSide;
