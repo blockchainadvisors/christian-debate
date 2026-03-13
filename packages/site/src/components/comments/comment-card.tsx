@@ -287,6 +287,7 @@ export function CommentCard({
       ref={commentRef}
       className={cn(
         "group min-w-0 overflow-hidden",
+        depth === 0 && "rounded-lg border border-border bg-card shadow-sm mb-4",
         isGuest && "border border-dashed border-amber-300 rounded-lg bg-amber-50/30"
       )}
     >

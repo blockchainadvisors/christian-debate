@@ -63,7 +63,7 @@ export function CommentTree({
   // Non-virtualized rendering for smaller comment sets
   if (!useVirtual) {
     return (
-      <div className="divide-y divide-gray-100">
+      <div className="space-y-0">
         {roots.map((node) => (
           <CommentCard
             key={node.id}
