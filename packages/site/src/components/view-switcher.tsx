@@ -1,6 +1,7 @@
 "use client";
 
 import { lazy, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SidesView } from "@/components/views/sides-view";
 import { BestExchangesView } from "@/components/views/best-exchanges-view";
@@ -43,8 +44,13 @@ interface ViewSwitcherProps {
 }
 
 export function ViewSwitcher({ debate }: ViewSwitcherProps) {
+  const searchParams = useSearchParams();
+  const viewParam = searchParams.get("view");
+  const validViews = VIEWS.map((v) => v.value) as readonly string[];
+  const defaultView = viewParam && validViews.includes(viewParam) ? viewParam : "thread";
+
   return (
-    <Tabs defaultValue="thread" className="w-full">
+    <Tabs defaultValue={defaultView} className="w-full">
       <TabsList className="flex w-full">
         {VIEWS.map((view) => (
           <TabsTrigger key={view.value} value={view.value}>

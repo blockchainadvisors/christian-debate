@@ -15,6 +15,13 @@
       "when": 1772842229938,
       "tag": "0001_pink_susan_delgado",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773404843132,
+      "tag": "0002_tired_lady_deathstrike",
+      "breakpoints": true
     }
   ]
 }

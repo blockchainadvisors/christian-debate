@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { CommentTree } from "@/components/comments/comment-tree";
 import { CommentEditor } from "@/components/comments/comment-editor";
@@ -30,9 +31,12 @@ interface ThreadViewProps {
 }
 
 export function ThreadView({ debate }: ThreadViewProps) {
+  const searchParams = useSearchParams();
+  const highlightId = searchParams.get("highlight");
   const { status } = useSession();
   const isGuest = status !== "authenticated";
   const [serverComments, setServerComments] = useState<CommentWithAuthor[]>([]);
+  const [promotedIds, setPromotedIds] = useState<Set<string>>(new Set());
   const [stanceSummary, setStanceSummary] = useState<StanceSummaryType | null>(null);
   const [currentStance, setCurrentStance] = useState<StanceSide | null | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +75,18 @@ export function ThreadView({ debate }: ThreadViewProps) {
 
     return [...serverComments, ...guestAsComments];
   }, [serverComments, guestComments, debate.slug, debate.id]);
+
+  const fetchPromoted = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/debates/${debate.slug}/promoted`);
+      if (res.ok) {
+        const ids: string[] = await res.json();
+        setPromotedIds(new Set(ids));
+      }
+    } catch {
+      // silently fail
+    }
+  }, [debate.slug]);
 
   const fetchComments = useCallback(async () => {
     try {
@@ -122,16 +138,17 @@ export function ThreadView({ debate }: ThreadViewProps) {
   useEffect(() => {
     const load = async () => {
       setIsLoading(true);
-      await Promise.all([fetchComments(), fetchStances(), fetchMyStance()]);
+      await Promise.all([fetchComments(), fetchStances(), fetchMyStance(), fetchPromoted()]);
       setIsLoading(false);
     };
     load();
-  }, [fetchComments, fetchStances, fetchMyStance]);
+  }, [fetchComments, fetchStances, fetchMyStance, fetchPromoted]);
 
   const handleCommentAdded = useCallback(() => {
     fetchComments();
     fetchStances();
-  }, [fetchComments, fetchStances]);
+    fetchPromoted();
+  }, [fetchComments, fetchStances, fetchPromoted]);
 
   const isOpen = debate.status === "open";
 
@@ -196,6 +213,8 @@ export function ThreadView({ debate }: ThreadViewProps) {
           sideBLabel: debate.sideBLabel,
         }}
         onCommentAdded={handleCommentAdded}
+        highlightId={highlightId}
+        promotedIds={promotedIds}
       />
     </div>
   );

@@ -325,6 +325,25 @@ export const burdenOfProofRequests = pgTable("burden_of_proof_requests", {
   resolvedAt: timestamp("resolved_at", { mode: "date" }),
 });
 
+// ─── Promoted Comments ────────────────────────────────────────────
+
+export const promotedComments = pgTable("promoted_comments", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  commentId: uuid("comment_id")
+    .notNull()
+    .references(() => comments.id, { onDelete: "cascade" })
+    .unique(),
+  debateId: uuid("debate_id")
+    .notNull()
+    .references(() => debates.id, { onDelete: "cascade" }),
+  authorId: uuid("author_id")
+    .notNull()
+    .references(() => users.id),
+  directReplyCount: integer("direct_reply_count").notNull(),
+  scoreAtPromotion: integer("score_at_promotion").notNull(),
+  promotedAt: timestamp("promoted_at", { mode: "date" }).notNull().defaultNow(),
+});
+
 // ─── MFA Secrets ───────────────────────────────────────────────────
 
 export const mfaSecrets = pgTable("mfa_secrets", {

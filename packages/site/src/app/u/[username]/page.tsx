@@ -6,6 +6,7 @@ import {
   comments,
   debates,
   debateStances,
+  promotedComments,
 } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -96,6 +97,13 @@ export default async function UserProfilePage({
     .from(debateStances)
     .where(eq(debateStances.userId, user.id));
 
+  const [promotedCountResult] = await db
+    .select({ value: count() })
+    .from(promotedComments)
+    .where(eq(promotedComments.authorId, user.id));
+
+  const promotedDebates = promotedCountResult?.value ?? 0;
+
   const totalComments = commentCountResult?.value ?? 0;
   const debatesParticipated = debateCountResult.length;
 
@@ -150,6 +158,14 @@ export default async function UserProfilePage({
               >
                 {user.trustTier}
               </Badge>
+              {promotedDebates > 0 && (
+                <Badge
+                  variant="outline"
+                  className="bg-amber-50 border-amber-300 text-amber-700"
+                >
+                  {promotedDebates} Promoted
+                </Badge>
+              )}
             </div>
             <p className="text-muted-foreground">@{user.username}</p>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -166,6 +182,7 @@ export default async function UserProfilePage({
           { label: "Minds Changed", value: user.persuasionRating },
           { label: "Comments", value: totalComments },
           { label: "Debates", value: debatesParticipated },
+          { label: "Promoted Debates", value: promotedDebates },
         ].map((stat) => (
           <Card key={stat.label}>
             <CardContent className="text-center">

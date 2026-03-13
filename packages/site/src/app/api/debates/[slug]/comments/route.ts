@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { comments, users, debates } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
+import { checkAndPromoteComment } from "@/lib/comment-promotion";
 
 const VALID_STANCES = ["side_a", "side_b", "neutral", "meta"] as const;
 
@@ -49,7 +50,7 @@ export async function GET(
       .from(comments)
       .innerJoin(users, eq(comments.authorId, users.id))
       .where(eq(comments.debateId, debate.id))
-      .orderBy(comments.createdAt);
+      .orderBy(comments.createdAt, comments.id);
 
     const result = rows.map((row) => ({
       id: row.id,
@@ -167,6 +168,11 @@ export async function POST(
         ancestorPath,
       })
       .returning();
+
+    // Fire-and-forget promotion check on parent
+    if (parentId) {
+      checkAndPromoteComment(parentId).catch(() => {});
+    }
 
     // Fetch author info
     const [author] = await db

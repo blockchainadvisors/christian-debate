@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useCallback } from "react";
+import { useMemo, useRef, useCallback, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { buildCommentTree } from "@/types/comments";
 import type { CommentWithAuthor, CommentNode } from "@/types/comments";
@@ -15,6 +15,8 @@ interface CommentTreeProps {
     sideBLabel: string;
   };
   onCommentAdded?: () => void;
+  highlightId?: string | null;
+  promotedIds?: Set<string>;
 }
 
 /**
@@ -29,11 +31,14 @@ export function CommentTree({
   comments,
   debate,
   onCommentAdded,
+  highlightId,
+  promotedIds,
 }: CommentTreeProps) {
   const tree = useMemo(() => buildCommentTree(comments), [comments]);
   const roots = useMemo(() => flattenRoots(tree), [tree]);
   const parentRef = useRef<HTMLDivElement>(null);
   const useVirtual = comments.length > 50;
+  const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
 
   const handleReply = useCallback((_comment: CommentNode) => {
     // Reply handling is done inline via CommentCard
@@ -67,6 +72,11 @@ export function CommentTree({
             onReply={handleReply}
             onCommentAdded={onCommentAdded}
             depth={0}
+            activeReplyId={activeReplyId}
+            onSetActiveReply={setActiveReplyId}
+            highlightId={highlightId}
+            isPromoted={promotedIds?.has(node.id)}
+            promotedIds={promotedIds}
           />
         ))}
       </div>
@@ -108,6 +118,11 @@ export function CommentTree({
                 onReply={handleReply}
                 onCommentAdded={onCommentAdded}
                 depth={0}
+                activeReplyId={activeReplyId}
+                onSetActiveReply={setActiveReplyId}
+                highlightId={highlightId}
+                isPromoted={promotedIds?.has(node.id)}
+                promotedIds={promotedIds}
               />
             </div>
           );

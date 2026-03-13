@@ -3203,3 +3203,125 @@ html[data-theme="art-deco"] .prose {
   --tw-prose-code: var(--foreground);
   color: var(--foreground);
 }
+
+/* ================================================================
+   THREAD DEPTH COLORS — 6 levels per theme
+   Used by thread lines in comment trees
+   ================================================================ */
+
+/* Default depth colors (used if no theme is set) */
+:root {
+  --depth-1: #3b82f6;
+  --depth-2: #10b981;
+  --depth-3: #f59e0b;
+  --depth-4: #ef4444;
+  --depth-5: #8b5cf6;
+  --depth-6: #ec4899;
+}
+
+html[data-theme="cathedral-dark"] {
+  --depth-1: #c9a84c;
+  --depth-2: #1e3a6e;
+  --depth-3: #9b2335;
+  --depth-4: #1a5e3a;
+  --depth-5: #b8860b;
+  --depth-6: #6b4c8a;
+}
+
+html[data-theme="warm-parchment"] {
+  --depth-1: #8b2500;
+  --depth-2: #b8860b;
+  --depth-3: #5c4033;
+  --depth-4: #6b8e23;
+  --depth-5: #8b6914;
+  --depth-6: #a0522d;
+}
+
+html[data-theme="nordic-clean"] {
+  --depth-1: #3b82f6;
+  --depth-2: #10b981;
+  --depth-3: #8b5cf6;
+  --depth-4: #f59e0b;
+  --depth-5: #ef4444;
+  --depth-6: #06b6d4;
+}
+
+html[data-theme="ink-and-paper"] {
+  --depth-1: #b91c1c;
+  --depth-2: #374151;
+  --depth-3: #92400e;
+  --depth-4: #065f46;
+  --depth-5: #6b21a8;
+  --depth-6: #1e40af;
+}
+
+html[data-theme="forest-deep"] {
+  --depth-1: #6b8f5e;
+  --depth-2: #4a7c8a;
+  --depth-3: #d4a44c;
+  --depth-4: #a85c3b;
+  --depth-5: #8b6f4e;
+  --depth-6: #5e8a6b;
+}
+
+html[data-theme="neon-terminal"] {
+  --depth-1: #00e5ff;
+  --depth-2: #ff0080;
+  --depth-3: #00ff88;
+  --depth-4: #ff6600;
+  --depth-5: #aa55ff;
+  --depth-6: #ffff00;
+}
+
+html[data-theme="byzantine-gold"] {
+  --depth-1: #ffd700;
+  --depth-2: #1a237e;
+  --depth-3: #b71c1c;
+  --depth-4: #00695c;
+  --depth-5: #e65100;
+  --depth-6: #4a148c;
+}
+
+html[data-theme="soft-cloud"] {
+  --depth-1: #c4b5fd;
+  --depth-2: #93c5fd;
+  --depth-3: #fda4af;
+  --depth-4: #86efac;
+  --depth-5: #fed7aa;
+  --depth-6: #a5b4fc;
+}
+
+html[data-theme="art-deco"] {
+  --depth-1: #c9a84c;
+  --depth-2: #1e3a6e;
+  --depth-3: #8b2500;
+  --depth-4: #2d572c;
+  --depth-5: #6b2d3e;
+  --depth-6: #4a6b8a;
+}
+
+html[data-theme="slate-academic"] {
+  --depth-1: #a51c30;
+  --depth-2: #002147;
+  --depth-3: #4a6741;
+  --depth-4: #7c4a1e;
+  --depth-5: #4a2c6b;
+  --depth-6: #1e5c6b;
+}
+
+/* ── Thread line depth color mapping ────────────────────────── */
+[data-depth="1"] > .thread-line { background-color: var(--depth-1); }
+[data-depth="2"] > .thread-line { background-color: var(--depth-2); }
+[data-depth="3"] > .thread-line { background-color: var(--depth-3); }
+[data-depth="4"] > .thread-line { background-color: var(--depth-4); }
+[data-depth="5"] > .thread-line { background-color: var(--depth-5); }
+[data-depth="6"] > .thread-line { background-color: var(--depth-6); }
+
+/* ── Comment highlight animation ────────────────────────────── */
+@keyframes comment-highlight-flash {
+  0%, 100% { background-color: transparent; }
+  20% { background-color: color-mix(in srgb, var(--primary) 15%, transparent); }
+}
+.comment-highlight {
+  animation: comment-highlight-flash 2s ease-out;
+}

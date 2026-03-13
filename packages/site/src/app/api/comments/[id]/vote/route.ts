@@ -11,6 +11,7 @@ import {
   computeCommentScore,
 } from "@/lib/vote-scoring";
 import type { VoteBreakdown, VoteDirection, VoteReason } from "@/types/votes";
+import { checkAndPromoteComment } from "@/lib/comment-promotion";
 
 async function computeBreakdown(commentId: string): Promise<VoteBreakdown> {
   const allVotes = await db
@@ -136,6 +137,9 @@ export async function POST(
     .update(comments)
     .set({ score: newScore })
     .where(eq(comments.id, commentId));
+
+  // Fire-and-forget promotion check
+  checkAndPromoteComment(commentId).catch(() => {});
 
   // Build and cache breakdown
   const breakdown = await computeBreakdown(commentId);
