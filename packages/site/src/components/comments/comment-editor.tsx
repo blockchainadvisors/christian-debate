@@ -206,7 +206,7 @@ export function CommentEditor({
           </div>
 
           {/* Editor area */}
-          <div className="min-h-[120px] p-3 prose prose-sm max-w-none">
+          <div className="min-h-[120px] p-3 [&_.tiptap]:outline-none [&_.tiptap]:min-h-[80px] [&_.tiptap_ul]:list-disc [&_.tiptap_ul]:pl-5 [&_.tiptap_ol]:list-decimal [&_.tiptap_ol]:pl-5 [&_.tiptap_blockquote]:border-l-4 [&_.tiptap_blockquote]:border-muted-foreground/30 [&_.tiptap_blockquote]:pl-4 [&_.tiptap_blockquote]:italic [&_.tiptap_blockquote]:text-muted-foreground [&_.tiptap_p]:my-1 text-sm">
             <EditorContent editor={editor} />
           </div>
         </div>
