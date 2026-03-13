@@ -207,7 +207,7 @@ export default async function UserProfilePage({
                 <div key={comment.id}>
                   <div className="flex items-center gap-2 text-sm">
                     <a
-                      href={`/debates/${comment.debateSlug}`}
+                      href={`/d/${comment.debateSlug}`}
                       className="font-medium hover:underline"
                     >
                       {comment.debateTitle}
@@ -219,9 +219,10 @@ export default async function UserProfilePage({
                       Score: {comment.score}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-foreground/80 line-clamp-2">
-                    {comment.content}
-                  </p>
+                  <div
+                    className="mt-1 text-sm text-foreground/80 line-clamp-2 [&>p]:inline"
+                    dangerouslySetInnerHTML={{ __html: comment.content }}
+                  />
                   <p className="mt-1 text-xs text-muted-foreground">
                     {comment.createdAt.toLocaleDateString("en-US", {
                       year: "numeric",
@@ -252,7 +253,7 @@ export default async function UserProfilePage({
               {stances.map((stance, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <a
-                    href={`/debates/${stance.debateSlug}`}
+                    href={`/d/${stance.debateSlug}`}
                     className="text-sm font-medium hover:underline"
                   >
                     {stance.debateTitle}
