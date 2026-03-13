@@ -14,6 +14,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@tanstack/react-virtual": "^3.13.19",
+    "@tiptap/extension-placeholder": "^3.20.1",
     "@tiptap/pm": "^3.20.0",
     "@tiptap/react": "^3.20.0",
     "@tiptap/starter-kit": "^3.20.0",

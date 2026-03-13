@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -40,14 +41,23 @@ export function CommentEditor({
   const [stanceSide, setStanceSide] = useState<string>("neutral");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Force re-render on editor state changes so toolbar active states update
+  const [, setEditorState] = useState(0);
 
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: "Share your perspective...",
+      }),
+    ],
     content: initialContent ?? "",
     immediatelyRender: false,
+    onUpdate: () => setEditorState((n) => n + 1),
+    onSelectionUpdate: () => setEditorState((n) => n + 1),
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (!editor) return;
 
     const html = editor.getHTML();
@@ -62,7 +72,6 @@ export function CommentEditor({
     setError(null);
 
     if (!isAuthenticated) {
-      // Guest mode: save to localStorage
       const result = addGuestComment({
         debateSlug,
         debateId,
@@ -107,7 +116,7 @@ export function CommentEditor({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [editor, isAuthenticated, stanceSide, debateSlug, debateId, parentId, onSubmit]);
 
   function getStanceLabel(option: (typeof STANCE_OPTIONS)[number]): string {
     switch (option.value) {
@@ -152,56 +161,56 @@ export function CommentEditor({
         </div>
       </div>
 
-      {/* Toolbar */}
+      {/* Toolbar + Editor grouped together */}
       {editor && (
-        <div className="flex flex-wrap gap-1 border-b border-gray-200 pb-2">
-          <ToolbarButton
-            onClick={() => editor.chain().focus().toggleBold().run()}
-            active={editor.isActive("bold")}
-            title="Bold"
-          >
-            B
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-            active={editor.isActive("italic")}
-            title="Italic"
-          >
-            <em>I</em>
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            active={editor.isActive("bulletList")}
-            title="Bullet List"
-          >
-            &bull; List
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            active={editor.isActive("orderedList")}
-            title="Ordered List"
-          >
-            1. List
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            active={editor.isActive("blockquote")}
-            title="Blockquote"
-          >
-            &ldquo; Quote
-          </ToolbarButton>
+        <div className="rounded-md border-2 border-border bg-background overflow-hidden focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary/50 transition-colors">
+          {/* Toolbar */}
+          <div className="flex flex-wrap gap-0.5 px-2 py-1.5 bg-muted/60 border-b border-border">
+            <ToolbarButton
+              onClick={() => editor.chain().focus().toggleBold().run()}
+              active={editor.isActive("bold")}
+              title="Bold"
+            >
+              <strong>B</strong>
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+              active={editor.isActive("italic")}
+              title="Italic"
+            >
+              <em>I</em>
+            </ToolbarButton>
+            <div className="w-px bg-border mx-1 self-stretch" />
+            <ToolbarButton
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              active={editor.isActive("bulletList")}
+              title="Bullet List"
+            >
+              &bull; List
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              active={editor.isActive("orderedList")}
+              title="Ordered List"
+            >
+              1. List
+            </ToolbarButton>
+            <div className="w-px bg-border mx-1 self-stretch" />
+            <ToolbarButton
+              onClick={() => editor.chain().focus().toggleBlockquote().run()}
+              active={editor.isActive("blockquote")}
+              title="Blockquote"
+            >
+              &ldquo; Quote
+            </ToolbarButton>
+          </div>
+
+          {/* Editor area */}
+          <div className="min-h-[120px] p-3 prose prose-sm max-w-none">
+            <EditorContent editor={editor} />
+          </div>
         </div>
       )}
-
-      {/* Editor */}
-      <div className="min-h-[100px] border-2 border-border rounded-md p-3 bg-background prose prose-sm max-w-none focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary/50 transition-colors">
-        <EditorContent editor={editor} />
-        {editor && editor.isEmpty && (
-          <p className="text-muted-foreground/50 text-sm pointer-events-none select-none -mt-7">
-            Share your perspective...
-          </p>
-        )}
-      </div>
 
       {/* Error */}
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -233,10 +242,10 @@ function ToolbarButton({
       onClick={onClick}
       title={title}
       className={cn(
-        "px-2.5 py-2 text-xs rounded transition-colors min-h-[44px] min-w-[44px]",
+        "px-2.5 py-1.5 text-xs rounded transition-colors min-h-[36px] min-w-[36px]",
         active
-          ? "bg-gray-200 text-gray-900"
-          : "text-gray-600 hover:bg-gray-100"
+          ? "bg-primary/15 text-primary font-semibold"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground"
       )}
     >
       {children}

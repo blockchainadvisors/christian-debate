@@ -126,6 +126,20 @@
   }
 }
 
+/* TipTap editor placeholder */
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--muted-foreground);
+  opacity: 0.4;
+  pointer-events: none;
+  height: 0;
+}
+
+.tiptap:focus {
+  outline: none;
+}
+
 /* Vote button pop animation */
 @keyframes vote-pop {
   0% { transform: scale(1); }
